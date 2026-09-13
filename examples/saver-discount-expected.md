@@ -33,14 +33,16 @@ later the same day as that morning block, since 11:23 PM > 9:06 AM.
 
 So this baseline labels the two spans **Day 1** (3:18 PM–6:18 PM) and **Day
 2** (8:50 AM–11:23 PM) — relative labels inferred from time-of-day ordering,
-not calendar dates. This deliberately departs from `extraction.md`'s own
-worked example, which cites `arpit.goel 2026-08-29 11:23 PM` — that ISO date
-is not supported anywhere in the source thread; it appears to be a
-placeholder the reference file's author supplied for illustration. Asserting
-it here would be exactly the invented-date mistake the task guarding this
-file warns against. If a future thread export adds real dates, or someone
-confirms 2026-08-29 out-of-band, this baseline should be updated deliberately
-— not by silently copying the reference file's placeholder.
+not calendar dates.
+
+An earlier draft of `extraction.md` cited a specific ISO date for the final
+message in its own worked examples. No such date exists anywhere in this
+export; it was a placeholder that read as an established fact. Writing this
+baseline is what surfaced it, and `extraction.md` now uses these same
+relative labels and states the rule directly: when a source carries clock
+times but no dates, never synthesize one. If a future export of this thread
+carries real dates, or someone confirms them out of band, update this
+baseline deliberately rather than by inference.
 
 Same-minute disambiguation needed once: `jomil.villareal` posts twice at
 3:21 PM (Day 1) — `jomil.villareal 3:21 PM ("if randy.tedjakusuma is on
@@ -279,10 +281,9 @@ itself indicate a regression.
 
 ## Judgment calls and disagreements worth flagging
 
-- **Dates**: this baseline deliberately does not adopt `extraction.md`'s
-  own worked-example date (`2026-08-29`) — see "On dates" above. This is
-  the single largest intentional divergence from the orientation this file
-  was written against.
+- **Dates**: no citation here carries a calendar date, because the export
+  has none — see "On dates" above. Establishing that corrected an invented
+  date in `extraction.md`'s own worked examples.
 - **D2's `pst`** is inferred on a visibly weaker chain of evidence than
   D1's; `extraction.md`'s own D2 worked example does not walk through a
   `pst` justification at all (only `rendering.md`'s rendered card assigns
