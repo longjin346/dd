@@ -86,9 +86,11 @@ character instead of a bullet.
 The rule that prevents this, stated once, applies to **every** template in
 this file with no per-template variation:
 
-> Whenever a `-` list follows a line that is not itself a list item — a
+> Whenever a list follows a line that is not itself a list item — a
 > section heading, a card's inline-code title line, a sentence of prose —
-> put exactly one blank line between that line and the first `-` item. A
+> put exactly one blank line between that line and the first item. This
+> covers ordered lists (`1.`, `2.`, …) exactly as it covers `-` lists; both
+> are recognized only when they start a fresh block. A
 > list item that continues the same list (the next field bullet in a card,
 > the next entry in a Review Notes category) needs no blank line before it —
 > only the transition from non-list text into a list does. Every top-level
@@ -178,6 +180,41 @@ the reviewer looks at a single card:
 
 Never render a missing `(*)` value as `null`. Never require the user to fill
 anything with no marker.
+
+## The source-selection prompt
+
+Chronologically the first thing the skill ever sends, before any card
+exists: `references/sources.md` discovers what the thread links to without
+opening anything, and this prompt asks which of those to read. It is sent
+only when the discovery pass found at least one external source — with none
+found, the question is skipped entirely and no message goes out.
+
+Number the sources in the order they appear in the thread, label each by
+what Slack already reveals about it (unfurled title, Jira key, filename, or
+URL host — never opened to get a better one), and link each to its own URL:
+
+```text
+▸ **Additional sources found in this thread**
+
+1. [Link — experiments.grab.com variable](URL)
+2. [Jira — Approval_Request - ID for Mart](URL)
+3. [Confluence — foodSaverOptionDiscount](URL)
+
+Reply with the ones you want me to read:
+
+- `1, 3` — just those
+- `all`
+- `none`
+
+I only open the sources you pick, and nothing linked inside them.
+```
+
+- The closing line is not decoration: the one-hop boundary is a real limit
+  on what the user is authorizing, and stating it is how they know what
+  they are agreeing to.
+- A source linked from several messages is one numbered entry, not several.
+- An ordinary permalink to another message in the same thread is not an
+  external source and never appears in this list.
 
 ## The Decision card
 
