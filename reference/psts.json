@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "psts": [
+    { "value": "DCA", "active": true },
+    { "value": "Dispatch", "active": true },
+    { "value": "FFI", "active": true },
+    { "value": "ITE", "active": true },
+    { "value": "Pax Pricing", "active": true },
+    { "value": "Earnings", "active": true },
+    { "value": "DQO", "active": true },
+    { "value": "Supply Planning", "active": true },
+    { "value": "Dax App Core", "active": true },
+    { "value": "MLE", "active": true },
+    { "value": "Data Engineering", "active": true },
+    { "value": "PRT", "active": true },
+    { "value": "Test Automation", "active": true },
+    { "value": "Scaled Ops", "active": true },
+    { "value": "PA", "active": true },
+    { "value": "FF Ecommerce", "active": true },
+    { "value": "TPM", "active": true }
+  ]
+}
