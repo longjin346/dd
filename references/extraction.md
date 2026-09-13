@@ -34,7 +34,12 @@ thread — never computed or re-numbered:
   short verbatim fragment to disambiguate — `jomil.villareal 3:21 PM
   ("Product is from under Fulfillment")`.
 - Thread spans more than one day: include the date —
-  `arpit.goel 2026-08-29 11:23 PM`.
+  `jane.doe 2026-08-29 11:23 PM`.
+- When the source carries clock times but no calendar dates, as some thread
+  exports do, never synthesize one. Where the ordering is unambiguous —
+  times ascend, then restart lower, which can only be the next day — label
+  the spans relatively (`Day 1`, `Day 2`) and say that is what you did. An
+  invented date is the same error as an invented due date.
 - Do not attach the fragment by default. A classification reason routinely
   cites two or three messages in one sentence; a fragment on each would make
   it unreadable.
@@ -455,7 +460,7 @@ message order is exactly how the old draft misattributed a decision below.
 - **Gate 3:** `cui.ju 3:20 PM` responds with a condition, not a disposition.
   `arpit.goel` probes repeatedly (`3:23 PM`, `5:06 PM`, `5:29 PM`, `6:18 PM`)
   but never says approved, rejected, or equivalent, and closes by saying "I
-  have documented the thread here" (`arpit.goel 2026-08-29 11:23 PM`) —
+  have documented the thread here" (`arpit.goel 11:23 PM (Day 2)`) —
   documentation is a wrap-up, not a disposition. No closure signal exists.
   `evidence_type: none`.
 - **Gate 4:** `cui.ju 3:20 PM` sets an unmet in-thread gate — "please inform
@@ -520,7 +525,7 @@ message order is exactly how the old draft misattributed a decision below.
 
 ### Actions attaching to D1
 
-- `arpit.goel 2026-08-29 11:23 PM` asks `@sengkeong.ho`, `@moch.zulfa`, and
+- `arpit.goel 11:23 PM (Day 2)` asks `@sengkeong.ho`, `@moch.zulfa`, and
   `@rangga.pratama` to add the logic that recreates the merchant list. Three
   named owners, store as a list; requested, not yet acknowledged in the
   available source; no date given.
@@ -536,6 +541,10 @@ message order is exactly how the old draft misattributed a decision below.
 - The fare-certainty/batching principle (`sengkeong.ho 8:54 AM`) and the FR
   capacity/pricing-lever discussion (`albert.lim 9:02 AM`) — background
   reasoning, no proposed course of action. Fails Gate 1.
+- `moch.zulfa 5:11 PM` explaining how the merchant group is currently
+  prioritized and maintained, answering a question — describes existing
+  practice, proposes nothing new. It feeds D1's conditions and motivates an
+  Action, but is not itself an object.
 - `albert.lim 8:50 AM` asking `long.jin` to use the capture tool, and
   `long.jin 8:55 AM` asking what sources are available — messages about the
   capture process itself. Excluded by Gate 1's explicit carve-out.

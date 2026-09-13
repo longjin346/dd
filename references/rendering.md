@@ -417,7 +417,7 @@ new value):
 - Merged `D4` into `D1`; kept `D1: Adopt option A`
 - Added `D5: Extend the pilot`
 - Confirmed `D2` as a Decision; no field values changed
-- `D2 pst`: ? - need to fill → FF Ecommerce
+- `D5 pst`: ? - need to fill → DCA
 - `D1 decision_status`: pending → approved
 ```
 
@@ -440,10 +440,16 @@ message — whenever a finalize-required field is still unresolved on any
 current Decision. Actions are never checked; they have no required field at
 either tier.
 
+The reference thread fills every finalize-required field on both of its
+Decisions, so it never triggers this prompt at all (see
+`examples/saver-discount-expected.md`). The example below therefore shows
+the shape using a Decision added from a blank template, which is the common
+case for an unresolved `pst`:
+
 ```text
 ▸ **Still needed before finalizing**
 
-- `D2 pst(*)` — Which PST does this belong to?
+- `D5 pst(*)` — Which PST does this belong to?
   1. DCA
   2. Dispatch
   3. FFI
