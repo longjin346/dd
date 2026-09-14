@@ -242,6 +242,22 @@ plain name with no `@`.
   - A2 Add the logic that recreates the merchant list (SQL, or partnership-based?) — @sengkeong.ho, @moch.zulfa, @rangga.pratama (requested, not yet acknowledged) — no date
 ```
 
+### One sequence, no classification on the card
+
+Render every Decision in a single sequence, in the order the thread raised
+them. Never split them into separate confident and uncertain groups, never
+sort by status, and never put a classification label in a card heading or
+anywhere else on the card.
+
+This is a deliberate choice, not an omission. A card that announces itself
+as uncertain, or that sits under an "Uncertain" heading, has prejudged the
+question the reviewer is there to answer — and it does so before they have
+read the evidence. Uncertainty is explained exactly once, in the
+`Uncertain Decisions` category of Review Notes, where it comes with the
+source-grounded reason that makes it actionable. The card itself carries
+`decision_status`, which is a fact about the thread, not a verdict on the
+extraction.
+
 Card mechanics, carried forward unchanged in substance from the Gateway
 contract above and applied identically to every card:
 

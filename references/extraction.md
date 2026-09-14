@@ -417,7 +417,10 @@ is exactly why it sits in the publish set instead.
 
 **Publish-required** — what an *approved* decision needs before the
 publication gate (defined elsewhere) will commit it: everything in
-Finalize-required, plus `decision_approver`. This is proportionate rather
+Finalize-required, plus `decision_approver`. Both lists name only fields a
+*reviewer* supplies. `references/schema.md`'s publication list additionally
+names `candidate_id` and `evidence_type`, which this layer always assigns
+itself — they are never missing and never something to prompt anyone for. This is proportionate rather
 than arbitrary — the publisher only ever accepts `approved` candidates, so an
 approver is exactly what an approved decision cannot lack, and nothing is
 lost by not demanding one earlier.
@@ -430,6 +433,37 @@ When required information is missing: set `completeness_status: incomplete`,
 add every missing field path to `missing_required_fields`, preserve the
 candidate for review, never invent a value to make it look complete, and
 never change `decision_classification` because a field is missing.
+
+## What this layer hands off
+
+Keep two things separate in the candidate you produce: the **record**, which
+is the proposed Decision Bank entry and whose field shapes are defined in
+`references/schema.md`, and the **workflow** bookkeeping, which exists only
+to drive review and never reaches the Bank.
+
+Workflow carries: `decision_classification` (`decision` or `uncertain`),
+`decision_status`, `evidence_type`, `classification_reason` (one concise,
+source-verifiable sentence naming the gate that decided it — "Approval
+requested in `jomil.villareal 3:18 PM`; eng-PIC gate set in
+`cui.ju 3:20 PM`; no signal from that party through the end of the thread",
+never "seems approved"), `classification_refs`, `completeness_status`, and
+`missing_required_fields`.
+
+Alongside the candidates sit the Actions attached to each, plus
+`no_decision_topics` and any `source_limitations` carried from acquisition.
+
+Two of the workflow fields are not purely internal: `decision_status` is
+shown on the card as a reviewable field, and `evidence_type` travels into
+the published record with it. Everything else in that list is dropped at
+publication — `references/review.md` §9 owns that step. Never expose a
+workflow field name, a gate id, or `classification_reason` in its raw form
+to the user; Review Notes shows a rewritten, plain-language version
+(`references/rendering.md`).
+
+Assign `candidate_id` (`D1`, `D2`, …) and Action labels (`A1`, `A2`, …) in
+thread chronology. Once issued, an identifier is never reused, including
+after a drop or a merge — `references/review.md` §2 owns that rule for the
+rest of the session.
 
 ## Topics that are not Decisions
 

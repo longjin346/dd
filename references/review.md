@@ -73,6 +73,13 @@ again in this review.
 
 ## 3. Editing model
 
+Corrections arrive as ordinary Slack text, and every prompt this layer sends
+is answered the same way. **Never offer or require an interactive control** —
+no buttons, no menus, no picker. Where a tool exists that would render a
+choice as an interactive element, do not reach for it here; the numbered PST
+list in §3.5 is the pattern for every bounded choice, and the reason it is a
+text list is given there.
+
 ### 3.1 Resolving a target
 
 - Identify the target Decision or Action by its visible ID.
@@ -81,6 +88,12 @@ again in this review.
 - If omission leaves more than one plausible target, ask one concise
   clarification question before applying anything that depends on resolving
   it. Unambiguous edits elsewhere in the same reply still apply.
+- **A named ID that does not exist is not a target to guess at.** Say so in
+  one line, list the IDs that do currently exist, and leave everything
+  unchanged for that ID — including when the reply names several targets and
+  only one is unknown: apply the valid ones and report the unknown one. An ID
+  can be absent because it was dropped or merged away earlier in this review
+  (§2), so an unrecognised ID is often a stale reference rather than a typo.
 - One reply may edit multiple Decisions and Actions in the same batch, as
   long as each target is unambiguous.
 
@@ -153,6 +166,11 @@ currently stored ones and apply only what actually changed.**
   selection, resolved against that same list; reject an out-of-range number
   by showing the list again. Never treat a bare number as a `pst` selection
   when no such prompt is currently active.
+- **The numbered text list is deliberate — do not substitute an interactive
+  picker for it.** The Slack adapter renders a large option set as rows of
+  buttons plus an `Other…` overflow rather than as a dropdown, which for the
+  full PST list is worse to read and worse to answer than a numbered list a
+  user can reply to with one character.
 - Never select the closest-looking value, invent a new one, or edit the
   configuration.
 
