@@ -44,10 +44,28 @@ thread — never computed or re-numbered:
   cites two or three messages in one sentence; a fragment on each would make
   it unreadable.
 
-This format is for reasoning citations (`classification_refs`,
-`classification_reason`) and for anything user-facing. The published `refs`
+This author + time format governs internal reasoning, `classification_refs`,
+`classification_reason`, and Review Notes — anywhere the reader may need to
+locate the exact message to verify a judgment. It is not used inside a
+Decision record field that appears on the card (`rationale`,
+`decision_details`, `conditions`): there, cite the person only, with no
+timestamp — `(@rahadiyan.wisesa)`, never `(rahadiyan.wisesa 3:26 PM)`. The
+timestamp does little work on the card itself — `refs` sits two lines below
+with exact permalinks — and on a thread whose export carries clock times but
+no dates, a bare time on the card is actively ambiguous. The published `refs`
 array is a separate, machine-precise layer — exact Slack permalink plus
 verbatim excerpt — and is unaffected by this section.
+
+**Person mentions render as `@alias`, everywhere.** Anywhere a person is
+named — inside `rationale`, `decision_details`, `conditions`, a
+`classification_reason` clause outside its author+time citations, or Review
+Notes prose — use their Slack alias, `@long.jin`, never a bare handle and
+never a display name. This is a general rule, not one limited to
+`decision_proposer`, `decision_approver`, and `action_owner` — those fields
+simply happen to be entirely a person value. A non-person approver (a
+declared no-objection forum) stays a plain name with no `@`. An author+time
+citation itself — `cui.ju 3:20 PM` — is a distinct notation, not a mention,
+and keeps the form this section already defines.
 
 ## The gate model
 
@@ -173,10 +191,15 @@ thread attached a gate to it. Distinguish two kinds of condition:
 - **An unmet in-thread gate assigned to a named party** — "get approval from
   the eng PIC first", "pending legal's sign-off" — means the object is not
   closed until that party's signal appears in the source. Until then the
-  candidate is `pending`, and the gate goes in `conditions`.
+  candidate is `pending`. This is a fact about the approval process, not
+  about the decision itself, so it never goes in `conditions`: name it in
+  `classification_reason` as the deciding gate, and it reaches the reviewer
+  through Review Notes' `Uncertain Decisions` category
+  (`references/rendering.md`).
 - **A condition on future execution** — "we'll revisit if volumes drop" —
   does not block closure. Classify by the closure signal and record the
-  condition in `conditions`.
+  condition in `conditions` — this is the only kind of condition that
+  belongs there.
 
 If you cannot tell which kind a condition is, treat it as an unmet gate and
 say so in `classification_reason`.
@@ -302,11 +325,14 @@ approval from seniority or presumed authority.
 **`decision_title`** — short, specific, neutral. Describe the subject of the
 decision, not the approval process. Do not add unsupported certainty.
 
-**`decision_details`** — one to three sentences stating the selected
-direction or disposition. Preserve the FINAL scope after any revision. Keep
-conditions in `conditions`, not folded into the title or details. For an
-`uncertain` candidate, describe the proposed outcome without presenting it as
-approved.
+**`decision_details`** — one to three sentences stating what was decided and
+its final scope, and nothing else. Preserve the FINAL scope after any
+revision. Keep conditions in `conditions`, not folded into the title or
+details. Never state or imply whether the decision was approved, rejected,
+pending, or blocked — that is what `decision_status` and `evidence_type`
+carry, and restating it here only duplicates them while risking a record
+that goes stale the moment `decision_status` is corrected. Test: the
+sentence must stay true even if `decision_status` changes later.
 
 **`pst`** — select only an active value from `references/psts.json`. Use
 explicit source evidence or clearly established project context; never infer
@@ -322,27 +348,35 @@ the relayer. Use only a source-established identity; never infer it from who
 triggered the capture. Leave unresolved when the source does not establish
 it.
 
-**`decision_approver`** — the person, people, or forum whose signal was
-accepted under Gates 3 and 5, and only them. Someone who engaged but was not
-the entitled party, or whose standing came only from an unendorsed
-redirection (Rule 5.2), is not the approver. For `evidence_type:
-no_objection`, the approver is the declared mechanism or forum, not an
-individual. Never infer it from seniority, attendance, channel membership,
-authorship of a recap, or a request to record the thread. Leave it
-unresolved when the source does not establish it — this is expected and
-correct for many `pending` candidates; see Completeness below for why an
-unresolved approver does not block finalizing the record.
+**`decision_approver`** — required, always populated by extraction itself,
+never left blank for the reviewer to fill. Set it to the person, people, or
+forum whose signal was accepted under Gates 3 and 5, and only them. Someone
+who engaged but was not the entitled party, or whose standing came only from
+an unendorsed redirection (Rule 5.2), is not the approver. For
+`evidence_type: no_objection`, the approver is the declared mechanism or
+forum, not an individual. Never infer it from seniority, attendance, channel
+membership, authorship of a recap, or a request to record the thread. When
+Gate 3 found no closure signal at all, set it to the literal `none` — that is
+a fact the thread supports (nobody closed this), exactly like any other
+extracted value, and it is what keeps a `pending` candidate finalizable
+without ever asking the reviewer to invent a name. A blank value is never
+correct here: it would leave ambiguous whether extraction failed to find an
+approver or whether there truly was none.
 
 **`rationale`** — reasons supported by the source only, explaining why the
 direction was selected, rejected, or deferred. Keep it separate from
 conditions. Never invent a rationale from general domain knowledge. Leave it
 unresolved when the source provides none.
 
-**`conditions`** — material assumptions, gates, exclusions, or dependencies,
-including any unmet in-thread gate (Gate 4) and any unendorsed redirection or
-third-party gate (Gate 5.2), named to the person who imposed it. Use `null`
-when no condition is established. Do not convert ordinary discussion detail
-into a condition.
+**`conditions`** — a condition on future execution only (Gate 4's second
+kind) — "we'll revisit if volumes drop" — named to the person who raised it
+when relevant. An unmet in-thread approval gate and an unendorsed redirection
+or third-party gate (Gate 5.2) are facts about the approval process, not
+about the decision's execution: they never populate this field. Cite them in
+`classification_reason` instead, and they reach the reviewer through Review
+Notes' `Uncertain Decisions` category (`references/rendering.md`) — never in
+both places at once. Use `null` when no future-execution condition is
+established. Do not convert ordinary discussion detail into a condition.
 
 **`refs`** — optional. For an automatically extracted candidate, include the
 available Slack evidence because it makes the record easier to verify: exact
@@ -380,20 +414,14 @@ Decision, not an independent record with its own foreign key to maintain.
   date only when it is certain from the source. No date is a normal, complete
   Action.
 
-## Completeness: two required-field sets
+## Completeness: one required-field set
 
 Completeness is judged only after classification and record drafting, and it
 never feeds back into classification. A decision with missing fields is
 still a decision.
 
-Two different questions get two different field sets. Conflating them is
-what breaks `pending` candidates: a `pending` decision the thread never
-resolved is a well-formed, valuable record, and demanding an approver for it
-forces the reviewer to invent one, delete the thread's actual subject, or
-never finalize — all three defeat the tool.
-
-**Finalize-required** — what a faithful record of what this thread contains
-needs before it can be locked for review:
+**Required to finalize** — what a faithful record of what this thread
+contains needs before it can be locked for review:
 
 - `decision_title`
 - `decision_details`
@@ -401,33 +429,36 @@ needs before it can be locked for review:
 - `decision_proposer`
 - `rationale`
 - `decision_status`
+- `decision_approver`
 
 A candidate missing any of these is `completeness_status: incomplete`; list
-every missing field path in `missing_required_fields`. `decision_approver` is
-never in this set, regardless of `decision_status` — a `pending` candidate
-with no approver, because none was ever given, is complete.
+every missing field path in `missing_required_fields`.
 
-The field rules above say to leave `pst`, `decision_proposer`, and
-`rationale` unresolved when the source does not establish them. That is
-correct *at extraction* and does not conflict with requiring them here: the
-reviewer was in the thread and can supply any of the three, so the finalize
-prompt asks and they answer. `decision_approver` is the one field where that
-does not work — if nobody approved, nobody can honestly supply a name — which
-is exactly why it sits in the publish set instead.
+`decision_approver` sits in this set without reintroducing the bug it once
+caused: extraction always populates it itself — the entitled party's signal,
+or the literal `none` when Gate 3 found no closure signal at all — so it is
+never something the *reviewer* is asked to supply. A `pending` candidate the
+thread never resolved is complete with `decision_approver: none`, exactly as
+drafted; nobody has to invent a name. The three fields the reviewer
+genuinely might need to supply — `pst`, `decision_proposer`, `rationale` —
+stay correct at extraction to leave unresolved when the source does not
+establish them (the field rules above): the reviewer was in the thread and
+can answer the finalize prompt directly. `decision_approver` never reaches
+the reviewer in that unresolved state, because extraction never leaves it
+unresolved.
 
-**Publish-required** — what an *approved* decision needs before the
-publication gate (defined elsewhere) will commit it: everything in
-Finalize-required, plus `decision_approver`. Both lists name only fields a
-*reviewer* supplies. `references/schema.md`'s publication list additionally
-names `candidate_id` and `evidence_type`, which this layer always assigns
-itself — they are never missing and never something to prompt anyone for. This is proportionate rather
-than arbitrary — the publisher only ever accepts `approved` candidates, so an
-approver is exactly what an approved decision cannot lack, and nothing is
-lost by not demanding one earlier.
+Publication adds exactly one more check on top of this set, owned by
+`references/review.md`: an `approved` candidate cannot carry
+`decision_approver: none` — that is a contradiction the publication gate
+catches, not a missing-field gap tracked here.
+
+`references/schema.md`'s publication list additionally names `candidate_id`
+and `evidence_type`, which this layer always assigns itself — they are never
+missing and never something to prompt anyone for.
 
 Track Action completeness the same permissive way: an Action has no required
-fields at all, at either tier. A missing owner or date on an Action never
-marks its linked Decision incomplete.
+fields at all. A missing owner or date on an Action never marks its linked
+Decision incomplete.
 
 When required information is missing: set `completeness_status: incomplete`,
 add every missing field path to `missing_required_fields`, preserve the
@@ -511,14 +542,20 @@ message order is exactly how the old draft misattributed a decision below.
   found no disposition from him, but it is why his extensive engagement could
   never have closed this candidate even if he had said "approved."
 - **Result:** `uncertain`, `decision_status: pending`, `evidence_type: none`.
-  `decision_approver`: unresolved. `conditions`: eng-PIC approval unmet
-  (`cui.ju 3:20 PM`); review redirected to `@arpit.goel` by `@cui.ju`,
-  unendorsed by the originally addressed `@randy.tedjakusuma`
-  (`cui.ju 3:22 PM`). `pst`: `FF Ecommerce` (inferred — the thread later
-  calls this "this eComm decision" and ties the product to Fulfillment;
-  flagged for reviewer confirmation).
-- This candidate is finalizable exactly as drafted: every Finalize-required
-  field is present, and the empty `decision_approver` does not block that,
+  `decision_approver`: `none` — Gate 3 found no closure signal at all, so
+  extraction sets it explicitly rather than leaving it blank. The eng-PIC
+  gate and the unendorsed redirection are approval-process facts, not a
+  condition on the decision's execution, so neither populates `conditions`
+  (`null` here) — both are instead what `classification_reason` cites as the
+  deciding gates: "Approval requested in `jomil.villareal 3:18 PM`; eng-PIC
+  gate set in `cui.ju 3:20 PM`; review redirected to `arpit.goel` by `cui.ju`
+  at `3:22 PM`, unendorsed by the originally addressed `randy.tedjakusuma`;
+  no signal from any entitled party through the end of the thread." `pst`:
+  `FF Ecommerce` (inferred — the thread later calls this "this eComm
+  decision" and ties the product to Fulfillment; flagged for reviewer
+  confirmation).
+- This candidate is finalizable exactly as drafted: every required field is
+  present — `decision_approver: none` is a filled, honest value, not a gap —
   per Completeness above.
 
 ### D2 — the wiki page to document the pricing config

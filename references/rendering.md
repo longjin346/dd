@@ -137,15 +137,14 @@ between two Review Notes categories.
 
 ## The required-field legend
 
-Two different things can be missing from a card, and a reviewer has to be
-able to tell which at a glance — this is the fix for the worst bug in the
-original draft, where an unconditional approver requirement made an honestly
-unapproved decision impossible to finalize.
+One marker says a field must be filled before this version can be locked for
+review — including `decision_approver`, which extraction always fills for
+itself (down to the literal `none` when nobody closed the candidate), so a
+reviewer is never the one asked to invent a name here.
 
 | Marker | Meaning | Fields it appears on |
 |---|---|---|
-| `(*)` | Required to **finalize** — lock this version for review. | `decision_title`, `decision_details`, `pst`, `decision_proposer`, `rationale`, `decision_status` |
-| `(**)` | Required only to **publish** this Decision as `approved`. Never blocks finalize. Leave blank freely on a `pending` or `uncertain` candidate — that is not a gap, it is the honest state of a decision nobody approved. | `decision_approver` only |
+| `(*)` | Required to **finalize** — lock this version for review. | `decision_title`, `decision_details`, `pst`, `decision_proposer`, `rationale`, `decision_status`, `decision_approver` |
 | *(no marker)* | Optional, permanently. Never blocks anything. | `conditions`, `refs`, every Action field |
 
 State this once, in the Read Me block, so the distinction is visible before
@@ -155,7 +154,7 @@ the reviewer looks at a single card:
 ▸ **Read Me**
 
 - This is an AI-generated draft of Decision Candidates, each with its own attached Actions.
-- `(*)` fields must be filled before I can lock this version. `(**)` — right now only `decision_approver` — is needed only if a Decision ends up `approved`; leave it blank on anything else.
+- `(*)` fields must be filled before I can lock this version.
 - Fill each `? - need to fill` before finalizing. Anything else marked `? - optional to fill` can stay as is.
 - To update a Decision or Action, use either method:
   - **Natural language:** name the ID, the field, and the new value — "D1 decision_approver is @jane. Change A1 to 2026-09-11."
@@ -169,8 +168,7 @@ the reviewer looks at a single card:
 
 | Situation | Render as |
 |---|---|
-| `(*)` field, empty | `? - need to fill` |
-| `(**)` field (`decision_approver`), empty | `? - optional to fill (required only if approved for publishing)` |
+| `(*)` field, empty (blank-template Decision only — an extracted candidate always fills `decision_approver`, even if only to `none`) | `? - need to fill` |
 | Optional scalar, empty | `? - optional to fill` |
 | Optional array, empty, on a drafted or extracted card | `[]` |
 | Optional array, empty, on a blank add-a-decision template only | `? - optional to fill` (fillable; normalizes to `[]` if left untouched) |
@@ -222,24 +220,29 @@ One self-contained card per candidate. `candidate_id` and `decision_title`
 live in the heading, never as a field bullet. Every other `record` field
 appears exactly once, in this order: `decision_details`, `pst`, `rationale`,
 `decision_status`, `decision_proposer`, `decision_approver`, `conditions`,
-`refs`. Person values use the Slack alias (`@long.jin`), never a display
-name; a non-person approver (a declared no-objection forum) is shown by
-plain name with no `@`.
+`refs`. Every person, wherever mentioned — a field that is itself a person
+value (`decision_proposer`, `decision_approver`, an Action's owner) or a
+person named inside a free-text field's own prose (`rationale`,
+`decision_details`, `conditions`) — uses the Slack alias (`@long.jin`), never
+a display name and never a bare handle; a non-person approver (a declared
+no-objection forum) is shown by plain name with no `@`. A citation embedded
+in a field's own text cites the person only, with no timestamp
+(`references/extraction.md` owns why).
 
 ```text
 `D1: Saver-fare discount for Kalbe & Wardah (tactical) (*)`
 
-- `decision_details(*)`: rahadiyan.wisesa proposed a Saver-fare discount for two merchants, Kalbe and Wardah, for a tactical purpose. The request was still awaiting eng-PIC approval when the thread ends; no explicit approval or rejection was ever given.
+- `decision_details(*)`: A Saver-fare discount for two merchants, Kalbe and Wardah, applied for a tactical purpose.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Kalbe & Wardah pickup points sit far from many PAX, creating delivery friction that free delivery removes, unlocking demand beyond the existing pickup-point catchment (rahadiyan.wisesa 3:26 PM).
+- `rationale(*)`: Kalbe & Wardah pickup points sit far from many PAX, creating delivery friction that free delivery removes, unlocking demand beyond the existing pickup-point catchment (@rahadiyan.wisesa).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
 - `decision_proposer(*)`: @rahadiyan.wisesa
-- `decision_approver(**)`: ? - optional to fill (required only if approved for publishing)
-- `conditions`: Unmet: eng-PIC approval required before proceeding (@cui.ju 3:20 PM). Review was redirected to @arpit.goel by @cui.ju (3:22 PM); @randy.tedjakusuma, who the approval was originally addressed to, never endorsed that redirection.
+- `decision_approver(*)`: none
+- `conditions`: ? - optional to fill
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
   - A1 Documented the thread in the Confluence wiki (completed within the thread) — @arpit.goel — no date
-  - A2 Add the logic that recreates the merchant list (SQL, or partnership-based?) — @sengkeong.ho, @moch.zulfa, @rangga.pratama (requested, not yet acknowledged) — no date
+  - A2 Add the logic that recreates the merchant list — @sengkeong.ho, @moch.zulfa, @rangga.pratama (requested, not yet acknowledged) — no date
 ```
 
 ### One sequence, no classification on the card
@@ -264,9 +267,9 @@ contract above and applied identically to every card:
 - Heading, one blank line, then top-level `-` field bullets with no leading
   spaces, then one blank line before the next card. A glued or indented
   top-level field renders as literal `-` text instead of a bullet.
-- Field labels are the exact JSON key in inline code, with `(*)` or `(**)`
-  appended inside the code span where it applies — `` `decision_details(*)` ``,
-  never a renamed label like "Decision".
+- Field labels are the exact JSON key in inline code, with `(*)` appended
+  inside the code span where it applies — `` `decision_details(*)` ``, never
+  a renamed label like "Decision".
 - `decision_status` always shows the full compact label
   `` `decision_status(*)(options:approved|rejected|pending)` `` followed by
   its plain-text value — never wrap `approved`/`rejected`/`pending` in code,
@@ -310,9 +313,11 @@ invented twice), with each Action as a nested line underneath:
 ### Adding a Decision or Action from a blank template
 
 `add a decision` gets the same card shape with every value blank — the
-fields shown are exactly the finalize-required set plus the two permanently
-optional ones; `decision_approver` is never demanded here either, for the
-same reason it is never demanded anywhere during review:
+fields shown are exactly the required set plus the two permanently optional
+ones. Unlike an extracted candidate, nothing populates `decision_approver`
+on the reviewer's behalf here — they are filling in every field themselves,
+so it is required the same as any other, typed `none` if that's what
+actually happened:
 
 ```text
 `D{next}: ? - need to fill (*)`
@@ -322,7 +327,7 @@ same reason it is never demanded anywhere during review:
 - `rationale(*)`: ? - need to fill
 - `decision_status(*)(options:approved|rejected|pending)`: ? - need to fill
 - `decision_proposer(*)`: ? - need to fill
-- `decision_approver(**)`: ? - optional to fill (required only if approved for publishing)
+- `decision_approver(*)`: ? - need to fill
 - `conditions`: ? - optional to fill
 - `refs`: ? - optional to fill
 ```
@@ -489,7 +494,18 @@ Please provide all known values in one reply. Anything else you want to change? 
 
 - List every missing `(*)` field once, grouped in Decision order, ID plus
   exact field key plus one short plain-language question.
-- Never list `decision_approver` here — it carries `(**)`, not `(*)`.
+- **`decision_approver` can only be missing on a Decision the reviewer added
+  from a blank template** — extraction always fills its own, down to the
+  literal `none`. When it does appear here, the question must name that
+  answer, because the reviewer who most needs it is the one recording
+  something nobody approved: `` - `D5 decision_approver(*)` — Who approved
+  this? Reply `none` if nobody did. `` Never ask for it in a way that
+  implies a name is the only valid answer; that is the trap this skill was
+  rebuilt to remove, and it reappears here if the question is phrased
+  carelessly. In practice
+  `decision_approver` only ever appears here for a Decision added from a
+  blank template — an extracted candidate always arrives with it already
+  filled, down to `none`.
 - Never ask for `conditions`, `refs`, an Action field, or any other
   unmarked field.
 - A missing `pst` always gets the numbered list, in `psts.json`'s configured
@@ -511,26 +527,26 @@ message, with no further separator:
 
 `D1: Saver-fare discount for Kalbe & Wardah (tactical) (*)`
 
-- `decision_details(*)`: rahadiyan.wisesa proposed a Saver-fare discount for two merchants, Kalbe and Wardah, for a tactical purpose. The request was still awaiting eng-PIC approval when the thread ends; no explicit approval or rejection was ever given.
+- `decision_details(*)`: A Saver-fare discount for two merchants, Kalbe and Wardah, applied for a tactical purpose.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Kalbe & Wardah pickup points sit far from many PAX, creating delivery friction that free delivery removes, unlocking demand beyond the existing pickup-point catchment (rahadiyan.wisesa 3:26 PM).
+- `rationale(*)`: Kalbe & Wardah pickup points sit far from many PAX, creating delivery friction that free delivery removes, unlocking demand beyond the existing pickup-point catchment (@rahadiyan.wisesa).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
 - `decision_proposer(*)`: @rahadiyan.wisesa
-- `decision_approver(**)`: ? - optional to fill (required only if approved for publishing)
-- `conditions`: Unmet: eng-PIC approval required before proceeding (@cui.ju 3:20 PM). Review was redirected to @arpit.goel by @cui.ju (3:22 PM); @randy.tedjakusuma, who the approval was originally addressed to, never endorsed that redirection.
+- `decision_approver(*)`: none
+- `conditions`: ? - optional to fill
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
   - A1 Documented the thread in the Confluence wiki (completed within the thread) — @arpit.goel — no date
-  - A2 Add the logic that recreates the merchant list (SQL, or partnership-based?) — @sengkeong.ho, @moch.zulfa, @rangga.pratama (requested, not yet acknowledged) — no date
+  - A2 Add the logic that recreates the merchant list — @sengkeong.ho, @moch.zulfa, @rangga.pratama (requested, not yet acknowledged) — no date
 
 `D2: Wiki page to document the pricing-config variable (*)`
 
 - `decision_details(*)`: sengkeong.ho proposed a wiki page to document mex-specific pricing configs, narrowed from "all markets" to this one variable, linked back to the variable as the central source of truth.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice; the wiki closes the traceability gap the team hit today, where legacy configs have no visible owner or purpose (sengkeong.ho 8:55 AM; albert.lim 8:57 AM).
+- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice; the wiki closes the traceability gap the team hit today, where legacy configs have no visible owner or purpose (@sengkeong.ho; @albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
 - `decision_proposer(*)`: @sengkeong.ho
-- `decision_approver(**)`: @albert.lim
+- `decision_approver(*)`: @albert.lim
 - `conditions`: ? - optional to fill
 - `refs`: 3 sources (reply "D2 refs" to view)
 - **Actions**
@@ -589,10 +605,10 @@ sync with it.
 
 - `decision_details(*)`: sengkeong.ho proposed a wiki page to document mex-specific pricing configs, narrowed from "all markets" to this one variable, linked back to the variable as the central source of truth.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice; the wiki closes the traceability gap the team hit today, where legacy configs have no visible owner or purpose (sengkeong.ho 8:55 AM; albert.lim 8:57 AM).
+- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice; the wiki closes the traceability gap the team hit today, where legacy configs have no visible owner or purpose (@sengkeong.ho; @albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
 - `decision_proposer(*)`: @sengkeong.ho
-- `decision_approver(**)`: @albert.lim
+- `decision_approver(*)`: @albert.lim
 - `conditions`: ? - optional to fill
 - `refs`: 3 sources (reply "D2 refs" to view)
 - **Actions**
@@ -600,7 +616,7 @@ sync with it.
 
 ▸ **Not Included**
 
-- `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — excluded (still `pending`; eng-PIC approval was never given). Reply "D1 approved by <name>" to include it instead.
+- `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — excluded (still `pending`, `decision_approver: none`). Reply "D1 approved by <name>" to include it instead.
 
 ▸ **Ready to Save?**
 These are the exact Decisions and Actions that will be saved to the Decision Bank.
@@ -608,10 +624,10 @@ These are the exact Decisions and Actions that will be saved to the Decision Ban
 Reply "Yes, save" to commit this version, or send any remaining changes.
 ```
 
-- Every Decision shown here already carries the full publish-required set —
-  finalize-required plus a named `decision_approver` — and
-  `decision_status: approved`; that field check is owned by
-  `references/review.md` §8, this section only renders its result.
+- Every Decision shown here already carries every required field, with
+  `decision_approver` naming an actual person, people, or forum — never the
+  literal `none` — and `decision_status: approved`; that field check is
+  owned by `references/review.md` §8, this section only renders its result.
 - List every excluded item under `▸ **Not Included**` with its ID, title,
   and reason — never drop one silently, and never treat silence as
   approval.
@@ -626,17 +642,25 @@ templates later. Checked line by line here:
 - D1's card and the full-set render both put a blank line between the
   heading and the first `-` field, and between `▸ **Review Notes**` and
   `- **Uncertain Decisions**` — no template above skips it.
-- D1's `decision_approver` reads `? - optional to fill (required only if
-  approved for publishing)`, not `? - need to fill` — a reviewer scanning
-  the card sees immediately that this is not something blocking finalize,
-  which is the entire fix for the original's unconditional `(*)`.
+- D1's `decision_approver` reads `none`, not a blank placeholder —
+  extraction populated it itself because Gate 3 found no closure signal at
+  all, so the reviewer never has to invent a name to finalize this card. Its
+  `decision_details` states only what was decided and its final scope, with
+  no comment on approval state — that stays true even if a correction later
+  makes this candidate `approved`. The eng-PIC gate and the redirection live
+  only in Review Notes' `Uncertain Decisions` category below; `conditions`
+  carries none of it, since neither is a condition on future execution.
 - D1's Actions (`A1`, `A2`) sit nested under `- **Actions**` inside D1's own
   card — no separate Action Candidates section exists anywhere in this
   file.
 - D1's fourth reference sanitizes the pasted Confluence URL out of the link
   label while keeping it as the actual link target — the concrete fix for
   defect 6.
-- The publication preview excludes D1 (still `pending`, no approver) and
+- D1's `rationale` cites `(@rahadiyan.wisesa)` — the person only, no
+  timestamp — while the same evidence is cited in its full `author + time`
+  form in Review Notes and `classification_reason`, per
+  `references/extraction.md`.
+- The publication preview excludes D1 (still `pending`, approver `none`) and
   publishes D2 outright (`approved`, `@albert.lim`) — matching
   `references/review.md` §10's own worked check — and needs no `Actions to
   Save` section because D2's card already shows `A3`.

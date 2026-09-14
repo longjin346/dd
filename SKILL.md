@@ -62,7 +62,7 @@ defeats the point of splitting them out.
 | Working on… | Load |
 |---|---|
 | Fetching the thread; a truncated or failed fetch; finding and listing linked sources; the source-selection question; reading the selected sources; the bundle's `complete` / `partial` / `inaccessible` status | `references/sources.md` |
-| Whether something is a Decision at all (the gate model), its `decision_status` / `evidence_type`, populating a Decision's fields, an Action as an attribute of the Decision it attaches to, the two completeness tiers (finalize vs. publish), how to cite a source | `references/extraction.md` |
+| Whether something is a Decision at all (the gate model), its `decision_status` / `evidence_type`, populating a Decision's fields, an Action as an attribute of the Decision it attaches to, the required-field set, how to cite a source | `references/extraction.md` |
 | Applying a correction — natural-language or pasted — a structural edit (merge, confirm, drop, add), the review-state variables, the finalize gate, the five publication gates | `references/review.md` |
 | The exact text of anything sent to Slack: the Read Me, a Decision or Action card, a change receipt, Review Notes, the finalize or publication prompt, spacing and glyph rules | `references/rendering.md` |
 

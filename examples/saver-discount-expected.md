@@ -20,7 +20,11 @@ and D2 from this same thread as worked examples.
 Citations use `references/extraction.md`'s format: `author + displayed
 time`, with a same-minute fragment when one author has two messages in the
 same displayed minute. See "On dates," directly below, for why no citation
-here carries a calendar date.
+here carries a calendar date. That format is for internal reasoning and gate
+traces — a Decision record field that would actually appear on a rendered
+card (`decision_details`, `rationale`, `conditions`) cites a person by alias
+only, with no timestamp, per the same file's card-field citation rule; those
+fields are marked below where it applies.
 
 ## On dates — read before trusting any timestamp below
 
@@ -95,11 +99,9 @@ engagement could never have closed this candidate even had he said
 **Fields:**
 - `decision_title`: Saver-fare discount for Kalbe & Wardah (tactical)
 - `decision_details`: A Saver-fare discount for two merchants, Kalbe and
-  Wardah, for a tactical purpose, relayed by `jomil.villareal` on behalf of
-  `rahadiyan.wisesa` (`3:18 PM, Day 1`). Scope is never narrowed or widened.
-  An eng-PIC approval condition remains unmet through the end of the
-  available source, and no closure signal — approval, rejection, or
-  explicit deferral — is ever given.
+  Wardah, applied for a tactical purpose. States substance and final scope
+  only — nothing about approval state, per `extraction.md`'s rule that this
+  sentence must stay true even if `decision_status` later changes.
 - `pst`: `FF Ecommerce` — **inferred, not established.** Basis:
   `jomil.villareal 3:21 PM (Day 1)` ("Product is from under Fulfillment")
   plus `albert.lim 9:02 AM (Day 2)` calling the surrounding thread "this
@@ -110,40 +112,44 @@ engagement could never have closed this candidate even had he said
 - `decision_proposer`: `@rahadiyan.wisesa`
 - `rationale`: Kalbe & Wardah pickup points sit far from many PAX, creating
   delivery friction that free delivery removes, unlocking demand beyond the
-  existing pickup-point catchment (`rahadiyan.wisesa 3:26 PM, Day 1`).
+  existing pickup-point catchment (`@rahadiyan.wisesa`). Cited by alias
+  only, no timestamp, per `extraction.md`'s card-field citation rule — the
+  full `author + time` form for this same evidence is above, in the Gate 3
+  trace.
 - `decision_status`: `pending`
-- `decision_approver`: unresolved — no party entitled to close this ever
-  gave a signal.
-- `conditions`:
-  - Unmet: eng-PIC approval required before proceeding
-    (`@cui.ju 3:20 PM, Day 1`).
-  - Review redirected to `@arpit.goel` by `@cui.ju` (`3:22 PM, Day 1`);
-    `@randy.tedjakusuma`, the party the approval was originally addressed
-    to, never endorsed that redirection.
+- `decision_approver`: `none` — no party entitled to close this ever gave a
+  signal, so extraction sets the literal `none` itself rather than leaving
+  the field blank.
+- `conditions`: `null`. The eng-PIC gate and the unendorsed redirection are
+  approval-process facts, not a condition on future execution, so neither
+  populates this field — both live instead in `classification_reason`
+  (the Gate 3/4/5 traces above) and reach the reviewer through Review
+  Notes' `Uncertain Decisions` category.
 - `refs`: available (approval-request message, the eng-PIC condition
   message, the governance-concern message, the wiki-documentation message)
   — not enumerated here; see `rendering.md`'s D1 references block for the
   rendered form.
 
 **Completeness:**
-- Finalize-required: all six fields present (`pst`, `decision_proposer`,
-  and `rationale` present as inferred/established values a reviewer can
-  confirm) → `completeness_status: complete` for finalize.
-- Publish-required: missing `decision_approver` → cannot publish as-is. Not
-  actually reachable anyway, since `decision_status` is `pending`, not
-  `approved`.
-- This candidate is finalizable exactly as drafted — the empty
-  `decision_approver` does not block finalize, per Completeness in
+- Required: all seven fields present, including `decision_approver: none`
+  as a filled, honest value → `completeness_status: complete`.
+- Not publishable as `approved` — but not because anything is missing:
+  `decision_status` is `pending`, and even if it were corrected to
+  `approved`, `decision_approver: none` would be the contradiction
+  `references/review.md`'s publication gate 3 catches and must resolve
+  before this candidate could publish.
+- This candidate is finalizable exactly as drafted — `decision_approver:
+  none` is a complete value, not a gap, per Completeness in
   `extraction.md`.
 
 **Actions attaching to D1:**
 - **A1** — "Documented the thread in the Confluence wiki (completed within
   the thread)." Owner: `@arpit.goel`. No date. Source:
   `arpit.goel 11:23 PM (Day 2)` — "I have documented the thread here."
-- **A2** — "Add the logic that recreates the merchant list (SQL, or
-  partnership-based?)." Owners (list): `@sengkeong.ho`, `@moch.zulfa`,
-  `@rangga.pratama` — requested, not yet acknowledged in the available
-  source. No date. Source: `arpit.goel 11:23 PM (Day 2)`.
+- **A2** — "Add the logic that recreates the merchant list." Owners (list):
+  `@sengkeong.ho`, `@moch.zulfa`, `@rangga.pratama` — requested, not yet
+  acknowledged in the available source. No date. Source:
+  `arpit.goel 11:23 PM (Day 2)`.
 
 ### D2 — Wiki page to document the mex-specific pricing-config variable
 
@@ -207,10 +213,10 @@ baseline records the corrected attribution.
   confirmation at least as strongly as D1's.
 - `decision_proposer`: `@sengkeong.ho`
 - `rationale`: Handling mex-specific pricing configs on ExP is established
-  practice, not a new one (`sengkeong.ho 8:55 AM, Day 2`); the wiki closes a
-  traceability gap the team hit that same morning, where legacy configs
-  have no visible owner or purpose and are hard to remove or trace
-  (`albert.lim 8:57 AM, Day 2`).
+  practice, not a new one (`@sengkeong.ho`); the wiki closes a traceability
+  gap the team hit that same morning, where legacy configs have no visible
+  owner or purpose and are hard to remove or trace (`@albert.lim`). Cited by
+  alias only, no timestamp, per `extraction.md`'s card-field citation rule.
 - `decision_status`: `approved`
 - `decision_approver`: `@albert.lim`
 - `conditions`: none established — `null`.
@@ -219,9 +225,11 @@ baseline records the corrected attribution.
   references block.
 
 **Completeness:**
-- Finalize-required: all six fields present → `complete`.
-- Publish-required: `decision_approver` present (`@albert.lim`) → also
-  `complete`. D2 is the one candidate in this thread eligible to actually
+- Required: all seven fields present, including `decision_approver:
+  @albert.lim` → `complete`, and — because `decision_status` is `approved`
+  and the approver is a real name, not `none` — also clear of the one extra
+  check publication gate 3 (`references/review.md`) applies to `approved`
+  candidates. D2 is the one candidate in this thread eligible to actually
   publish as `approved`.
 
 **Actions attaching to D2:**
@@ -281,6 +289,20 @@ itself indicate a regression.
 
 ## Judgment calls and disagreements worth flagging
 
+- **Single required-field tier**: an earlier draft of `extraction.md` left
+  `decision_approver` unresolved on D1 and treated it as required only to
+  publish, not to finalize. It is now required at the same single tier as
+  every other field, but extraction populates it unconditionally — `none`
+  here, since Gate 3 found no closure signal — so this baseline's D1 was
+  never actually at risk of the bug that split ever existed to avoid: the
+  reviewer is still never asked to invent an approver.
+- **`decision_details` and `conditions` no longer carry approval-process
+  content**: an earlier draft's D1 `decision_details` stated that no
+  approval was ever given, and its `conditions` repeated the unmet eng-PIC
+  gate and the redirection that Review Notes already carries. Both are
+  trimmed here — `decision_details` states substance and scope only, and
+  the approval-process facts live solely in `classification_reason` and
+  Review Notes' `Uncertain Decisions` category.
 - **Dates**: no citation here carries a calendar date, because the export
   has none — see "On dates" above. Establishing that corrected an invented
   date in `extraction.md`'s own worked examples.

@@ -33,7 +33,7 @@ Action pointing at a Decision that does not exist is not a case to handle.
   "decision_details": "one-to-three sentences describing the outcome",
   "rationale": "why, based on the available sources, or null",
   "decision_proposer": "@username (Slack profile alias, e.g. @long.jin) or null",
-  "decision_approver": "@username (Slack profile alias, e.g. @long.jin) or null",
+  "decision_approver": "@username (Slack profile alias, e.g. @long.jin), a non-person forum's plain name, or the literal \"none\" when no closer was ever entitled and gave a signal",
   "decision_status": "approved | rejected | pending",
   "evidence_type": "explicitly_stated | no_objection | none",
   "conditions": "material condition or null",
@@ -59,19 +59,20 @@ Required before publication:
 - `decision_status`
 - `evidence_type`
 
-**This list is the publish tier, not the finalize tier.** `extraction.md`
-defines two required-field sets, and `decision_approver` is the one field
-that separates them: everything above except the approver is also required
-to *finalize* a record, while the approver is required only here, to publish
-one as `approved`.
-
-Nothing in this file may be read as demanding an approver from a record that
-is merely being finalized. A `pending` decision nobody ever approved is a
-complete, honest record and must be finalizable with `decision_approver`
-left `null`; it is simply not publishable, because publication accepts only
-`approved` Candidates. Conflating the two tiers is what made the reference
-thread's central decision impossible to finalize without inventing a name
-for an approver who never existed.
+**One required-field set, not two.** `extraction.md` defines a single
+required-field list, checked at finalize, and this is that same list plus
+the two fields extraction always assigns itself (`candidate_id`,
+`evidence_type`) rather than ever leaving to a reviewer. `decision_approver`
+sits in it like any other field because extraction always populates it —
+the entitled party's signal, or the literal `none` when Gate 3 found no
+closure signal at all — so it is never a value a reviewer has to invent. A
+`pending` decision nobody ever approved is a complete, honest record with
+`decision_approver: none`, and is finalizable exactly as drafted; it is
+simply not publishable as `approved`. Because publication accepts only
+`approved` Candidates, an `approved` Candidate whose `decision_approver`
+still reads `none` is a contradiction, not a missing field —
+`references/review.md`'s publication gate catches and resolves it, not this
+file.
 
 Optional:
 
