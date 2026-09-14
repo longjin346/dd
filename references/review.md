@@ -125,11 +125,6 @@ currently stored ones and apply only what actually changed.**
 - Preserve every field the user did not touch.
 - Never delete a value merely because a pasted card omits its line — deletion
   requires an explicit instruction (`remove`, `clear`, `set to null`).
-- `none` is a **value**, not one of those instructions. "D1 approver is none"
-  stores the literal `none` — the recorded fact that nobody closed this
-  candidate — leaving the field filled and the Decision complete. Accept any
-  plain equivalent the reviewer offers (`nobody`, `no one`, `n/a`) and store
-  the canonical `none`, rather than asking them to rephrase.
 - Treat placeholder markers (an unfilled-field marker, the references
   summary line) as presentation, never as literal values to store.
 - If a pasted diff exposes a probably-unintended change (for example, text
@@ -204,9 +199,10 @@ currently stored ones and apply only what actually changed.**
   the user to fill are exactly the **required** set from extraction.md —
   title, details, pst, proposer, rationale, status, approver. Nothing is
   populated on the reviewer's behalf here — they are supplying every field —
-  and `decision_approver` behaves exactly as it does on an extracted
-  candidate: they fill it like any other, typing `none` if that is what
-  actually happened. Offer `conditions` and `refs` as optional. Do not
+  and `decision_approver` is required the same as any other field: whoever
+  actually approved it, or, if nobody has yet, whoever it is awaiting,
+  written with the same inline awaited marker extraction.md defines. Offer
+  `conditions` and `refs` as optional. Do not
   extract, infer, or prefill any value for a manually added Decision; it is
   subject to every ordinary completeness, finalize, and publication rule
   from that point on.
@@ -247,12 +243,15 @@ extraction.md, across every current Decision.
 - Incomplete: keep `review_state: reviewing`, set `awaiting_finalize_revision`
   to unset, and end the response with one consolidated prompt listing every
   missing required field, grouped by Decision, with its ID and field key.
-  `decision_approver` appears here like any other unfilled field, and it
-  will appear often — every candidate the thread never closed reaches this
-  prompt needing it, which is the common case for anything `pending`. The
-  question must name `none` as a valid reply (`references/rendering.md`);
-  asked that way it costs the reviewer one word and never asks them to
-  invent a person. Never ask the user to fill an optional field.
+  `decision_approver` appears here like any other unfilled field, whenever
+  extraction's fallback ladder (`references/extraction.md`) reached rung 3 —
+  the thread established neither who approved the candidate nor who is
+  awaited to. That is the exception, not the common case: most candidates
+  the thread never closed still name an addressee, a gatekeeper, or a
+  required sign-off role, which rung 2 already captures before this prompt
+  is ever reached. When it does appear here, the question states plainly
+  what is wanted — who approved this, or who it is awaiting
+  (`references/rendering.md`). Never ask the user to fill an optional field.
 - Complete: set `awaiting_finalize_revision` to the current revision and
   issue the finalize prompt (§7). Apply the render rule in §6 to decide
   whether the full set accompanies it.
@@ -266,28 +265,30 @@ extraction.md, across every current Decision.
 
 `decision_approver` is required, same tier as every other field
 (extraction.md). When the thread closed the candidate, extraction fills it
-with whoever closed it; when the thread did not, it arrives unresolved and
-the missing-fields prompt asks for it (§4), offering `none` as a valid
-answer. Either way the reviewer settles it before finalize, so by the time
-anything downstream reads the field it holds a deliberate value rather than
-an assumed one. During ordinary review, naming a different approver
-on a `pending` candidate does **not** trigger a follow-up question about
-status, and setting `decision_status: approved` does **not** by itself
-trigger a follow-up question about the approver. Apply each edit at face
-value. A named approver may sit quietly on a candidate the reviewer still
-wants to keep `pending`, and a candidate may sit at `decision_approver: none`
-while its status reads `approved` — the ordinary edit path never blocks
-either.
+with whoever closed it; when nobody has closed it yet but the thread says
+who is supposed to, extraction fills it with that party, marked as awaited;
+only when the thread establishes neither does it arrive unresolved for the
+missing-fields prompt to ask for (§4). Either way the reviewer settles it
+before finalize, so by the time anything downstream reads the field it holds
+a deliberate value rather than an assumed one. During ordinary review,
+naming a different approver on a `pending` candidate does **not** trigger a
+follow-up question about status, and setting `decision_status: approved`
+does **not** by itself trigger a follow-up question about the approver.
+Apply each edit at face value. A named approver may sit quietly on a
+candidate the reviewer still wants to keep `pending`, and a candidate may
+sit with `decision_approver` still marked awaited while its status reads
+`approved` — the ordinary edit path never blocks either.
 
 The coupling itself — that these two fields bear on each other — is still
 correct reasoning. It resurfaces at exactly the point where it stops being
 optional: **Publication gate 3** (§8), because the publisher accepts only
 `approved` candidates, and an `approved` candidate whose `decision_approver`
-still reads `none` is a contradiction, not an honest gap. When a candidate is
-corrected to `approved` at that gate (or is already `approved` with
-`decision_approver: none` when gate 3 is reached), resolve the approver to an
-actual name or forum in the same response — never split the pair across two
-turns there, since by then both are genuinely required together.
+still carries the awaited marker is a contradiction, not an honest gap. When
+a candidate is corrected to `approved` at that gate (or is already
+`approved` with `decision_approver` still marked awaited when gate 3 is
+reached), resolve the approver to who actually approved in the same
+response — never split the pair across two turns there, since by then both
+are genuinely required together.
 
 ## 6. What gets rendered, and when
 
@@ -390,9 +391,10 @@ order, all required.
      "editing a finalized set"): gate 1 now fails by construction and must
      be earned again. `decision_approver` was already required and already
      populated before this edit, but an `approved` candidate cannot honestly
-     carry `none` — if it still reads `none`, resolve it to an actual name or
-     forum in the same response — this is the one place the §5 coupling
-     applies. Recompute completeness, obtain a fresh finalize confirmation
+     carry an approver still marked awaited — if it still carries that
+     marker, resolve it to who actually approved in the same response — this
+     is the one place the §5 coupling applies. Recompute completeness,
+     obtain a fresh finalize confirmation
      (full render, per §6's first moment), then re-enter gate 3 for
      whatever, if anything, still needs resolving. The save request from
      gate 2 still stands across this loop — never make the user ask to save
@@ -412,8 +414,9 @@ order, all required.
 
 **Field check before gate 5 can be satisfied:** every candidate in the
 previewed set carries every required field from extraction.md (including a
-`decision_approver` that is not the literal `none`) and
-`decision_status: approved`. Every Action attached to a publishing Decision
+`decision_approver` that names who actually approved, not one still
+carrying the awaited marker) and `decision_status: approved`. Every Action
+attached to a publishing Decision
 publishes regardless of which of its optional fields — owner, due date — are
 filled; nothing about an Action ever blocks this gate.
 
@@ -447,19 +450,21 @@ again, from gate 1.
 
 - **D1** (uncertain, `pending`, unmet eng-PIC condition cited in
   `classification_reason` and Review Notes rather than in `conditions`):
-  arrives with `decision_approver` unresolved, because nothing in the thread
-  closed it. That is the one field standing between it and finalize, and the
-  prompt asks for it with `none` named as a valid reply — one word settles
-  it, and the reviewer is never asked for a name that does not exist (§4–§5).
-  Once confirmed, at the publication gate (§8 gate 3) it is
-  resolved either by exclusion — D2 still publishes, and the finalization
-  survives untouched — or by correcting it to `approved`, which requires
-  naming an actual approver in that same reply because `none` cannot stand
-  on an `approved` candidate, reopens review, and requires a fresh finalize
-  before gate 3 can be re-entered.
+  arrives with `decision_approver` already filled by rung 2 of the fallback
+  ladder — `@randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC
+  sign-off also required, person not named in thread` — because the
+  thread never closed it but does say who was supposed to. That leaves every
+  required field present, so D1 reaches the finalize prompt without a
+  missing-fields round-trip (§4–§5). At the publication gate (§8 gate 3) it
+  is resolved either by exclusion — D2 still publishes, and the
+  finalization survives untouched — or by correcting it to `approved`, which
+  requires naming an actual approver in that same reply, because an awaited
+  marker cannot stand on an `approved` candidate, reopens review, and
+  requires a fresh finalize before gate 3 can be re-entered.
 - **D2** (`approved`, approver `@albert.lim`): every required field is
-  present with a real approver, not `none`, so it satisfies gate 3's field
-  check outright and moves through the gate cleanly once gates 1–2 hold.
+  present with a real approver, not one still marked awaited, so it
+  satisfies gate 3's field check outright and moves through the gate cleanly
+  once gates 1–2 hold.
 - **Actions with no owner and no date** (several, attached to both D1 and
   D2): never appear in a missing-fields prompt, never block finalize, never
   block publication — per §4 and §8's field check, exactly as extraction.md

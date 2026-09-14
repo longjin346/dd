@@ -33,7 +33,7 @@ Action pointing at a Decision that does not exist is not a case to handle.
   "decision_details": "one-to-three sentences describing the outcome",
   "rationale": "why, based on the available sources, or null",
   "decision_proposer": "@username (Slack profile alias, e.g. @long.jin) or null",
-  "decision_approver": "@username (Slack profile alias, e.g. @long.jin), a non-person forum's plain name, or the literal \"none\" when no closer was ever entitled and gave a signal",
+  "decision_approver": "@username (Slack profile alias, e.g. @long.jin), a non-person forum's plain name, or either of those with an inline awaited marker (e.g. \"@name (awaiting approval)\") when the thread establishes who is supposed to approve but nobody has yet",
   "decision_status": "approved | rejected | pending",
   "evidence_type": "explicitly_stated | no_objection | none",
   "conditions": "material condition or null",
@@ -63,14 +63,16 @@ Required before publication:
 required-field list, checked at finalize, and this is that same list plus
 the two fields extraction always assigns itself (`candidate_id`,
 `evidence_type`) rather than ever leaving to a reviewer. `decision_approver`
-sits in it like any other field. Extraction fills it when the thread closed
-the candidate; when nothing closed it, the field arrives unresolved and the
-reviewer settles it before finalize, with `none` offered as a valid answer
-so no name is ever invented. A `pending` decision nobody ever approved is a
-complete, honest record once `decision_approver: none` is confirmed; it is
-simply not publishable as `approved`. Because publication accepts only
-`approved` Candidates, an `approved` Candidate whose `decision_approver`
-still reads `none` is a contradiction, not a missing field —
+sits in it like any other field. Extraction fills it by working down the
+fallback ladder `extraction.md` defines: who approved it; failing that, who
+is supposed to — recorded with an inline marker showing that approval is
+still awaited, never as a bare name; only failing both does the field arrive
+unresolved for the reviewer to settle before finalize. A `pending` decision
+nobody has approved yet is a complete, honest record once `decision_approver`
+names who approved it, or who it is awaiting; it is simply not publishable
+as `approved`. Because publication accepts only `approved` Candidates, an
+`approved` Candidate whose `decision_approver` still carries the awaited
+marker is a contradiction, not a missing field —
 `references/review.md`'s publication gate catches and resolves it, not this
 file.
 

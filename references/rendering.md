@@ -138,17 +138,22 @@ between two Review Notes categories.
 ## The required-field legend
 
 One marker says a field must be filled before this version can be locked for
-review. `decision_approver` carries it like any other: when the thread
-establishes no approver, the card shows `? - need to fill`, not a value
-supplied on the reviewer's behalf.
+review. `decision_approver` carries it like any other, but it reaches that
+marker far less often than it once did: `references/extraction.md` fills it
+by working down a fallback ladder — who approved it, failing that who is
+supposed to, marked inline as `(awaiting approval)` rather than given — and
+only when the thread establishes neither does the card show
+`? - need to fill`.
 
-That is deliberate. A field pre-filled with `none` reads as answered and
-gets skipped, and it makes a required field look optional. The reviewer
-confirms instead — and the prompt that asks names `none` as a valid answer,
-so confirming costs one word and never requires inventing a person. Asking
-someone to confirm what the thread shows is fine; asking them to supply what
-it does not is the bug this skill was rebuilt to remove, and the difference
-lives entirely in how the question is worded.
+That is deliberate. A value supplied on the reviewer's behalf without
+marking that it was never actually given would read as answered and get
+skipped, making a required field look optional. An awaited value avoids that
+because the inline marker (below) keeps it from being misread as a
+disposition. Only when the ladder finds nothing at all does the reviewer get
+asked, and the prompt states plainly what is wanted. Asking someone to
+confirm what the thread shows is fine; asking them to supply what it does
+not is the bug this skill was rebuilt to remove, and the difference lives
+entirely in how the question is worded.
 
 | Marker | Meaning | Fields it appears on |
 |---|---|---|
@@ -176,7 +181,7 @@ the reviewer looks at a single card:
 
 | Situation | Render as |
 |---|---|
-| `(*)` field, empty — including `decision_approver` when the thread established no approver | `? - need to fill` |
+| `(*)` field, empty — including `decision_approver` when the thread establishes neither an approver nor an awaited party | `? - need to fill` |
 | Optional scalar, empty | `? - optional to fill` |
 | Optional array, empty, on a drafted or extracted card | `[]` |
 | Optional array, empty, on a blank add-a-decision template only | `? - optional to fill` (fillable; normalizes to `[]` if left untouched) |
@@ -245,7 +250,7 @@ in a field's own text cites the person only, with no timestamp
 - `rationale(*)`: Many PAX sit far from Kalbe & Wardah pickup points, and the delivery cost that creates is what caps demand; free delivery removes the barrier and unlocks volume beyond the existing catchment (@rahadiyan.wisesa). Commercially, these merchants carry Grab's e-commerce partnerships with FMCG principals, and a competitive Saver fare is one of the requirements for those partnerships to drive enough sales volume to stay sustainable (@moch.zulfa).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
 - `decision_proposer(*)`: @rahadiyan.wisesa
-- `decision_approver(*)`: ? - need to fill
+- `decision_approver(*)`: @randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC sign-off also required, person not named in thread
 - `conditions`: The merchant group is a business-team priority list reviewed against partnership needs and merchant performance, not a fixed setup — membership is expected to change as relevance does (@moch.zulfa).
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
@@ -324,8 +329,9 @@ invented twice), with each Action as a nested line underneath:
 fields shown are exactly the required set plus the two permanently optional
 ones. Unlike an extracted candidate, nothing populates `decision_approver`
 on the reviewer's behalf here — they are filling in every field themselves,
-so it is required the same as any other, typed `none` if that's what
-actually happened:
+so it is required the same as any other field: whoever actually approved
+it, or, if nobody has yet, whoever it is awaiting, marked inline as
+`(awaiting approval)`:
 
 ```text
 `D{next}: ? - need to fill (*)`
@@ -399,6 +405,10 @@ every category is empty.** Nothing else gates it.
 - **Inferred Values to Confirm**
   - `D1 pst`: FF Ecommerce — inferred from the thread calling this "this
     eComm decision" and tying the product to Fulfillment. Confirm or change.
+  - `D1 decision_approver`: recorded as the party the request was addressed
+    to. The eng-PIC sign-off `cui.ju` also required (`cui.ju 3:20 PM`) is
+    left as a role — the thread never names that person. Confirm or name
+    them.
 - **Uncertain Decisions**
   - `D1` — Why uncertain: eng-PIC approval was required before this could
     close (`cui.ju 3:20 PM`); no eng PIC appears anywhere in the available
@@ -502,18 +512,19 @@ Please provide all known values in one reply. Anything else you want to change? 
 
 - List every missing `(*)` field once, grouped in Decision order, ID plus
   exact field key plus one short plain-language question.
-- **The `decision_approver` question must always name `none` as an answer.**
-  It appears here whenever the thread established no approver — the common
-  case for anything still `pending` — and the reviewer who most needs it is
-  precisely the one recording something nobody approved:
-  `` - `D1 decision_approver(*)` — Who approved this? Reply `none` if nobody
-  did. `` Never phrase it so that a name looks like the only valid answer.
-  That phrasing is the whole bug this skill was rebuilt to remove: it does
-  not matter that the rules permit `none` if the question on screen implies
-  otherwise, because the reviewer answers the question, not the rules. In practice
-  `decision_approver` only ever appears here for a Decision added from a
-  blank template — an extracted candidate always arrives with it already
-  filled, down to `none`.
+- **The `decision_approver` question states plainly what is wanted.** It
+  reaches this prompt only when extraction's fallback ladder
+  (`references/extraction.md`) found neither an approver nor an awaited
+  party in the thread — the reviewer is being asked to supply real
+  knowledge the transcript didn't capture, the same as `pst`,
+  `decision_proposer`, and `rationale` already are, never to invent a
+  person:
+  `` - `D5 decision_approver(*)` — Who approved this? If nobody has yet, who
+  is it waiting on? `` In practice this rarely fires for an extracted
+  candidate — rung 2 of the ladder already fills the field with an awaited
+  party whenever the thread names one — so it is the common case only for a
+  Decision added from a blank template, where the reviewer is filling every
+  field themselves.
 - Never ask for `conditions`, `refs`, an Action field, or any other
   unmarked field.
 - A missing `pst` always gets the numbered list, in `psts.json`'s configured
@@ -540,7 +551,7 @@ message, with no further separator:
 - `rationale(*)`: Many PAX sit far from Kalbe & Wardah pickup points, and the delivery cost that creates is what caps demand; free delivery removes the barrier and unlocks volume beyond the existing catchment (@rahadiyan.wisesa). Commercially, these merchants carry Grab's e-commerce partnerships with FMCG principals, and a competitive Saver fare is one of the requirements for those partnerships to drive enough sales volume to stay sustainable (@moch.zulfa).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
 - `decision_proposer(*)`: @rahadiyan.wisesa
-- `decision_approver(*)`: ? - need to fill
+- `decision_approver(*)`: @randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC sign-off also required, person not named in thread
 - `conditions`: The merchant group is a business-team priority list reviewed against partnership needs and merchant performance, not a fixed setup — membership is expected to change as relevance does (@moch.zulfa).
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
@@ -624,7 +635,7 @@ sync with it.
 
 ▸ **Not Included**
 
-- `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — excluded (still `pending`; the reviewer confirmed `decision_approver: none`). Reply "D1 approved by <name>" to include it instead.
+- `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — excluded (still `pending`; `decision_approver` still marked `(awaiting approval)`). Reply "D1 approved by <name>" to include it instead.
 
 ▸ **Ready to Save?**
 These are the exact Decisions and Actions that will be saved to the Decision Bank.
@@ -633,9 +644,10 @@ Reply "Yes, save" to commit this version, or send any remaining changes.
 ```
 
 - Every Decision shown here already carries every required field, with
-  `decision_approver` naming an actual person, people, or forum — never the
-  literal `none` — and `decision_status: approved`; that field check is
-  owned by `references/review.md` §8, this section only renders its result.
+  `decision_approver` naming an actual person, people, or forum who really
+  approved it — never one still carrying the `(awaiting approval)` marker —
+  and `decision_status: approved`; that field check is owned by
+  `references/review.md` §8, this section only renders its result.
 - List every excluded item under `▸ **Not Included**` with its ID, title,
   and reason — never drop one silently, and never treat silence as
   approval.
@@ -650,15 +662,17 @@ templates later. Checked line by line here:
 - D1's card and the full-set render both put a blank line between the
   heading and the first `-` field, and between `▸ **Review Notes**` and
   `- **Uncertain Decisions**` — no template above skips it.
-- D1's `decision_approver` reads `? - need to fill`, because Gate 3 found no
-  closure signal and extraction does not answer that question on the
-  reviewer's behalf. The finalize prompt asks it with `none` named as a
-  valid reply, so one word settles it and no name is ever invented. Its
-  `decision_details` states only what was decided and its final scope, with
-  no comment on approval state — that stays true even if a correction later
-  makes this candidate `approved`. The eng-PIC gate and the redirection live
-  only in Review Notes' `Uncertain Decisions` category below; `conditions`
-  carries none of it, since neither is a condition on future execution.
+- D1's `decision_approver` reads `@randy.tedjakusuma / @oncall-lead
+  (awaiting approval); eng-PIC sign-off also required, person not named in thread (awaiting
+  approval)`, because Gate 3 found no closure signal but the thread still
+  names who the approval was addressed to and who was routed to review it.
+  The role-to-person inference is flagged in Review Notes' `Inferred Values
+  to Confirm`, exactly like `pst`. Its `decision_details` states only what
+  was decided and its final scope, with no comment on approval state — that
+  stays true even if a correction later makes this candidate `approved`. The
+  eng-PIC gate and the redirection still live only in Review Notes'
+  `Uncertain Decisions` category below; `conditions` carries none of it,
+  since neither is a condition on future execution.
 - D1's Actions (`A1`, `A2`) sit nested under `- **Actions**` inside D1's own
   card — no separate Action Candidates section exists anywhere in this
   file.
@@ -669,8 +683,8 @@ templates later. Checked line by line here:
   timestamp — while the same evidence is cited in its full `author + time`
   form in Review Notes and `classification_reason`, per
   `references/extraction.md`.
-- The publication preview excludes D1 (still `pending`, approver confirmed
-  as `none` by the reviewer) and
+- The publication preview excludes D1 (still `pending`, `decision_approver`
+  still marked `(awaiting approval)`) and
   publishes D2 outright (`approved`, `@albert.lim`) — matching
   `references/review.md` §10's own worked check — and needs no `Actions to
   Save` section because D2's card already shows `A3`.

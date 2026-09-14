@@ -363,27 +363,56 @@ the relayer. Use only a source-established identity; never infer it from who
 triggered the capture. Leave unresolved when the source does not establish
 it.
 
-**`decision_approver`** — required. Set it to the person, people, or forum
-whose signal was accepted under Gates 3 and 5, and only them. Someone who
-engaged but was not the entitled party, or whose standing came only from an
-unendorsed redirection (Rule 5.2), is not the approver. For
-`evidence_type: no_objection`, the approver is the declared mechanism or
-forum, not an individual. Never infer it from seniority, attendance, channel
-membership, authorship of a recap, or a request to record the thread.
+**`decision_approver`** — required for every candidate, no tier and no
+exception. Fill it by working down this fallback ladder and stop at the
+first rung the source supports:
 
-**When Gate 3 found no closure signal at all, leave it unresolved.** Do not
-write `none` on the reviewer's behalf. That nobody approved this is a real
-finding, and it is exactly the kind of finding a person should confirm rather
-than have asserted for them in a record that may outlive the thread — an
-auto-filled `none` slides past unread, and it also reads on the card like a
-satisfied field, which quietly undercuts the point that this one is required.
+1. **Who approved it.** The person, people, or forum whose signal was
+   accepted under Gates 3 and 5, and only them. Someone who engaged but was
+   not the entitled party, or whose standing came only from an unendorsed
+   redirection (Rule 5.2), is not the approver. For
+   `evidence_type: no_objection`, the approver is the declared mechanism or
+   forum, not an individual. Never infer it from seniority, attendance,
+   channel membership, authorship of a recap, or a request to record the
+   thread. Render as the plain value.
+2. **Who is supposed to approve it, when nobody has yet.** The thread
+   routinely establishes this even when no approval arrived — an approval
+   request addressed to someone, a named gatekeeper, a required sign-off
+   role. Record that party, explicitly marked as awaited rather than given:
+   `@name (awaiting approval)` — the same shape `action_owner` already uses
+   for `@jane (requested, not yet acknowledged)`. An awaited value must never
+   render as a bare name; the inline marker is what stops a reader from
+   mistaking an outstanding request for a disposition that happened. When
+   the thread names the awaited party only by role and a specific person can
+   be resolved from what the thread shows, resolve it and flag the inference
+   for the reviewer under Review Notes' `Inferred Values to Confirm`
+   (`references/rendering.md`), exactly as an inferred `pst` already is.
+   When the role cannot be resolved to a person, record the role exactly as
+   the thread stated it, still marked as awaiting approval — never guess a
+   name to fill it.
 
-`none` remains the correct *value*; it is simply the reviewer who supplies
-it. The prompt that asks for it must offer that answer in so many words
-(`references/rendering.md`), so answering costs one word and never requires
-naming someone who does not exist. That is the line this skill holds: the
-reviewer may be asked to confirm what the thread shows, never to invent what
-it does not.
+   **Before resolving a role to a person, check what question the naming
+   message was actually answering.** A thread that requires "the eng PIC's
+   sign-off" and, two messages later, names someone, has often answered a
+   different question in between — who is covering for an absent addressee,
+   who can take a first look — and the name attaches to that question, not
+   to the role. Read the intervening messages, not just the two that seem to
+   pair up. Being asked to check something is not the same as holding the
+   role whose sign-off was required, and a person put in this field on that
+   reading becomes someone a reviewer may go chase, or whose later "ok" gets
+   read as the approval. When the sequence is ambiguous, leave the role
+   unresolved; an unnamed role is a smaller error than a confidently wrong
+   name.
+
+   This rung is independent of Gate 5.2: whether a
+   redirected or role-holding party's eventual signal would actually count
+   as closure is a separate question from who the thread says is awaited,
+   and answering the second never disturbs the gate's answer to the first.
+3. **Nothing at all.** Only when the source establishes neither of the
+   above. Leave it unresolved; the card shows the standard `? - need to
+   fill` marker and the finalize prompt asks for it, stating plainly what is
+   wanted — who approved this, or, failing that, who it is awaiting. Never
+   write a value on the reviewer's behalf here.
 
 **`rationale`** — why this direction was selected, rejected, or deferred,
 drawn only from the source.
@@ -470,22 +499,26 @@ caused, and the reason is worth stating precisely, because the bug was never
 "the field is required" — it was that the only way to satisfy the
 requirement was to name someone who did not exist.
 
-It reaches the reviewer unresolved whenever the thread closed nothing, and
-the prompt that asks for it names `none` as a valid reply
-(`references/rendering.md`). So the reviewer is asked a question they can
-always answer truthfully in one word. That holds for every field in this
-set: `pst`, `decision_proposer` and `rationale` are likewise left unresolved
-when the source does not establish them, and the reviewer — who was in the
-thread — supplies them at the finalize prompt.
+It reaches the reviewer unresolved only at rung 3 of the fallback ladder
+above — when the thread establishes neither who approved the candidate nor
+who is awaited to. That is rarer than it once was: most candidates the
+thread never closed still name an addressee, a gatekeeper, or a required
+sign-off role, and rung 2 fills the field from that, clearly marked as
+awaited rather than given. When rung 3 is genuinely reached, the
+missing-fields prompt states plainly what is wanted
+(`references/rendering.md`) — who approved this, or who it is awaiting — and
+the reviewer, who was in the thread, supplies it. That holds for every field
+in this set: `pst`, `decision_proposer` and `rationale` are likewise left
+unresolved when the source does not establish them.
 
 The line this skill holds is not "never ask the reviewer for anything." It
 is that a reviewer may be asked to **confirm what the thread shows**, and
 never to **supply what it does not**.
 
 Publication adds exactly one more check on top of this set, owned by
-`references/review.md`: an `approved` candidate cannot carry
-`decision_approver: none` — that is a contradiction the publication gate
-catches, not a missing-field gap tracked here.
+`references/review.md`: an `approved` candidate cannot carry a
+`decision_approver` that still reads as awaited — that is a contradiction
+the publication gate catches, not a missing-field gap tracked here.
 
 `references/schema.md`'s publication list additionally names `candidate_id`
 and `evidence_type`, which this layer always assigns itself — they are never
@@ -577,21 +610,43 @@ message order is exactly how the old draft misattributed a decision below.
   found no disposition from him, but it is why his extensive engagement could
   never have closed this candidate even if he had said "approved."
 - **Result:** `uncertain`, `decision_status: pending`, `evidence_type: none`.
-  `decision_approver`: `none` — Gate 3 found no closure signal at all, so
-  extraction sets it explicitly rather than leaving it blank. The eng-PIC
-  gate and the unendorsed redirection are approval-process facts, not a
-  condition on the decision's execution, so neither populates `conditions`
-  (`null` here) — both are instead what `classification_reason` cites as the
-  deciding gates: "Approval requested in `jomil.villareal 3:18 PM`; eng-PIC
+  `decision_approver`: rung 1 fails outright — Gate 3 found no closure
+  signal — so extraction drops to rung 2. The thread names an awaited party
+  twice: the original approval request at `jomil.villareal 3:18 PM` is
+  addressed to `randy.tedjakusuma` / `@oncall-lead` directly, and
+  `cui.ju 3:20 PM` additionally requires sign-off from "the respective eng
+  PIC" — a role, not a name. That role is resolvable: `cui.ju 3:22 PM`
+  routes the same review to `arpit.goel`, who then engages substantively on
+  exactly the engineering-side concerns (merchant-group maintenance,
+  governance, documentation freshness) an eng PIC would own, through to the
+  end of the available source. Resolving the role to `arpit.goel` is an
+  inference, not a stated fact, so it is flagged for the reviewer under
+  Review Notes' `Inferred Values to Confirm`, same as `pst` below. This is
+  independent of Gate 5's finding — `arpit.goel`'s standing came only from
+  `cui.ju`'s unendorsed redirection, so his signal still could not have
+  closed this candidate even if he had given one; who is awaited and who is
+  entitled to close are separate questions. Value:
+  `@randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC sign-off
+  also required, person not named in thread`. The role stays unresolved on
+  purpose: `cui.ju 3:22 PM` names `@arpit.goel`, but read in sequence that
+  message answers `jomil.villareal 3:21 PM` asking who to contact while
+  `randy.tedjakusuma` is on leave — not the eng-PIC requirement two messages
+  earlier. Nothing in the thread says `@arpit.goel` holds that role, and
+  putting him in this field would send a reviewer chasing the wrong person.
+  The eng-PIC gate and the
+  unendorsed redirection also remain what `classification_reason` cites as
+  the deciding gates — recording who is awaited does not remove either from
+  that reasoning: "Approval requested in `jomil.villareal 3:18 PM`; eng-PIC
   gate set in `cui.ju 3:20 PM`; review redirected to `arpit.goel` by `cui.ju`
   at `3:22 PM`, unendorsed by the originally addressed `randy.tedjakusuma`;
-  no signal from any entitled party through the end of the thread." `pst`:
-  `FF Ecommerce` (inferred — the thread later calls this "this eComm
-  decision" and ties the product to Fulfillment; flagged for reviewer
-  confirmation).
+  no signal from any entitled party through the end of the thread." Neither
+  fact populates `conditions` (`null` here) — both are approval-process
+  facts, not a condition on execution. `pst`: `FF Ecommerce` (inferred — the
+  thread later calls this "this eComm decision" and ties the product to
+  Fulfillment; flagged for reviewer confirmation).
 - This candidate is finalizable exactly as drafted: every required field is
-  present — `decision_approver: none` is a filled, honest value, not a gap —
-  per Completeness above.
+  present, `decision_approver` included — an awaited value, clearly marked
+  as such, is a filled, honest value, not a gap — per Completeness above.
 
 ### D2 — the wiki page to document the pricing config
 

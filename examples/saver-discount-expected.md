@@ -128,11 +128,33 @@ engagement could never have closed this candidate even had he said
   evidence is above, in the Gate 3
   trace.
 - `decision_status`: `pending`
-- `decision_approver`: **unresolved.** No party entitled to close this gave a
-  signal, and extraction does not answer that on the reviewer's behalf — it
-  renders as `? - need to fill` and the finalize prompt asks for it, naming
-  `none` as a valid reply. `none` is the correct value here; a reviewer
-  supplies it in one word.
+- `decision_approver`: **`@randy.tedjakusuma / @oncall-lead (awaiting
+  approval); eng-PIC sign-off also required, person not named in thread`.** No
+  party entitled to close this gave a signal (Gate 3 fails outright), so
+  extraction drops to rung 2 of the fallback ladder: who is supposed to
+  approve, when nobody has yet. The thread names that twice — the original
+  approval request (`jomil.villareal 3:18 PM, Day 1`) addressed to
+  `randy.tedjakusuma` / `@oncall-lead` directly, and `cui.ju 3:20 PM (Day 1)`
+  additionally requiring sign-off from "the respective eng PIC," a role with
+  no name given.
+
+  **The role stays unresolved, and this is the part most likely to be got
+  wrong on a re-run.** `cui.ju 3:22 PM (Day 1)` names `@arpit.goel`, and it
+  is tempting to read that as identifying the eng PIC. Read in sequence it
+  does not: `jomil.villareal 3:21 PM (Day 1)` asks who to contact while
+  `randy.tedjakusuma` is on leave, and `3:22 PM` answers *that*. Being asked
+  to "help to check" is not holding the role whose sign-off was required two
+  messages earlier, and the thread never says `@arpit.goel` holds it. A name
+  here would send a reviewer chasing the wrong person, or let his later
+  agreement read as the approval. If a future run resolves this role to a
+  person, that is a regression unless the thread text changed.
+
+  The awaited party is marked `(awaiting approval)` inline so it cannot read
+  as a disposition that happened — the same safety the skill applies to
+  `action_owner`'s `(requested, not yet acknowledged)`. Recording who is
+  awaited is independent of Gate 5: `@arpit.goel`'s standing came only from
+  `cui.ju`'s unendorsed redirection, so his signal could not have closed this
+  candidate even had he given one.
 - `conditions`: The merchant group is a business-team priority list reviewed
   against partnership needs and merchant performance, not a fixed setup —
   membership is expected to change as relevance does (`@moch.zulfa`). This
@@ -149,18 +171,24 @@ engagement could never have closed this candidate even had he said
   rendered form.
 
 **Completeness:**
-- Six of seven required fields present; `decision_approver` unresolved →
-  `completeness_status: incomplete`, and it is the only entry in
-  `missing_required_fields`.
-- **This is one prompt, not a blocker.** The finalize prompt asks who
-  approved it and names `none` as a valid reply; the reviewer answers in one
-  word and the candidate is complete. The distinction that matters, and the
-  one this whole design turns on: a reviewer may be asked to *confirm what
-  the thread shows*, never to *supply what it does not*.
+- All seven required fields present, `decision_approver` included via rung 2
+  of the fallback ladder → `completeness_status: complete`. No
+  `missing_required_fields` entry, and no finalize-prompt round-trip needed
+  for this candidate.
+- **The awaited value is a filled, honest field, not a gap.**
+  `decision_approver` names both parties the thread shows are owed a
+  disposition — `@randy.tedjakusuma` / `@oncall-lead`, the original
+  addressee, and the eng PIC role `cui.ju` required, inferred as
+  `@arpit.goel` — each marked `(awaiting approval)` so neither can be
+  misread as a signal that was actually given. The distinction that matters,
+  and the one this whole design turns on: a reviewer may be asked to
+  *confirm what the thread shows*, never to *supply what it does not* — and
+  rung 2 is exactly that confirmation, drawn straight from the thread.
 - Not publishable as `approved` — and not because anything is missing:
-  `decision_status` is `pending`, and even once the approver reads `none`,
-  correcting the status to `approved` would make that `none` a contradiction
-  for `references/review.md`'s publication gate 3 to resolve.
+  `decision_status` is `pending`, and even once `decision_approver` is
+  corrected to name who actually approved, `decision_status` would still
+  need correcting to `approved` in the same reply for
+  `references/review.md`'s publication gate 3 to resolve.
 
 **Actions attaching to D1:**
 - **A1** — "Documented the thread in the Confluence wiki (completed within
@@ -252,9 +280,10 @@ baseline records the corrected attribution.
 **Completeness:**
 - Required: all seven fields present, including `decision_approver:
   @albert.lim` → `complete`, and — because `decision_status` is `approved`
-  and the approver is a real name, not `none` — also clear of the one extra
-  check publication gate 3 (`references/review.md`) applies to `approved`
-  candidates. D2 is the one candidate in this thread eligible to actually
+  and the approver is a real name, not one still marked `(awaiting
+  approval)` — also clear of the one extra check publication gate 3
+  (`references/review.md`) applies to `approved` candidates. D2 is the one
+  candidate in this thread eligible to actually
   publish as `approved`.
 
 **Actions attaching to D2:**
@@ -314,19 +343,38 @@ itself indicate a regression.
 
 ## Judgment calls and disagreements worth flagging
 
-- **Single required-field tier, with the approver confirmed rather than
-  assumed.** This field went through three designs, and the reasoning is
-  worth keeping because a future change is likely to be tempted by the same
-  wrong turns. It was once unconditionally required with no honest way to
-  satisfy it, which made D1 unfinalizable without inventing a name — the
-  original bug. It was then split into two tiers, which fixed that but made
-  the card carry a notation readers had to decode. It was then auto-filled
-  with `none`, which read as an answered field and quietly undercut the
-  point that the field is required. It now arrives unresolved on D1, and the
-  finalize prompt asks for it while naming `none` as a valid reply. The
-  invariant across all of it, and the thing any future change must preserve:
-  a reviewer may be asked to confirm what the thread shows, never to supply
-  what it does not.
+- **A fallback ladder, not a value that reports emptiness.** This field has
+  now been through four designs, and the reasoning is worth keeping in full
+  because a future change is likely to be tempted by the same wrong turns.
+  (1) It was once unconditionally required with no honest way to satisfy it,
+  which made D1 unfinalizable without inventing a name — the original bug.
+  (2) It was then split into two tiers, marked `(*)` and `(**)` on the card,
+  which fixed that but made the reader decode a notation whose intuitive
+  reading ("two stars = even more required") is backwards. (3) It was then
+  auto-filled with the literal `none` when nothing closed the candidate,
+  which removed the notation but read as an answered field, got skipped, and
+  quietly undercut the marker that says the field is required. The immediate
+  fix to that — leaving it unresolved on the card and asking the reviewer to
+  type `none` at the finalize prompt — solved the "reads as answered"
+  problem, but it was still asking the reviewer to confirm an absence in a
+  thread that, more often than not, already says who the approval was
+  addressed to or who was supposed to sign off. That signal was sitting
+  right there in the source, and every one of the first three designs threw
+  it away. (4) The field now works down a ladder instead: who approved it;
+  failing that, who is supposed to, marked inline as `(awaiting approval)` so
+  an outstanding request can never be misread as a disposition that
+  happened; only failing both is it left unresolved. `none` is removed
+  entirely — it is not a value, not an accepted reply, not an option named in
+  any prompt anywhere in this skill. D1 is the worked case: nobody ever
+  approved it, but the thread names an addressee
+  (`@randy.tedjakusuma` / `@oncall-lead`) and, once the eng-PIC role `cui.ju`
+  required is resolved by inference, a second awaited party
+  (`@arpit.goel`) — both recorded, both marked awaiting, neither confused
+  with D2's real approver `@albert.lim`. The invariant across all four
+  designs, and the thing any future change must preserve: a reviewer may be
+  asked to confirm what the thread shows, never to supply what it does not —
+  and an awaited approver must never render as a bare name, because that is
+  indistinguishable from one who actually signed off.
 - **`decision_details` and `conditions` no longer carry approval-process
   content**: an earlier draft's D1 `decision_details` stated that no
   approval was ever given, and its `conditions` repeated the unmet eng-PIC
