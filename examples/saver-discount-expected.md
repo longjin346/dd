@@ -128,9 +128,11 @@ engagement could never have closed this candidate even had he said
   evidence is above, in the Gate 3
   trace.
 - `decision_status`: `pending`
-- `decision_approver`: `none` — no party entitled to close this ever gave a
-  signal, so extraction sets the literal `none` itself rather than leaving
-  the field blank.
+- `decision_approver`: **unresolved.** No party entitled to close this gave a
+  signal, and extraction does not answer that on the reviewer's behalf — it
+  renders as `? - need to fill` and the finalize prompt asks for it, naming
+  `none` as a valid reply. `none` is the correct value here; a reviewer
+  supplies it in one word.
 - `conditions`: The merchant group is a business-team priority list reviewed
   against partnership needs and merchant performance, not a fixed setup —
   membership is expected to change as relevance does (`@moch.zulfa`). This
@@ -147,16 +149,18 @@ engagement could never have closed this candidate even had he said
   rendered form.
 
 **Completeness:**
-- Required: all seven fields present, including `decision_approver: none`
-  as a filled, honest value → `completeness_status: complete`.
-- Not publishable as `approved` — but not because anything is missing:
-  `decision_status` is `pending`, and even if it were corrected to
-  `approved`, `decision_approver: none` would be the contradiction
-  `references/review.md`'s publication gate 3 catches and must resolve
-  before this candidate could publish.
-- This candidate is finalizable exactly as drafted — `decision_approver:
-  none` is a complete value, not a gap, per Completeness in
-  `extraction.md`.
+- Six of seven required fields present; `decision_approver` unresolved →
+  `completeness_status: incomplete`, and it is the only entry in
+  `missing_required_fields`.
+- **This is one prompt, not a blocker.** The finalize prompt asks who
+  approved it and names `none` as a valid reply; the reviewer answers in one
+  word and the candidate is complete. The distinction that matters, and the
+  one this whole design turns on: a reviewer may be asked to *confirm what
+  the thread shows*, never to *supply what it does not*.
+- Not publishable as `approved` — and not because anything is missing:
+  `decision_status` is `pending`, and even once the approver reads `none`,
+  correcting the status to `approved` would make that `none` a contradiction
+  for `references/review.md`'s publication gate 3 to resolve.
 
 **Actions attaching to D1:**
 - **A1** — "Documented the thread in the Confluence wiki (completed within
@@ -310,13 +314,19 @@ itself indicate a regression.
 
 ## Judgment calls and disagreements worth flagging
 
-- **Single required-field tier**: an earlier draft of `extraction.md` left
-  `decision_approver` unresolved on D1 and treated it as required only to
-  publish, not to finalize. It is now required at the same single tier as
-  every other field, but extraction populates it unconditionally — `none`
-  here, since Gate 3 found no closure signal — so this baseline's D1 was
-  never actually at risk of the bug that split ever existed to avoid: the
-  reviewer is still never asked to invent an approver.
+- **Single required-field tier, with the approver confirmed rather than
+  assumed.** This field went through three designs, and the reasoning is
+  worth keeping because a future change is likely to be tempted by the same
+  wrong turns. It was once unconditionally required with no honest way to
+  satisfy it, which made D1 unfinalizable without inventing a name — the
+  original bug. It was then split into two tiers, which fixed that but made
+  the card carry a notation readers had to decode. It was then auto-filled
+  with `none`, which read as an answered field and quietly undercut the
+  point that the field is required. It now arrives unresolved on D1, and the
+  finalize prompt asks for it while naming `none` as a valid reply. The
+  invariant across all of it, and the thing any future change must preserve:
+  a reviewer may be asked to confirm what the thread shows, never to supply
+  what it does not.
 - **`decision_details` and `conditions` no longer carry approval-process
   content**: an earlier draft's D1 `decision_details` stated that no
   approval was ever given, and its `conditions` repeated the unmet eng-PIC

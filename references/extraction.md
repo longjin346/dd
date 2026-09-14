@@ -363,20 +363,27 @@ the relayer. Use only a source-established identity; never infer it from who
 triggered the capture. Leave unresolved when the source does not establish
 it.
 
-**`decision_approver`** — required, always populated by extraction itself,
-never left blank for the reviewer to fill. Set it to the person, people, or
-forum whose signal was accepted under Gates 3 and 5, and only them. Someone
-who engaged but was not the entitled party, or whose standing came only from
-an unendorsed redirection (Rule 5.2), is not the approver. For
+**`decision_approver`** — required. Set it to the person, people, or forum
+whose signal was accepted under Gates 3 and 5, and only them. Someone who
+engaged but was not the entitled party, or whose standing came only from an
+unendorsed redirection (Rule 5.2), is not the approver. For
 `evidence_type: no_objection`, the approver is the declared mechanism or
 forum, not an individual. Never infer it from seniority, attendance, channel
-membership, authorship of a recap, or a request to record the thread. When
-Gate 3 found no closure signal at all, set it to the literal `none` — that is
-a fact the thread supports (nobody closed this), exactly like any other
-extracted value, and it is what keeps a `pending` candidate finalizable
-without ever asking the reviewer to invent a name. A blank value is never
-correct here: it would leave ambiguous whether extraction failed to find an
-approver or whether there truly was none.
+membership, authorship of a recap, or a request to record the thread.
+
+**When Gate 3 found no closure signal at all, leave it unresolved.** Do not
+write `none` on the reviewer's behalf. That nobody approved this is a real
+finding, and it is exactly the kind of finding a person should confirm rather
+than have asserted for them in a record that may outlive the thread — an
+auto-filled `none` slides past unread, and it also reads on the card like a
+satisfied field, which quietly undercuts the point that this one is required.
+
+`none` remains the correct *value*; it is simply the reviewer who supplies
+it. The prompt that asks for it must offer that answer in so many words
+(`references/rendering.md`), so answering costs one word and never requires
+naming someone who does not exist. That is the line this skill holds: the
+reviewer may be asked to confirm what the thread shows, never to invent what
+it does not.
 
 **`rationale`** — why this direction was selected, rejected, or deferred,
 drawn only from the source.
@@ -459,17 +466,21 @@ A candidate missing any of these is `completeness_status: incomplete`; list
 every missing field path in `missing_required_fields`.
 
 `decision_approver` sits in this set without reintroducing the bug it once
-caused: extraction always populates it itself — the entitled party's signal,
-or the literal `none` when Gate 3 found no closure signal at all — so it is
-never something the *reviewer* is asked to supply. A `pending` candidate the
-thread never resolved is complete with `decision_approver: none`, exactly as
-drafted; nobody has to invent a name. The three fields the reviewer
-genuinely might need to supply — `pst`, `decision_proposer`, `rationale` —
-stay correct at extraction to leave unresolved when the source does not
-establish them (the field rules above): the reviewer was in the thread and
-can answer the finalize prompt directly. `decision_approver` never reaches
-the reviewer in that unresolved state, because extraction never leaves it
-unresolved.
+caused, and the reason is worth stating precisely, because the bug was never
+"the field is required" — it was that the only way to satisfy the
+requirement was to name someone who did not exist.
+
+It reaches the reviewer unresolved whenever the thread closed nothing, and
+the prompt that asks for it names `none` as a valid reply
+(`references/rendering.md`). So the reviewer is asked a question they can
+always answer truthfully in one word. That holds for every field in this
+set: `pst`, `decision_proposer` and `rationale` are likewise left unresolved
+when the source does not establish them, and the reviewer — who was in the
+thread — supplies them at the finalize prompt.
+
+The line this skill holds is not "never ask the reviewer for anything." It
+is that a reviewer may be asked to **confirm what the thread shows**, and
+never to **supply what it does not**.
 
 Publication adds exactly one more check on top of this set, owned by
 `references/review.md`: an `approved` candidate cannot carry

@@ -202,11 +202,11 @@ currently stored ones and apply only what actually changed.**
   initialize `decision_classification: decision` immediately; never ask
   again or raise it as a separate uncertainty. The fields the template asks
   the user to fill are exactly the **required** set from extraction.md —
-  title, details, pst, proposer, rationale, status, approver. Unlike an
-  automatically extracted candidate, nothing populates `decision_approver`
-  here on the reviewer's behalf — they are the one supplying every field, so
-  they fill it the same as any other, typing `none` themselves if that is
-  what actually happened. Offer `conditions` and `refs` as optional. Do not
+  title, details, pst, proposer, rationale, status, approver. Nothing is
+  populated on the reviewer's behalf here — they are supplying every field —
+  and `decision_approver` behaves exactly as it does on an extracted
+  candidate: they fill it like any other, typing `none` if that is what
+  actually happened. Offer `conditions` and `refs` as optional. Do not
   extract, infer, or prefill any value for a manually added Decision; it is
   subject to every ordinary completeness, finalize, and publication rule
   from that point on.
@@ -247,12 +247,12 @@ extraction.md, across every current Decision.
 - Incomplete: keep `review_state: reviewing`, set `awaiting_finalize_revision`
   to unset, and end the response with one consolidated prompt listing every
   missing required field, grouped by Decision, with its ID and field key.
-  `decision_approver` appears here exactly like any other field when it's
-  genuinely unfilled — which in practice only happens on a Decision added
-  from a blank template (§3.6): an automatically extracted candidate never
-  reaches this prompt with `decision_approver` missing, because extraction
-  always populates it, down to the literal `none`. Never ask the user to
-  fill an optional field.
+  `decision_approver` appears here like any other unfilled field, and it
+  will appear often — every candidate the thread never closed reaches this
+  prompt needing it, which is the common case for anything `pending`. The
+  question must name `none` as a valid reply (`references/rendering.md`);
+  asked that way it costs the reviewer one word and never asks them to
+  invent a person. Never ask the user to fill an optional field.
 - Complete: set `awaiting_finalize_revision` to the current revision and
   issue the finalize prompt (§7). Apply the render rule in §6 to decide
   whether the full set accompanies it.
@@ -265,10 +265,12 @@ extraction.md, across every current Decision.
 ## 5. Where the approver/status coupling lives
 
 `decision_approver` is required, same tier as every other field
-(extraction.md), but it is always populated by extraction itself — a real
-name/forum, or the literal `none` — so a `pending` candidate the thread never
-resolved already carries a complete, honest value (`none`) without the
-reviewer touching it. So during ordinary review, naming a different approver
+(extraction.md). When the thread closed the candidate, extraction fills it
+with whoever closed it; when the thread did not, it arrives unresolved and
+the missing-fields prompt asks for it (§4), offering `none` as a valid
+answer. Either way the reviewer settles it before finalize, so by the time
+anything downstream reads the field it holds a deliberate value rather than
+an assumed one. During ordinary review, naming a different approver
 on a `pending` candidate does **not** trigger a follow-up question about
 status, and setting `decision_status: approved` does **not** by itself
 trigger a follow-up question about the approver. Apply each edit at face
@@ -443,10 +445,13 @@ again, from gate 1.
 
 ## 10. Worked check against the reference thread
 
-- **D1** (uncertain, `pending`, `decision_approver: none`, unmet eng-PIC
-  condition cited in `classification_reason` and Review Notes rather than in
-  `conditions`): finalizes as drafted — every required field is present,
-  `none` counts as filled (§4–§5). At the publication gate (§8 gate 3) it is
+- **D1** (uncertain, `pending`, unmet eng-PIC condition cited in
+  `classification_reason` and Review Notes rather than in `conditions`):
+  arrives with `decision_approver` unresolved, because nothing in the thread
+  closed it. That is the one field standing between it and finalize, and the
+  prompt asks for it with `none` named as a valid reply — one word settles
+  it, and the reviewer is never asked for a name that does not exist (§4–§5).
+  Once confirmed, at the publication gate (§8 gate 3) it is
   resolved either by exclusion — D2 still publishes, and the finalization
   survives untouched — or by correcting it to `approved`, which requires
   naming an actual approver in that same reply because `none` cannot stand

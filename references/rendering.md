@@ -138,9 +138,17 @@ between two Review Notes categories.
 ## The required-field legend
 
 One marker says a field must be filled before this version can be locked for
-review — including `decision_approver`, which extraction always fills for
-itself (down to the literal `none` when nobody closed the candidate), so a
-reviewer is never the one asked to invent a name here.
+review. `decision_approver` carries it like any other: when the thread
+establishes no approver, the card shows `? - need to fill`, not a value
+supplied on the reviewer's behalf.
+
+That is deliberate. A field pre-filled with `none` reads as answered and
+gets skipped, and it makes a required field look optional. The reviewer
+confirms instead — and the prompt that asks names `none` as a valid answer,
+so confirming costs one word and never requires inventing a person. Asking
+someone to confirm what the thread shows is fine; asking them to supply what
+it does not is the bug this skill was rebuilt to remove, and the difference
+lives entirely in how the question is worded.
 
 | Marker | Meaning | Fields it appears on |
 |---|---|---|
@@ -168,7 +176,7 @@ the reviewer looks at a single card:
 
 | Situation | Render as |
 |---|---|
-| `(*)` field, empty (blank-template Decision only — an extracted candidate always fills `decision_approver`, even if only to `none`) | `? - need to fill` |
+| `(*)` field, empty — including `decision_approver` when the thread established no approver | `? - need to fill` |
 | Optional scalar, empty | `? - optional to fill` |
 | Optional array, empty, on a drafted or extracted card | `[]` |
 | Optional array, empty, on a blank add-a-decision template only | `? - optional to fill` (fillable; normalizes to `[]` if left untouched) |
@@ -237,7 +245,7 @@ in a field's own text cites the person only, with no timestamp
 - `rationale(*)`: Many PAX sit far from Kalbe & Wardah pickup points, and the delivery cost that creates is what caps demand; free delivery removes the barrier and unlocks volume beyond the existing catchment (@rahadiyan.wisesa). Commercially, these merchants carry Grab's e-commerce partnerships with FMCG principals, and a competitive Saver fare is one of the requirements for those partnerships to drive enough sales volume to stay sustainable (@moch.zulfa).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
 - `decision_proposer(*)`: @rahadiyan.wisesa
-- `decision_approver(*)`: none
+- `decision_approver(*)`: ? - need to fill
 - `conditions`: The merchant group is a business-team priority list reviewed against partnership needs and merchant performance, not a fixed setup — membership is expected to change as relevance does (@moch.zulfa).
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
@@ -494,15 +502,15 @@ Please provide all known values in one reply. Anything else you want to change? 
 
 - List every missing `(*)` field once, grouped in Decision order, ID plus
   exact field key plus one short plain-language question.
-- **`decision_approver` can only be missing on a Decision the reviewer added
-  from a blank template** — extraction always fills its own, down to the
-  literal `none`. When it does appear here, the question must name that
-  answer, because the reviewer who most needs it is the one recording
-  something nobody approved: `` - `D5 decision_approver(*)` — Who approved
-  this? Reply `none` if nobody did. `` Never ask for it in a way that
-  implies a name is the only valid answer; that is the trap this skill was
-  rebuilt to remove, and it reappears here if the question is phrased
-  carelessly. In practice
+- **The `decision_approver` question must always name `none` as an answer.**
+  It appears here whenever the thread established no approver — the common
+  case for anything still `pending` — and the reviewer who most needs it is
+  precisely the one recording something nobody approved:
+  `` - `D1 decision_approver(*)` — Who approved this? Reply `none` if nobody
+  did. `` Never phrase it so that a name looks like the only valid answer.
+  That phrasing is the whole bug this skill was rebuilt to remove: it does
+  not matter that the rules permit `none` if the question on screen implies
+  otherwise, because the reviewer answers the question, not the rules. In practice
   `decision_approver` only ever appears here for a Decision added from a
   blank template — an extracted candidate always arrives with it already
   filled, down to `none`.
@@ -532,7 +540,7 @@ message, with no further separator:
 - `rationale(*)`: Many PAX sit far from Kalbe & Wardah pickup points, and the delivery cost that creates is what caps demand; free delivery removes the barrier and unlocks volume beyond the existing catchment (@rahadiyan.wisesa). Commercially, these merchants carry Grab's e-commerce partnerships with FMCG principals, and a competitive Saver fare is one of the requirements for those partnerships to drive enough sales volume to stay sustainable (@moch.zulfa).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
 - `decision_proposer(*)`: @rahadiyan.wisesa
-- `decision_approver(*)`: none
+- `decision_approver(*)`: ? - need to fill
 - `conditions`: The merchant group is a business-team priority list reviewed against partnership needs and merchant performance, not a fixed setup — membership is expected to change as relevance does (@moch.zulfa).
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
@@ -616,7 +624,7 @@ sync with it.
 
 ▸ **Not Included**
 
-- `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — excluded (still `pending`, `decision_approver: none`). Reply "D1 approved by <name>" to include it instead.
+- `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — excluded (still `pending`; the reviewer confirmed `decision_approver: none`). Reply "D1 approved by <name>" to include it instead.
 
 ▸ **Ready to Save?**
 These are the exact Decisions and Actions that will be saved to the Decision Bank.
@@ -642,9 +650,10 @@ templates later. Checked line by line here:
 - D1's card and the full-set render both put a blank line between the
   heading and the first `-` field, and between `▸ **Review Notes**` and
   `- **Uncertain Decisions**` — no template above skips it.
-- D1's `decision_approver` reads `none`, not a blank placeholder —
-  extraction populated it itself because Gate 3 found no closure signal at
-  all, so the reviewer never has to invent a name to finalize this card. Its
+- D1's `decision_approver` reads `? - need to fill`, because Gate 3 found no
+  closure signal and extraction does not answer that question on the
+  reviewer's behalf. The finalize prompt asks it with `none` named as a
+  valid reply, so one word settles it and no name is ever invented. Its
   `decision_details` states only what was decided and its final scope, with
   no comment on approval state — that stays true even if a correction later
   makes this candidate `approved`. The eng-PIC gate and the redirection live
@@ -660,7 +669,8 @@ templates later. Checked line by line here:
   timestamp — while the same evidence is cited in its full `author + time`
   form in Review Notes and `classification_reason`, per
   `references/extraction.md`.
-- The publication preview excludes D1 (still `pending`, approver `none`) and
+- The publication preview excludes D1 (still `pending`, approver confirmed
+  as `none` by the reviewer) and
   publishes D2 outright (`approved`, `@albert.lim`) — matching
   `references/review.md` §10's own worked check — and needs no `Actions to
   Save` section because D2's card already shows `A3`.

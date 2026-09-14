@@ -63,11 +63,11 @@ Required before publication:
 required-field list, checked at finalize, and this is that same list plus
 the two fields extraction always assigns itself (`candidate_id`,
 `evidence_type`) rather than ever leaving to a reviewer. `decision_approver`
-sits in it like any other field because extraction always populates it —
-the entitled party's signal, or the literal `none` when Gate 3 found no
-closure signal at all — so it is never a value a reviewer has to invent. A
-`pending` decision nobody ever approved is a complete, honest record with
-`decision_approver: none`, and is finalizable exactly as drafted; it is
+sits in it like any other field. Extraction fills it when the thread closed
+the candidate; when nothing closed it, the field arrives unresolved and the
+reviewer settles it before finalize, with `none` offered as a valid answer
+so no name is ever invented. A `pending` decision nobody ever approved is a
+complete, honest record once `decision_approver: none` is confirmed; it is
 simply not publishable as `approved`. Because publication accepts only
 `approved` Candidates, an `approved` Candidate whose `decision_approver`
 still reads `none` is a contradiction, not a missing field —
