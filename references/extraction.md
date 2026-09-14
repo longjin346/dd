@@ -441,8 +441,10 @@ can act on.
 
 ## Worked examples
 
-These trace the reference thread (`example slackthread/slack thread
-converted in txt.txt`) line by line. Verify any new example the same way
+These trace the reference thread (`examples/saver-discount-thread.txt`) line
+by line. Its full expected output is recorded in
+`examples/saver-discount-expected.md` — when any rule in this file changes,
+re-run that thread and diff against it. Verify any new example the same way
 before trusting it — a plausible-sounding reading that skips the actual
 message order is exactly how the old draft misattributed a decision below.
 
