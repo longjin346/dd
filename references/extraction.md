@@ -168,13 +168,16 @@ thread identifies whose disposition is being sought — an approval request
 addressed to someone, a named gatekeeper, a delegated reviewer — only that
 party's signal, or their explicit delegation, closes the candidate.
 Acceptance from anyone else is engagement, not closure. When the thread
-identifies no such party, a disposition from any participant other than the
-proposer can close, subject to Rule 3.1. Never derive authority from
+identifies no such party, a disposition from any participant outside the
+proposing side can close, subject to Rule 3.1 — the side, not just the
+`decision_proposer` name, so that whoever voiced the proposal cannot close
+it either. Never derive authority from
 seniority, title, channel membership, message volume, attendance, or who
 wrote the recap; authority comes only from what the thread itself assigns.
 
-**Rule 3.3 — Not the proposer.** The proposer's own reaction to, or
-restatement of, their proposal is never a closure signal. Neither is a recap
+**Rule 3.3 — Not the proposing side.** A reaction to, or restatement of,
+the proposal by anyone on the proposing side — the `decision_proposer` or
+whoever voiced the object — is never a closure signal. Neither is a recap
 that merely repeats the proposal.
 
 **Silence.** Ordinary silence — no reply, no reaction, the thread moving on —
@@ -214,11 +217,13 @@ actually possessed it. This gate closes both gaps. It only applies once Gate
 **Rule 5.1 — Scope fit.** Check the closure signal against the final scope
 Gate 2 established, not the scope at the moment of the signal.
 
-- A **narrowing by the proposer**, after their proposal was accepted, does
-  not reopen the candidate — the acceptance carries to the narrowed scope.
-  The proposer retains authority over their own proposal's shape; narrowing
-  it is not a new proposition requiring fresh consent, only a tightening of
-  the one already accepted.
+- A **narrowing from the proposing side**, after the proposal was accepted,
+  does not reopen the candidate — the acceptance carries to the narrowed
+  scope. That side retains authority over its own proposal's shape;
+  narrowing it is not a new proposition requiring fresh consent, only a
+  tightening of the one already accepted. This covers a narrowing by
+  whoever voiced the object, which under rung 2 of `decision_proposer` is
+  not the name in that field.
 - A **widening or other material change** after acceptance does reopen the
   candidate. The accepted signal covered the earlier, smaller or different
   proposition, not the changed one, so the candidate reverts to `uncertain`
@@ -315,8 +320,8 @@ produced it, mark the candidate `uncertain` with `classification_reason:
 calling the model again.
 
 Apply these evidence rules throughout: never treat ordinary silence as
-consent; never treat the proposer's reaction to their own proposal as
-approval; treat a reaction as evidence only when its meaning is clear in
+consent; never treat a reaction from the proposing side to its own proposal
+as approval; treat a reaction as evidence only when its meaning is clear in
 context; cite the exact source carrying the closure signal; never infer
 approval from seniority or presumed authority.
 
@@ -357,11 +362,43 @@ eComm decision" — fill the best-supported active value and flag it as
 inferred so the reviewer confirms or changes it. Never stop to ask before
 drafting. Leave it unresolved only when no source gives any basis at all.
 
-**`decision_proposer`** — the person or group that introduced the object, per
-the attribution rule under Gate 1: the named source of a relayed request, not
-the relayer. Use only a source-established identity; never infer it from who
-triggered the capture. Leave unresolved when the source does not establish
-it.
+**`decision_proposer`** — the party the decision exists to serve: whoever
+raised the need it answers, not whoever happened to type the proposal. This
+is the Gate 1 attribution rule generalized. That rule already separates
+these two roles for a relayed request; a thread separates them a second way,
+when one person states a gap and a different person offers the thing that
+closes it. One field covers both — work down this ladder and stop at the
+first rung the source supports:
+
+1. **A relayed request** — the named source, not the relayer.
+   `jomil.villareal` relaying `rahadiyan.wisesa`'s approval request gives
+   `@rahadiyan.wisesa`.
+2. **A solution offered to a need someone else raised** — the person who
+   raised the need, when the message introducing the object is explicitly
+   responsive to it: it answers, quotes, or is addressed to that need. Where
+   several people voiced the same need, it belongs to whoever stated it
+   first; a later restatement by someone else does not transfer it. Record
+   the person who voiced the proposal inline, as `@needraiser (raised the
+   need; proposed by @voicer)`, so one field keeps both facts.
+3. **Otherwise** — whoever introduced the object.
+
+Rung 2 is deliberately narrow. A need is a stated gap, requirement, or
+problem someone asked to have addressed — not background commentary, not an
+opinion, and not any complaint that merely sits earlier in the thread. When
+the responsive link is not explicit, drop to rung 3. Guessing here writes a
+name into the record that the thread does not support, and puts the wrong
+person at the top of the card six months later.
+
+**The proposing side.** Rung 2 splits one role across two people, so the
+gate rules that turn on "the proposer" need both: the **proposing side** is
+the `decision_proposer` together with whoever voiced the object. At rungs 1
+and 3 the side has exactly one member and nothing changes. Rules 3.2, 3.3
+and 5.1 are stated against the side, not the field — read them that way, and
+never narrow them back to the field's single name. Getting this backwards
+lets the person who proposed something approve it themselves.
+
+Use only a source-established identity; never infer it from who triggered
+the capture. Leave unresolved when the source does not establish it.
 
 **`decision_approver`** — required for every candidate, no tier and no
 exception. Fill it by working down this fallback ladder and stop at the
@@ -418,12 +455,20 @@ first rung the source supports:
 drawn only from the source.
 
 **Capture every distinct reason the thread gave, not only the first one or
-the one the proposer led with.** Threads routinely justify the same decision
+the one the proposal led with.** Threads routinely justify the same decision
 from two directions — one participant argues it operationally, another
 commercially — and keeping only the earliest silently discards the half of
 the case a later reader may care about most. When more than one person
 contributed a reason, attribute each with `(@alias)` so the record shows the
 case was made from more than one side.
+
+**The reason that motivated the proposal is usually stated before it, and is
+the one most often dropped.** Where `decision_proposer` resolved to rung 2 —
+someone offered a solution to a need another person raised — the need itself
+is a rationale strand and must appear here, cited to whoever raised it.
+Rationale gathered only from the proposal message forward keeps the answer
+and discards the question, which is exactly the context a later reader is
+looking for.
 
 Keep it separate from conditions. Never invent a rationale from general
 domain knowledge. Leave it unresolved when the source provides none.
@@ -587,7 +632,9 @@ message order is exactly how the old draft misattributed a decision below.
   approval request from rahadiyan.wisesa" — an approval request, explicitly
   relayed. Object exists. Attribution: the object belongs to
   `rahadiyan.wisesa`, the named source, not to `jomil.villareal`, who is only
-  transmitting it. `decision_proposer`: `@rahadiyan.wisesa`.
+  transmitting it — rung 1 of `decision_proposer`, which settles it before
+  rung 2 is reached. `decision_proposer`: `@rahadiyan.wisesa`, and the
+  proposing side has just that one member.
 - **Gate 2:** the object's scope — a Saver discount for the named merchant
   group (Kalbe & Wardah) — is never itself narrowed or widened. The
   surrounding discussion about merchant-list governance is related context
@@ -651,22 +698,52 @@ message order is exactly how the old draft misattributed a decision below.
 ### D2 — the wiki page to document the pricing config
 
 - **Gate 1:** `sengkeong.ho 8:55 AM` — "can we set up an wiki page to
-  document this for all markets?" — a proposal. Object exists,
-  `decision_proposer`: `@sengkeong.ho`.
+  document this for all markets?" — a proposal. Object exists.
+  `decision_proposer` resolves on **rung 2**, not to the person who typed
+  the proposal: the same message opens "Can I understand the concern about
+  documentation further?", which makes it explicitly responsive to the
+  documentation gap `arpit.goel` stated the day before (`5:29 PM`,
+  `6:18 PM`). `albert.lim 8:57 AM` voices the same need again, but a later
+  restatement does not transfer it. So `decision_proposer`:
+  `@arpit.goel (raised the need; proposed by @sengkeong.ho)`, and the
+  **proposing side** is `arpit.goel` + `sengkeong.ho`.
 - **Gate 2:** `sengkeong.ho 8:59 AM` — "rahadiyan.wisesa lets set up a wiki
   page for this variable and document all the configs here" — narrows the
   object from "all markets" to the single variable. Final scope is the
   narrowed one.
 - **Gate 3:** `albert.lim 8:57 AM` — "sengkeong.ho ya that helps" — explicit
   acceptance. The thread names no specific approver for this proposal, so
-  under Rule 3.2 any participant other than the proposer can close it;
-  `albert.lim` is such a participant. Valid, unambiguous form.
+  under Rule 3.2 a disposition from any participant outside the proposing
+  side can close it. `albert.lim` is neither `arpit.goel` nor
+  `sengkeong.ho`, so he qualifies. Valid, unambiguous form.
+
+  This is where rung 2's "whoever stated it first" tiebreak earns its
+  keep. `albert.lim` restates the same documentation need at `8:57 AM`; had
+  the restatement carried the need to him, he would be on the proposing
+  side, his own "ya that helps" would fall to Rule 3.3, and D2 would close
+  as `uncertain` with no approver — from a thread that plainly settled the
+  question. The need stays with `arpit.goel`, who stated it first and never
+  responded to the proposal, and the acceptance stands.
 - **Gate 5 (scope fit):** the narrowing at `8:59 AM` comes from
-  `sengkeong.ho`, the proposer, and happens after `albert.lim`'s acceptance
-  at `8:57 AM`. A proposer's own narrowing after acceptance does not reopen
-  the candidate, so the acceptance carries forward to the narrowed scope.
+  `sengkeong.ho`, who voiced the object and is therefore on the proposing
+  side, and happens after `albert.lim`'s acceptance at `8:57 AM`. A
+  narrowing from that side after acceptance does not reopen the candidate,
+  so the acceptance carries forward to the narrowed scope. Note that Rule
+  5.1 has to be read against the side here: `sengkeong.ho` is not the name
+  in `decision_proposer`.
 - **Result:** `decision`, `decision_status: approved`,
   `evidence_type: explicitly_stated`. `decision_approver`: `@albert.lim`.
+- **`rationale` — three strands, not two.** The governance gap that
+  motivated the proposal is the first of them and is the one a run of this
+  thread has actually dropped: legacy configs carry no approvals,
+  documentation, or freshness check, so mistakes go undetected and nobody
+  can later reconstruct which merchants belong in a group or how they were
+  derived (`@arpit.goel`). Then the two strands from the proposal forward:
+  handling mex-specific pricing configs on ExP is established practice, so
+  what is missing is documentation rather than the mechanism
+  (`@sengkeong.ho`); and the team cannot today remove or trace configs ops
+  set up long ago, which is what documenting new ones prevents
+  (`@albert.lim`).
 
   **Correcting a prior misreading:** an earlier draft of this example
   described the accepter as "the person whose cleanup concern prompted" the
@@ -680,6 +757,11 @@ message order is exactly how the old draft misattributed a decision below.
   `sengkeong.ho`'s proposal. Do not attribute a stakeholder's motivating
   concern to whoever happens to accept a later, related proposal without
   checking which message came first and who said which.
+
+  That same message order is what rung 2 of `decision_proposer` now reads
+  deliberately rather than incidentally: `arpit.goel` raised the need, so
+  the decision is attributed to him; `albert.lim` restated it and then
+  accepted, so he closes it. One reading of the thread, two fields.
 
 - **Action (attaches to D2):** `sengkeong.ho 8:59 AM` asks
   `@rahadiyan.wisesa` to set up the wiki page. `rahadiyan.wisesa` does not

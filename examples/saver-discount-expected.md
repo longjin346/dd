@@ -207,7 +207,22 @@ engagement could never have closed this candidate even had he said
 
 **Gate 1 — Object exists:** PASS. `sengkeong.ho 8:55 AM (Day 2)` — "can we
 set up an wiki page to document this for all markets?" — a proposal.
-`decision_proposer`: `@sengkeong.ho`.
+
+`decision_proposer` resolves on **rung 2** of `extraction.md`'s ladder, not
+to the author of that message. The same message opens "Can I understand the
+concern about documentation further?", making it explicitly responsive to
+the documentation gap `arpit.goel` stated the day before (`5:29 PM`,
+`6:18 PM`, Day 1). `albert.lim 8:57 AM (Day 2)` voices the same need again,
+but rung 2's tiebreak keeps it with whoever stated it first, so a later
+restatement does not move it. Value:
+`@arpit.goel (raised the need; proposed by @sengkeong.ho)`. The **proposing
+side** — the pair that Rules 3.2, 3.3 and 5.1 are read against — is
+`arpit.goel` + `sengkeong.ho`.
+
+**This is the value most likely to regress, in either direction.** A run
+that reports `@sengkeong.ho` has read only who typed the proposal and lost
+the stakeholder the record exists for. A run that reports `@albert.lim` has
+let a restatement carry the need, which additionally breaks Gate 3 below.
 
 **Gate 2 — Final state:** Narrowed. `sengkeong.ho 8:59 AM (Day 2)` —
 "rahadiyan.wisesa lets set up a wiki page for this variable and document all
@@ -218,23 +233,38 @@ narrowed version, which matters for Gate 5, not Gate 2.
 
 **Gate 3 — Closure signal:** PASS. `albert.lim 8:57 AM (Day 2)` —
 "sengkeong.ho ya that helps" — explicit, unambiguous acceptance (Rule 3.1).
-The thread names no specific approver for this proposal, so under Rule 3.2
-any participant other than the proposer can close it; `albert.lim` is such a
-participant, and is not `sengkeong.ho`.
+The thread names no specific approver for this proposal, so under Rule 3.2 a
+disposition from any participant **outside the proposing side** can close
+it; `albert.lim` is neither `arpit.goel` nor `sengkeong.ho`, so he
+qualifies.
+
+The rung-2 tiebreak carries a load here. Had `albert.lim`'s `8:57 AM`
+restatement of the documentation need moved the need to him, he would sit on
+the proposing side, his own "ya that helps" would be disqualified by Rule
+3.3, and D2 would come out `uncertain` with no approver — from a thread that
+plainly settled the question. Reading Rule 3.2 against only the
+`decision_proposer` name rather than the side is the mirror-image failure:
+it would let `sengkeong.ho` close the proposal he himself voiced.
 
 **Gate 4 — Unmet condition:** None found. No party attaches an in-thread
 gate to this proposal.
 
 **Gate 5 — Scope/authority fit:** PASS. The narrowing at `8:59 AM (Day 2)`
-comes from `sengkeong.ho`, the proposer himself, and happens *after*
-`albert.lim`'s acceptance at `8:57 AM (Day 2)`. Per Rule 5.1, a proposer's
-own narrowing after acceptance does not reopen the candidate — the
-acceptance carries forward to the narrowed scope. Authority conferral
+comes from `sengkeong.ho`, who voiced the object and is therefore on the
+proposing side, and happens *after* `albert.lim`'s acceptance at `8:57 AM
+(Day 2)`. Per Rule 5.1, a narrowing from that side after acceptance does not
+reopen the candidate — the acceptance carries forward to the narrowed scope.
+Rule 5.1 has to be read against the side here too: `sengkeong.ho` is not the
+name in `decision_proposer`. Authority conferral
 (Rule 5.2) is not in question here since `albert.lim`'s standing to close
 comes from Rule 3.2 directly, not from a transfer.
 
-**Attribution check (the known misreading):** the accepter is `albert.lim`,
-not "the person whose cleanup concern prompted the proposal." The governance
+**Attribution check (the known misreading):** this is now read
+deliberately, by rung 2 of `decision_proposer`, rather than left to whoever
+the reader happens to notice — but the message order it depends on is the
+same, and is recorded here because a rule change that got it backwards would
+still produce a plausible-looking card. The accepter is `albert.lim`, not
+"the person whose cleanup concern prompted the proposal." The governance
 concern that motivated the whole exchange — "no governance on the grabx
 group... no documentation on knowing what the right set of merchants are" —
 was raised earlier, on **Day 1**, by a different person, `arpit.goel`, at
@@ -262,13 +292,20 @@ baseline records the corrected attribution.
   adjacent to `albert.lim`'s "this eComm decision" remark
   (`9:02 AM, Day 2`) about the surrounding conversation. Flag for reviewer
   confirmation at least as strongly as D1's.
-- `decision_proposer`: `@sengkeong.ho`
-- `rationale`: Handling mex-specific pricing configs on ExP is established
-  practice, so what is missing is documentation rather than the mechanism
-  itself (`@sengkeong.ho`). The team currently cannot remove or trace legacy
-  configs set up by ops long ago, because nothing records what they were for
-  or who asked for them; documenting new configs as they are created is what
-  stops that recurring (`@albert.lim`). Two contributors, both kept. Cited by
+- `decision_proposer`: `@arpit.goel (raised the need; proposed by
+  @sengkeong.ho)` — see the Gate 1 trace above for the rung-2 derivation.
+- `rationale`: The grabx merchant group carries no approvals, documentation,
+  or freshness check, so mistakes go undetected and nobody can later
+  reconstruct which merchants belong in a group or how they were derived
+  (`@arpit.goel`). Handling mex-specific pricing configs on ExP is
+  established practice, so what is missing is documentation rather than the
+  mechanism itself (`@sengkeong.ho`). The team currently cannot remove or
+  trace legacy configs set up by ops long ago, because nothing records what
+  they were for or who asked for them; documenting new configs as they are
+  created is what stops that recurring (`@albert.lim`). **Three
+  contributors, all kept** — and the first strand is the one a run has
+  actually dropped: a rationale gathered from the proposal message forward
+  keeps the answer and discards the question that prompted it. Cited by
   alias only, no timestamp, per `extraction.md`'s card-field citation rule.
 - `decision_status`: `approved`
 - `decision_approver`: `@albert.lim`
