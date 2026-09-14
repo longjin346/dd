@@ -325,10 +325,25 @@ approval from seniority or presumed authority.
 **`decision_title`** — short, specific, neutral. Describe the subject of the
 decision, not the approval process. Do not add unsupported certainty.
 
-**`decision_details`** — one to three sentences stating what was decided and
-its final scope, and nothing else. Preserve the FINAL scope after any
-revision. Keep conditions in `conditions`, not folded into the title or
-details. Never state or imply whether the decision was approved, rejected,
+**`decision_details`** — what was decided, at its final scope, with the
+specifics that make it actionable: what is being done, to or for what, by
+what mechanism, within what boundary. Preserve the FINAL scope after any
+revision.
+
+Write for someone who was not in the thread and reads this record months
+later, when the thread is gone or unsearchable. They should understand what
+was decided without opening `refs`. Err toward keeping a material
+specific — a named group, the system or config the change lands in, a
+figure, an exclusion — rather than compressing it away. Two to four
+sentences is typical, but length is not the constraint; substance is. A
+one-line summary that forces a reader back to the source has failed at the
+one job this field has.
+
+What does not belong: the shape of the conversation ("X proposed, Y asked,
+Z agreed"), anything already carried by `decision_proposer`, `conditions`
+or `refs`, and a restatement of `decision_title`. Keep conditions in
+`conditions`, not folded into the title or details. Never state or imply
+whether the decision was approved, rejected,
 pending, or blocked — that is what `decision_status` and `evidence_type`
 carry, and restating it here only duplicates them while risking a record
 that goes stale the moment `decision_status` is corrected. Test: the
@@ -363,10 +378,19 @@ without ever asking the reviewer to invent a name. A blank value is never
 correct here: it would leave ambiguous whether extraction failed to find an
 approver or whether there truly was none.
 
-**`rationale`** — reasons supported by the source only, explaining why the
-direction was selected, rejected, or deferred. Keep it separate from
-conditions. Never invent a rationale from general domain knowledge. Leave it
-unresolved when the source provides none.
+**`rationale`** — why this direction was selected, rejected, or deferred,
+drawn only from the source.
+
+**Capture every distinct reason the thread gave, not only the first one or
+the one the proposer led with.** Threads routinely justify the same decision
+from two directions — one participant argues it operationally, another
+commercially — and keeping only the earliest silently discards the half of
+the case a later reader may care about most. When more than one person
+contributed a reason, attribute each with `(@alias)` so the record shows the
+case was made from more than one side.
+
+Keep it separate from conditions. Never invent a rationale from general
+domain knowledge. Leave it unresolved when the source provides none.
 
 **`conditions`** — a condition on future execution only (Gate 4's second
 kind) — "we'll revisit if volumes drop" — named to the person who raised it

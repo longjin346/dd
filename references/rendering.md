@@ -232,13 +232,13 @@ in a field's own text cites the person only, with no timestamp
 ```text
 `D1: Saver-fare discount for Kalbe & Wardah (tactical) (*)`
 
-- `decision_details(*)`: A Saver-fare discount for two merchants, Kalbe and Wardah, applied for a tactical purpose.
+- `decision_details(*)`: Apply a Saver-fare discount to a selected merchant group — Kalbe and Wardah — as a tactical measure, configured on the ExP variable behind Mart's Saver option rather than as a change to standard fares. In effect it gives these two merchants free delivery, aimed specifically at the pickup-point catchment problem rather than at their pricing generally.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Kalbe & Wardah pickup points sit far from many PAX, creating delivery friction that free delivery removes, unlocking demand beyond the existing pickup-point catchment (@rahadiyan.wisesa).
+- `rationale(*)`: Many PAX sit far from Kalbe & Wardah pickup points, and the delivery cost that creates is what caps demand; free delivery removes the barrier and unlocks volume beyond the existing catchment (@rahadiyan.wisesa). Commercially, these merchants carry Grab's e-commerce partnerships with FMCG principals, and a competitive Saver fare is one of the requirements for those partnerships to drive enough sales volume to stay sustainable (@moch.zulfa).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
 - `decision_proposer(*)`: @rahadiyan.wisesa
 - `decision_approver(*)`: none
-- `conditions`: ? - optional to fill
+- `conditions`: The merchant group is a business-team priority list reviewed against partnership needs and merchant performance, not a fixed setup — membership is expected to change as relevance does (@moch.zulfa).
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
   - A1 Documented the thread in the Confluence wiki (completed within the thread) — @arpit.goel — no date
@@ -527,13 +527,13 @@ message, with no further separator:
 
 `D1: Saver-fare discount for Kalbe & Wardah (tactical) (*)`
 
-- `decision_details(*)`: A Saver-fare discount for two merchants, Kalbe and Wardah, applied for a tactical purpose.
+- `decision_details(*)`: Apply a Saver-fare discount to a selected merchant group — Kalbe and Wardah — as a tactical measure, configured on the ExP variable behind Mart's Saver option rather than as a change to standard fares. In effect it gives these two merchants free delivery, aimed specifically at the pickup-point catchment problem rather than at their pricing generally.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Kalbe & Wardah pickup points sit far from many PAX, creating delivery friction that free delivery removes, unlocking demand beyond the existing pickup-point catchment (@rahadiyan.wisesa).
+- `rationale(*)`: Many PAX sit far from Kalbe & Wardah pickup points, and the delivery cost that creates is what caps demand; free delivery removes the barrier and unlocks volume beyond the existing catchment (@rahadiyan.wisesa). Commercially, these merchants carry Grab's e-commerce partnerships with FMCG principals, and a competitive Saver fare is one of the requirements for those partnerships to drive enough sales volume to stay sustainable (@moch.zulfa).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
 - `decision_proposer(*)`: @rahadiyan.wisesa
 - `decision_approver(*)`: none
-- `conditions`: ? - optional to fill
+- `conditions`: The merchant group is a business-team priority list reviewed against partnership needs and merchant performance, not a fixed setup — membership is expected to change as relevance does (@moch.zulfa).
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
   - A1 Documented the thread in the Confluence wiki (completed within the thread) — @arpit.goel — no date
@@ -541,9 +541,9 @@ message, with no further separator:
 
 `D2: Wiki page to document the pricing-config variable (*)`
 
-- `decision_details(*)`: sengkeong.ho proposed a wiki page to document mex-specific pricing configs, narrowed from "all markets" to this one variable, linked back to the variable as the central source of truth.
+- `decision_details(*)`: Create a wiki page documenting the mex-specific pricing configs carried on this ExP variable, and link the variable to that page so the wiki becomes the central source of truth for what each config is and why it exists. Scope is this one variable, not pricing configs across all markets.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice; the wiki closes the traceability gap the team hit today, where legacy configs have no visible owner or purpose (@sengkeong.ho; @albert.lim).
+- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
 - `decision_proposer(*)`: @sengkeong.ho
 - `decision_approver(*)`: @albert.lim
@@ -603,9 +603,9 @@ sync with it.
 
 `D2: Wiki page to document the pricing-config variable (*)`
 
-- `decision_details(*)`: sengkeong.ho proposed a wiki page to document mex-specific pricing configs, narrowed from "all markets" to this one variable, linked back to the variable as the central source of truth.
+- `decision_details(*)`: Create a wiki page documenting the mex-specific pricing configs carried on this ExP variable, and link the variable to that page so the wiki becomes the central source of truth for what each config is and why it exists. Scope is this one variable, not pricing configs across all markets.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice; the wiki closes the traceability gap the team hit today, where legacy configs have no visible owner or purpose (@sengkeong.ho; @albert.lim).
+- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
 - `decision_proposer(*)`: @sengkeong.ho
 - `decision_approver(*)`: @albert.lim

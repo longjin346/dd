@@ -98,10 +98,14 @@ engagement could never have closed this candidate even had he said
 
 **Fields:**
 - `decision_title`: Saver-fare discount for Kalbe & Wardah (tactical)
-- `decision_details`: A Saver-fare discount for two merchants, Kalbe and
-  Wardah, applied for a tactical purpose. States substance and final scope
-  only — nothing about approval state, per `extraction.md`'s rule that this
-  sentence must stay true even if `decision_status` later changes.
+- `decision_details`: Apply a Saver-fare discount to a selected merchant
+  group — Kalbe and Wardah — as a tactical measure, configured on the ExP
+  variable behind Mart's Saver option rather than as a change to standard
+  fares. In effect it gives these two merchants free delivery, aimed
+  specifically at the pickup-point catchment problem rather than at their
+  pricing generally. States substance and final scope only — nothing about
+  approval state, per `extraction.md`'s rule that this must stay true even
+  if `decision_status` later changes.
 - `pst`: `FF Ecommerce` — **inferred, not established.** Basis:
   `jomil.villareal 3:21 PM (Day 1)` ("Product is from under Fulfillment")
   plus `albert.lim 9:02 AM (Day 2)` calling the surrounding thread "this
@@ -110,21 +114,33 @@ engagement could never have closed this candidate even had he said
   reviewer to confirm or change, per the rule to never stop and ask before
   drafting.
 - `decision_proposer`: `@rahadiyan.wisesa`
-- `rationale`: Kalbe & Wardah pickup points sit far from many PAX, creating
-  delivery friction that free delivery removes, unlocking demand beyond the
-  existing pickup-point catchment (`@rahadiyan.wisesa`). Cited by alias
-  only, no timestamp, per `extraction.md`'s card-field citation rule — the
-  full `author + time` form for this same evidence is above, in the Gate 3
+- `rationale`: Many PAX sit far from Kalbe & Wardah pickup points, and the
+  delivery cost that creates is what caps demand; free delivery removes the
+  barrier and unlocks volume beyond the existing catchment
+  (`@rahadiyan.wisesa`). Commercially, these merchants carry Grab's
+  e-commerce partnerships with FMCG principals, and a competitive Saver fare
+  is one of the requirements for those partnerships to drive enough sales
+  volume to stay sustainable (`@moch.zulfa`). **Both strands are required**
+  — the thread justifies this decision from two directions, and keeping only
+  the proposer's operational argument would discard the commercial case
+  entirely. Cited by alias only, no timestamp, per `extraction.md`'s
+  card-field citation rule — the full `author + time` form for this same
+  evidence is above, in the Gate 3
   trace.
 - `decision_status`: `pending`
 - `decision_approver`: `none` — no party entitled to close this ever gave a
   signal, so extraction sets the literal `none` itself rather than leaving
   the field blank.
-- `conditions`: `null`. The eng-PIC gate and the unendorsed redirection are
-  approval-process facts, not a condition on future execution, so neither
-  populates this field — both live instead in `classification_reason`
-  (the Gate 3/4/5 traces above) and reach the reviewer through Review
-  Notes' `Uncertain Decisions` category.
+- `conditions`: The merchant group is a business-team priority list reviewed
+  against partnership needs and merchant performance, not a fixed setup —
+  membership is expected to change as relevance does (`@moch.zulfa`). This
+  is a genuine condition on future execution and belongs here. The eng-PIC
+  gate and the unendorsed redirection do **not**: they are approval-process
+  facts, so they live in `classification_reason` (the Gate 3/4/5 traces
+  above) and reach the reviewer through Review Notes' `Uncertain Decisions`
+  category instead. The same message supplies both, which is exactly why the
+  distinction has to be drawn on what the statement is about, not on who
+  said it or when.
 - `refs`: available (approval-request message, the eng-PIC condition
   message, the governance-concern message, the wiki-documentation message)
   — not enumerated here; see `rendering.md`'s D1 references block for the
@@ -200,10 +216,13 @@ baseline records the corrected attribution.
 **Fields:**
 - `decision_title`: Wiki page to document the mex-specific pricing-config
   variable
-- `decision_details`: `sengkeong.ho` proposed a wiki page to document
-  mex-specific pricing configs (`8:55 AM, Day 2`), narrowed by himself to
-  documenting this single ExP variable and linking it back as the central
-  source of truth (`8:59 AM, Day 2`). Final scope is the narrowed one.
+- `decision_details`: Create a wiki page documenting the mex-specific
+  pricing configs carried on this ExP variable, and link the variable to
+  that page so the wiki becomes the central source of truth for what each
+  config is and why it exists. Scope is this one variable, not pricing
+  configs across all markets. The final, narrowed scope is stated as the
+  decision; who narrowed it and when is conversation shape and belongs to
+  the Gate 2 trace above, not to this field.
 - `pst`: `FF Ecommerce` — **inferred, weaker basis than D1.** The thread
   gives no phrase tying D2 itself to a PST the way `3:21 PM`/`9:02 AM` do
   for D1; this value is carried over on the basis that D2 is the same
@@ -213,9 +232,11 @@ baseline records the corrected attribution.
   confirmation at least as strongly as D1's.
 - `decision_proposer`: `@sengkeong.ho`
 - `rationale`: Handling mex-specific pricing configs on ExP is established
-  practice, not a new one (`@sengkeong.ho`); the wiki closes a traceability
-  gap the team hit that same morning, where legacy configs have no visible
-  owner or purpose and are hard to remove or trace (`@albert.lim`). Cited by
+  practice, so what is missing is documentation rather than the mechanism
+  itself (`@sengkeong.ho`). The team currently cannot remove or trace legacy
+  configs set up by ops long ago, because nothing records what they were for
+  or who asked for them; documenting new configs as they are created is what
+  stops that recurring (`@albert.lim`). Two contributors, both kept. Cited by
   alias only, no timestamp, per `extraction.md`'s card-field citation rule.
 - `decision_status`: `approved`
 - `decision_approver`: `@albert.lim`
