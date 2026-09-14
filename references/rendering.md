@@ -283,6 +283,13 @@ contract above and applied identically to every card:
 - Field labels are the exact JSON key in inline code, with `(*)` appended
   inside the code span where it applies — `` `decision_details(*)` ``, never
   a renamed label like "Decision".
+- `decision_proposer` names the party whose need the decision serves, which
+  is not always whoever typed the proposal
+  (`references/extraction.md` owns which). When the thread splits those two
+  roles, the value carries the voicer inline — `@arpit.goel (raised the
+  need; proposed by @sengkeong.ho)` — one field, both people, no second
+  field on the card. Render it as one value; never split it across two
+  bullets, and never drop the parenthetical to shorten the card.
 - `decision_status` always shows the full compact label
   `` `decision_status(*)(options:approved|rejected|pending)` `` followed by
   its plain-text value — never wrap `approved`/`rejected`/`pending` in code,
@@ -562,9 +569,9 @@ message, with no further separator:
 
 - `decision_details(*)`: Create a wiki page documenting the mex-specific pricing configs carried on this ExP variable, and link the variable to that page so the wiki becomes the central source of truth for what each config is and why it exists. Scope is this one variable, not pricing configs across all markets.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
+- `rationale(*)`: The grabx merchant group carries no approvals, documentation, or freshness check, so mistakes go undetected and nobody can later reconstruct which merchants belong in a group or how they were derived (@arpit.goel). Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
-- `decision_proposer(*)`: @sengkeong.ho
+- `decision_proposer(*)`: @arpit.goel (raised the need; proposed by @sengkeong.ho)
 - `decision_approver(*)`: @albert.lim
 - `conditions`: ? - optional to fill
 - `refs`: 3 sources (reply "D2 refs" to view)
@@ -624,9 +631,9 @@ sync with it.
 
 - `decision_details(*)`: Create a wiki page documenting the mex-specific pricing configs carried on this ExP variable, and link the variable to that page so the wiki becomes the central source of truth for what each config is and why it exists. Scope is this one variable, not pricing configs across all markets.
 - `pst(*)`: FF Ecommerce
-- `rationale(*)`: Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
+- `rationale(*)`: The grabx merchant group carries no approvals, documentation, or freshness check, so mistakes go undetected and nobody can later reconstruct which merchants belong in a group or how they were derived (@arpit.goel). Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
-- `decision_proposer(*)`: @sengkeong.ho
+- `decision_proposer(*)`: @arpit.goel (raised the need; proposed by @sengkeong.ho)
 - `decision_approver(*)`: @albert.lim
 - `conditions`: ? - optional to fill
 - `refs`: 3 sources (reply "D2 refs" to view)
