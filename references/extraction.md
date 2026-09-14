@@ -115,6 +115,37 @@ with a source-grounded reason and stop — do not run Gates 2–5, do not assign
 `decision_classification`, and never keep it as `uncertain`. Failing Gate 1 is
 the only gate result that removes a topic from the candidate set.
 
+**The commitment is the object; the vehicle that carries it is not.** Gate 1
+decides not only *whether* there is an object but *which* proposition it is,
+and a proposal routinely names an instrument — a wiki page, a dashboard, a
+recurring meeting, a ticket, a channel — as the way to meet a need. Naming
+the instrument as the decision records the tool and loses the commitment.
+
+**Test it by substitution.** Swap the instrument for a different one and ask
+whether what was agreed still stands. If it does, the commitment is the
+object: the instrument is how it gets done, and it belongs in
+`decision_details` as the agreed mechanism and in the Action as the step
+someone executes — never as the subject of `decision_title`. If swapping the
+instrument destroys the agreement, the instrument *is* the object; "we
+standardize on Confluence rather than Notion" is a decision about the tool,
+and abstracting it into "we will document things" would record something
+nobody agreed to.
+
+Two signals in the thread usually settle it:
+
+- **The proposal states its own purpose.** "can we set up an wiki page *to
+  document this*" puts documenting as the end and the page as the means. A
+  proposal offered conditionally — "if it helps" — is being put forward as
+  one way to meet a need, not as the thing itself.
+- **The acceptance restates the commitment without the instrument.** "part
+  of solving that problem is to properly document the incoming new ones" is
+  the accepter saying what they understood themselves to be agreeing to.
+
+Where both point the same way, take the commitment. Where the thread only
+ever discusses the instrument and no underlying commitment is stated, the
+instrument is all there is — use it, and do not invent a purpose it was
+serving.
+
 The Slack thread defines candidate scope. Selected external sources may
 explain or verify a candidate the thread raised; they never create one the
 thread did not raise.
@@ -224,6 +255,15 @@ Gate 2 established, not the scope at the moment of the signal.
   tightening of the one already accepted. This covers a narrowing by
   whoever voiced the object, which under rung 2 of `decision_proposer` is
   not the name in that field.
+
+  **Carrying the acceptance forward is not the same as confirming it.**
+  Whenever this rule applies, the record ends up narrower than what the
+  accepter actually agreed to, and they never saw the narrowed version. Say
+  so: every post-acceptance narrowing gets one `Scope Narrowed After
+  Acceptance` entry in Review Notes (`references/rendering.md`), naming what
+  was accepted, what it was narrowed to, and by whom. The candidate stays
+  `decision` — this is a confirmation to collect, not a reason to mark it
+  `uncertain`.
 - A **widening or other material change** after acceptance does reopen the
   candidate. The accepted signal covered the earlier, smaller or different
   proposition, not the changed one, so the candidate reverts to `uncertain`
@@ -328,12 +368,16 @@ approval from seniority or presumed authority.
 ## Populating the Decision record
 
 **`decision_title`** — short, specific, neutral. Describe the subject of the
-decision, not the approval process. Do not add unsupported certainty.
+decision, not the approval process, and not the instrument that carries it
+(Gate 1's substitution test). Do not add unsupported certainty.
 
 **`decision_details`** — what was decided, at its final scope, with the
 specifics that make it actionable: what is being done, to or for what, by
 what mechanism, within what boundary. Preserve the FINAL scope after any
-revision.
+revision. Where Gate 1's substitution test moved an instrument out of the
+object, "by what mechanism" is where it lands — the agreed vehicle is
+recorded here as one clause, not promoted to the subject of the decision and
+not dropped.
 
 Write for someone who was not in the thread and reads this record months
 later, when the thread is gone or unsearchable. They should understand what
@@ -695,10 +739,26 @@ message order is exactly how the old draft misattributed a decision below.
   present, `decision_approver` included — an awaited value, clearly marked
   as such, is a filled, honest value, not a gap — per Completeness above.
 
-### D2 — the wiki page to document the pricing config
+### D2 — documenting the pricing configs on the ExP variable
 
-- **Gate 1:** `sengkeong.ho 8:55 AM` — "can we set up an wiki page to
-  document this for all markets?" — a proposal. Object exists.
+- **Gate 1:** `sengkeong.ho 8:55 AM` — "If it helps, can we set up an wiki
+  page to document this for all markets?" — a proposal. Object exists, but
+  **the wiki page is not it.** Both signals point the same way: the proposal
+  states its own purpose ("to document this") and offers the page
+  conditionally ("if it helps"), and the acceptance restates the commitment
+  without it — `albert.lim 8:57 AM`, "part of solving that problem is to
+  properly document the incoming new ones." Substitution confirms it: put
+  the documentation somewhere other than a wiki and what was agreed still
+  stands. The object is the commitment to document these configs, with the
+  page recorded in `decision_details` as the agreed mechanism and executed
+  as the Action.
+
+  The thread itself demonstrates why this matters. The wiki page that
+  actually got made came from `arpit.goel 11:23 PM` — a different person
+  from the one asked, documenting the thread rather than the variable's
+  configs. Framed as "`@rahadiyan.wisesa` creates a wiki page", the record
+  reads as unfulfilled; framed as the commitment, that message is partial
+  progress toward it.
   `decision_proposer` resolves on **rung 2**, not to the person who typed
   the proposal: the same message opens "Can I understand the concern about
   documentation further?", which makes it explicitly responsive to the
@@ -708,9 +768,22 @@ message order is exactly how the old draft misattributed a decision below.
   `@arpit.goel (raised the need; proposed by @sengkeong.ho)`, and the
   **proposing side** is `arpit.goel` + `sengkeong.ho`.
 - **Gate 2:** `sengkeong.ho 8:59 AM` — "rahadiyan.wisesa lets set up a wiki
-  page for this variable and document all the configs here" — narrows the
-  object from "all markets" to the single variable. Final scope is the
-  narrowed one.
+  page for this variable and document all the configs here? and then find a
+  way to link this variable to this wiki so this becomes the central source
+  of truth" — narrows the object from "all markets" to the single variable,
+  and adds the linking requirement. Final scope is the narrowed one.
+
+  The linking clause splits across two fields, and the split is on the
+  substitution test again. The committed property — the documentation is
+  reachable from the config, making it the source of truth — survives any
+  change of tool and belongs in `decision_details`. "Find a way to" is
+  unresolved work with no mechanism chosen, so it is part of the Action.
+
+  Note also that `albert.lim`'s acceptance at `8:57 AM` speaks of "the
+  incoming new ones" — all new pricing configs, wider than the single
+  variable this narrows to. Rule 5.1 carries the acceptance forward to the
+  narrower scope; the gap between the two is what that rule's Review Notes
+  entry exists to surface.
 - **Gate 3:** `albert.lim 8:57 AM` — "sengkeong.ho ya that helps" — explicit
   acceptance. The thread names no specific approver for this proposal, so
   under Rule 3.2 a disposition from any participant outside the proposing
@@ -764,9 +837,13 @@ message order is exactly how the old draft misattributed a decision below.
   accepted, so he closes it. One reading of the thread, two fields.
 
 - **Action (attaches to D2):** `sengkeong.ho 8:59 AM` asks
-  `@rahadiyan.wisesa` to set up the wiki page. `rahadiyan.wisesa` does not
-  speak again in the available source. `action_owner`: "@rahadiyan.wisesa
-  (requested, not yet acknowledged)". No date given; none guessed.
+  `@rahadiyan.wisesa` to set up the wiki page, document the configs there,
+  and link the variable to it. **One Action, not two** — the same person is
+  asked, in one message, to stand up a page and wire it to the config; they
+  are steps of a single piece of work, and splitting them would put an
+  artificial handoff in the record. `rahadiyan.wisesa` does not speak again
+  in the available source. `action_owner`: "@rahadiyan.wisesa (requested,
+  not yet acknowledged)". No date given; none guessed.
 
 ### Actions attaching to D1
 

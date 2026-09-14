@@ -416,6 +416,11 @@ every category is empty.** Nothing else gates it.
     to. The eng-PIC sign-off `cui.ju` also required (`cui.ju 3:20 PM`) is
     left as a role — the thread never names that person. Confirm or name
     them.
+- **Scope Narrowed After Acceptance**
+  - `D2` — accepted at `albert.lim 8:57 AM` as documenting "the incoming new
+    ones", meaning all new pricing configs; narrowed by `@sengkeong.ho` at
+    `8:59 AM` to this one variable. The record keeps the narrower scope.
+    Confirm that is what was meant. [View source](slack-permalink)
 - **Uncertain Decisions**
   - `D1` — Why uncertain: eng-PIC approval was required before this could
     close (`cui.ju 3:20 PM`); no eng PIC appears anywhere in the available
@@ -445,6 +450,13 @@ every category is empty.** Nothing else gates it.
 - Never expose a Gate id, an enum name, `evidence_type`, or chain-of-thought
   in a `Why uncertain` line — rewrite it as one plain, source-grounded
   sentence.
+- Scope Narrowed After Acceptance carries one entry per candidate where
+  Rule 5.1 (`references/extraction.md`) carried an acceptance forward onto a
+  scope the accepter never saw. Name what was accepted, what it was narrowed
+  to, and who narrowed it. The candidate is still a `decision` and still
+  renders its own card normally — this category asks for a confirmation, it
+  does not report a problem, so never let an entry here pull a candidate
+  into `Uncertain Decisions` as well.
 - Source Limitations, when present, is always last, one entry per unread or
   inaccessible selected source, stated once — never repeated per Candidate.
 
@@ -565,9 +577,9 @@ message, with no further separator:
   - A1 Documented the thread in the Confluence wiki (completed within the thread) — @arpit.goel — no date
   - A2 Add the logic that recreates the merchant list — @sengkeong.ho, @moch.zulfa, @rangga.pratama (requested, not yet acknowledged) — no date
 
-`D2: Wiki page to document the pricing-config variable (*)`
+`D2: Documenting the mex-specific pricing configs on this ExP variable (*)`
 
-- `decision_details(*)`: Create a wiki page documenting the mex-specific pricing configs carried on this ExP variable, and link the variable to that page so the wiki becomes the central source of truth for what each config is and why it exists. Scope is this one variable, not pricing configs across all markets.
+- `decision_details(*)`: The mex-specific pricing configs carried on this ExP variable will be documented, and the variable will link to that documentation so it becomes the central source of truth for what each config is and why it exists. The agreed mechanism is a wiki page. Scope is this one variable, not pricing configs across all markets.
 - `pst(*)`: FF Ecommerce
 - `rationale(*)`: The grabx merchant group carries no approvals, documentation, or freshness check, so mistakes go undetected and nobody can later reconstruct which merchants belong in a group or how they were derived (@arpit.goel). Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
@@ -576,7 +588,7 @@ message, with no further separator:
 - `conditions`: ? - optional to fill
 - `refs`: 3 sources (reply "D2 refs" to view)
 - **Actions**
-  - A3 Set up a wiki page for this variable and document the pricing configs there — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
+  - A3 Set up the wiki page for this variable, document the pricing configs there, and link the variable to it — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
 
 ────────────────────────
 
@@ -592,9 +604,9 @@ Look right? Reply "Yes, finalize" to lock this version, or send any remaining ch
 ```
 
 - This is the exact block for defect 4: the re-render before locking never
-  repeats `Inferred Values to Confirm`, `Not Identified as Decisions`, or
-  `Source Limitations` — those haven't changed since Step 3 first showed
-  them. It shows the `▸ **Review Notes**` heading together with only the
+  repeats `Inferred Values to Confirm`, `Scope Narrowed After Acceptance`,
+  `Not Identified as Decisions`, or `Source Limitations` — those haven't
+  changed since Step 3 first showed them. It shows the `▸ **Review Notes**` heading together with only the
   `Uncertain Decisions` category, preceded by the standard separator, and
   nothing else from Review Notes accompanies it.
 - When no Decision remains at all, render the heading followed by the empty
@@ -627,9 +639,9 @@ sync with it.
 ```text
 ▸ **Decisions to Save**
 
-`D2: Wiki page to document the pricing-config variable (*)`
+`D2: Documenting the mex-specific pricing configs on this ExP variable (*)`
 
-- `decision_details(*)`: Create a wiki page documenting the mex-specific pricing configs carried on this ExP variable, and link the variable to that page so the wiki becomes the central source of truth for what each config is and why it exists. Scope is this one variable, not pricing configs across all markets.
+- `decision_details(*)`: The mex-specific pricing configs carried on this ExP variable will be documented, and the variable will link to that documentation so it becomes the central source of truth for what each config is and why it exists. The agreed mechanism is a wiki page. Scope is this one variable, not pricing configs across all markets.
 - `pst(*)`: FF Ecommerce
 - `rationale(*)`: The grabx merchant group carries no approvals, documentation, or freshness check, so mistakes go undetected and nobody can later reconstruct which merchants belong in a group or how they were derived (@arpit.goel). Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
@@ -638,7 +650,7 @@ sync with it.
 - `conditions`: ? - optional to fill
 - `refs`: 3 sources (reply "D2 refs" to view)
 - **Actions**
-  - A3 Set up a wiki page for this variable and document the pricing configs there — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
+  - A3 Set up the wiki page for this variable, document the pricing configs there, and link the variable to it — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
 
 ▸ **Not Included**
 

@@ -199,14 +199,33 @@ engagement could never have closed this candidate even had he said
   acknowledged in the available source. No date. Source:
   `arpit.goel 11:23 PM (Day 2)`.
 
-### D2 — Wiki page to document the mex-specific pricing-config variable
+### D2 — Documenting the mex-specific pricing configs on the ExP variable
 
 **Classification:** `decision`
 **Status:** `approved`
 **Evidence type:** `explicitly_stated`
 
-**Gate 1 — Object exists:** PASS. `sengkeong.ho 8:55 AM (Day 2)` — "can we
-set up an wiki page to document this for all markets?" — a proposal.
+**Gate 1 — Object exists:** PASS. `sengkeong.ho 8:55 AM (Day 2)` — "If it
+helps, can we set up an wiki page to document this for all markets?" — a
+proposal.
+
+**The object is the commitment to document, not the wiki page.** Both of
+Gate 1's signals point that way: the proposal names its own purpose ("to
+document this") and offers the page conditionally ("if it helps"), and the
+acceptance restates the commitment with no instrument in it —
+`albert.lim 8:57 AM (Day 2)`, "part of solving that problem is to properly
+document the incoming new ones." Substitution confirms it: move the
+documentation off a wiki and the agreement still stands.
+
+The thread supplies its own proof. The wiki page that actually got created
+came from `arpit.goel 11:23 PM (Day 2)` — not `@rahadiyan.wisesa`, who was
+the one asked, and documenting the thread rather than the variable's
+configs. Read as "`@rahadiyan.wisesa` creates a wiki page", the record is
+already unfulfilled inside its own thread; read as the commitment, that
+message is partial progress toward it. **A run that titles this candidate
+after the wiki page has failed the substitution test**, even though every
+other field may be right.
+
 
 `decision_proposer` resolves on **rung 2** of `extraction.md`'s ladder, not
 to the author of that message. The same message opens "Can I understand the
@@ -230,6 +249,22 @@ the configs here" — narrows the object from "all markets" to the single
 variable, and adds linking the variable to the wiki as the central source of
 truth. Final scope is the narrowed one; nobody explicitly re-confirms the
 narrowed version, which matters for Gate 5, not Gate 2.
+
+**The accepter's scope was wider, and that has to reach the reviewer.**
+`albert.lim 8:57 AM (Day 2)` accepts in terms of "the incoming new ones" —
+all new pricing configs — while `8:59 AM` narrows to this one variable.
+Rule 5.1 carries the acceptance forward, so the record keeps the narrow
+scope and D2 stays a `decision`; the gap itself is reported through the
+`Scope Narrowed After Acceptance` entry in Review Notes. Expect exactly one
+such entry from this thread. A run that resolves the narrowing silently, or
+that reacts to it by demoting D2 to `uncertain`, has got this wrong in
+opposite directions.
+
+**The linking clause splits across two fields.** The committed property —
+the documentation is reachable from the config, making it the source of
+truth — survives a change of tool and belongs in `decision_details`. "Find
+a way to" names no mechanism and is unresolved work, so it belongs to the
+Action.
 
 **Gate 3 — Closure signal:** PASS. `albert.lim 8:57 AM (Day 2)` —
 "sengkeong.ho ya that helps" — explicit, unambiguous acceptance (Rule 3.1).
@@ -276,15 +311,19 @@ proposal. Verified against message order in the source thread; this
 baseline records the corrected attribution.
 
 **Fields:**
-- `decision_title`: Wiki page to document the mex-specific pricing-config
-  variable
-- `decision_details`: Create a wiki page documenting the mex-specific
-  pricing configs carried on this ExP variable, and link the variable to
-  that page so the wiki becomes the central source of truth for what each
-  config is and why it exists. Scope is this one variable, not pricing
-  configs across all markets. The final, narrowed scope is stated as the
-  decision; who narrowed it and when is conversation shape and belongs to
-  the Gate 2 trace above, not to this field.
+- `decision_title`: Documenting the mex-specific pricing configs on this ExP
+  variable — **the commitment, not the wiki page.** A title naming the
+  vehicle is the regression to watch for here; see the Gate 1 trace above.
+- `decision_details`: The mex-specific pricing configs carried on this ExP
+  variable will be documented, and the variable will link to that
+  documentation so it becomes the central source of truth for what each
+  config is and why it exists. The agreed mechanism is a wiki page. Scope is
+  this one variable, not pricing configs across all markets. The wiki
+  survives here as the mechanism clause and nowhere above it — dropping it
+  entirely would lose a material specific, and promoting it to the title
+  would record the tool instead of the commitment. The final, narrowed scope
+  is stated as the decision; who narrowed it and when is conversation shape
+  and belongs to the Gate 2 trace above, not to this field.
 - `pst`: `FF Ecommerce` — **inferred, weaker basis than D1.** The thread
   gives no phrase tying D2 itself to a PST the way `3:21 PM`/`9:02 AM` do
   for D1; this value is carried over on the basis that D2 is the same
@@ -324,10 +363,17 @@ baseline records the corrected attribution.
   publish as `approved`.
 
 **Actions attaching to D2:**
-- **A3** — "Set up a wiki page for this variable and document the pricing
-  configs there." Owner: `@rahadiyan.wisesa` — requested, not yet
-  acknowledged; he does not speak again anywhere in the available source.
-  No date given, none guessed. Source: `sengkeong.ho 8:59 AM (Day 2)`.
+- **A3** — "Set up the wiki page for this variable, document the pricing
+  configs there, and link the variable to it." Owner: `@rahadiyan.wisesa` —
+  requested, not yet acknowledged; he does not speak again anywhere in the
+  available source. No date given, none guessed. Source:
+  `sengkeong.ho 8:59 AM (Day 2)`.
+
+  **One Action, not two.** `8:59 AM` asks one person, in one message, to
+  stand up the page and wire the variable to it; they are steps of a single
+  piece of work. A run that emits a separate `A4` for the linking has put an
+  artificial handoff in the record — three Actions total across this thread,
+  not four.
 
 ## Topics routed to `no_decision_topics` (Gate 1 failures)
 
