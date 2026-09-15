@@ -167,6 +167,7 @@ the reviewer looks at a single card:
 ▸ **Read Me**
 
 - This is an AI-generated draft of Decision Candidates, each with its own attached Actions.
+- Nothing is saved to the Decision Bank until you've reviewed this and asked me to save it.
 - `(*)` fields must be filled before I can lock this version.
 - Fill each `? - need to fill` before finalizing. Anything else marked `? - optional to fill` can stay as is.
 - To update a Decision or Action, use either method:
@@ -192,13 +193,57 @@ the reviewer looks at a single card:
 Never render a missing `(*)` value as `null`. Never require the user to fill
 anything with no marker.
 
+## The opening line
+
+The first thing the skill ever sends, and the only message that goes out on
+every single invocation — including one triggered by a bare @-mention with
+no instruction. Someone who has never seen this bot before meets it here.
+
+One line, the same one every time, so it stays recognizable:
+
+```text
+I'll read this thread and work out what was decided.
+```
+
+**"Work out," not "pull out."** The skill infers what was decided; it does
+not lift a sentence that was already sitting there labelled as a decision.
+A verb that promises transcription sets up a reader to be surprised by
+Review Notes.
+
+Actions are not mentioned here, deliberately. An Action is an attribute of
+its Decision (`references/extraction.md`), and naming the two side by side
+would teach a structure the cards immediately contradict. The Read Me's
+first bullet already introduces the nesting, which is the right place for
+it.
+
+How it is sent depends on what the discovery pass found:
+
+- **External sources found** — the line, a blank line, then the
+  source-selection prompt below, all in one message. One message, not two:
+  the thread stays quiet.
+- **None found** — the line alone, as its own message, with one added
+  sentence so the silence that follows is expected:
+
+  ```text
+  I'll read this thread and work out what was decided. Back shortly with a draft for you to check.
+  ```
+
+  Nothing else goes out until the cards.
+
+Never in this line: the Decision Bank, a PST, a schema field name, a gate, or
+any stage name from this skill. Never narrate the step you are about to take
+internally — "let me first check whether there are any external sources"
+tells the reader nothing the prompt underneath it does not already show.
+Never promise a time. Never add a third sentence.
+
 ## The source-selection prompt
 
-Chronologically the first thing the skill ever sends, before any card
-exists: `references/sources.md` discovers what the thread links to without
-opening anything, and this prompt asks which of those to read. It is sent
-only when the discovery pass found at least one external source — with none
-found, the question is skipped entirely and no message goes out.
+The first thing sent after the opening line, and only when the discovery
+pass found at least one external source: `references/sources.md` discovers
+what the thread links to without opening anything, and this prompt asks
+which of those to read. With none found the question is skipped entirely and
+no message goes out — the opening line's second form covers that case on its
+own.
 
 Number the sources in the order they appear in the thread, label each by
 what Slack already reveals about it (unfurled title, Jira key, filename, or
@@ -223,6 +268,17 @@ I only open the sources you pick, and nothing linked inside them.
 - The closing line is not decoration: the one-hop boundary is a real limit
   on what the user is authorizing, and stating it is how they know what
   they are agreeing to.
+- **A source with no URL you can actually see renders as a plain label, with
+  no link.** `(URL)` above is a placeholder for a real one the fetch
+  supplied; when the unfurl carries a title but no resolvable address —
+  a Jira card rendered as an attachment, a file preview, a truncated paste —
+  write `2. Jira — Approval_Request - ID for Mart` and nothing more. Never
+  invent an address, never guess at one from the host or the title, and
+  never park explanatory text in the link target (`[label](URL not visible)`
+  renders as a broken link, which is worse than no link at all). The user is
+  being asked which sources to open; a fabricated address sends them
+  somewhere that does not exist, and a source they cannot identify from its
+  label they simply will not pick.
 - A source linked from several messages is one numbered entry, not several.
 - An ordinary permalink to another message in the same thread is not an
   external source and never appears in this list.
@@ -413,9 +469,9 @@ every category is empty.** Nothing else gates it.
   - `D1 pst`: FF Ecommerce — inferred from the thread calling this "this
     eComm decision" and tying the product to Fulfillment. Confirm or change.
   - `D1 decision_approver`: recorded as the party the request was addressed
-    to. The eng-PIC sign-off `cui.ju` also required (`cui.ju 3:20 PM`) is
-    left as a role — the thread never names that person. Confirm or name
-    them.
+    to. The additional eng-PIC sign-off that `cui.ju` asked for
+    (`cui.ju 3:20 PM`) is left as a role — the thread never names who holds
+    it. Confirm or name them.
 - **Uncertain Decisions**
   - `D1` — Why uncertain: eng-PIC approval was required before this could
     close (`cui.ju 3:20 PM`); no eng PIC appears anywhere in the available
@@ -447,21 +503,32 @@ every category is empty.** Nothing else gates it.
   sentence.
 - Source Limitations, when present, is always last, one entry per unread or
   inaccessible selected source, stated once — never repeated per Candidate.
+  A run where the source-selection choice was never settled
+  (`references/sources.md`) contributes **one** entry covering all of them
+  together, not one per link: the sources went unread because the question
+  went unanswered, which is a single fact about the run. State it flatly —
+  it is never a complaint that nobody replied.
 
 ## The change receipt
 
-Follows every applied edit batch, always — never a re-rendered card set.
-Structural changes (add, drop, merge, confirm) come first, in this order,
-then field-level changes, each showing previous → new value verbatim
+Follows every edit batch, always — whether it applied in whole, in part, or
+not at all — and never a re-rendered card set. A batch where nothing could
+be applied still gets a reply: the user said something, and silence is not
+an answer to it.
+Structural changes (add, drop, restore, merge, confirm) come first, in this
+order, then field-level changes, each showing previous → new value verbatim
 (shorten a long *previous* value to a few words plus `…`; never shorten the
 new value):
 
 ```text
 ▸ **Applied**
 
-- Dropped `D3: Pilot in SG` and its linked Action `A2`
+- Dropped `D3: Pilot in SG` and its linked Action `A2` — reply "Restore D3" to put it back
 - Merged `D4` into `D1`; kept `D1: Adopt option A`
+  - Combined the rationale and conditions from both
+  - `D4 decision_details` was displaced by `D1`'s: "Run the pilot in SG first, then…"
 - Added `D5: Extend the pilot`
+- Restored `D3: Pilot in SG` and its linked Action `A2`
 - Confirmed `D2` as a Decision; no field values changed
 - `D5 pst`: ? - need to fill → DCA
 - `D1 decision_status`: pending → approved
@@ -470,6 +537,16 @@ new value):
 - Show a previous placeholder verbatim (`? - need to fill` or `? - optional
   to fill (required only if approved for publishing)`) so the user can tell
   a filled blank from an overwritten value.
+- **A drop line carries the way back**, once, on the line itself — a drop is
+  reversible (`references/review.md` §3.6) and the user has no reason to
+  know that unless told at the moment it happens. Say it on the drop, not as
+  a standing note anywhere else, and not on a restore.
+- **A merge names what it displaced**, nested under the merge line: one line
+  saying the accumulating fields were combined, and one line per non-empty
+  value that lost out, with the winning text shortened to a few words plus
+  `…`. A merge that silently overwrites text the user could read on screen
+  one message earlier is the one structural operation that can lose content
+  without anyone noticing.
 - Mention uncertainty only when this batch actually changed a candidate's
   uncertain state — one line saying it's now confident, or newly uncertain
   with its `Why uncertain` sentence. Don't resend the whole category for no
@@ -478,6 +555,52 @@ new value):
   is decided by `references/review.md` §6, never here. When it calls for a
   single card, render that card in the Decision card format above. Never
   render the same card twice in one message.
+
+### What was not applied
+
+`references/review.md` requires several edits to be refused or held, and
+they need somewhere to go. Two blocks cover it, and a reply carries each one
+only when it has content:
+
+**The `Not applied` block** — edits refused outright, where there is nothing
+to ask. One line each, naming what was skipped and why, in plain language:
+
+```text
+▸ **Not applied**
+
+- `D7` — no Decision with that ID. Current IDs: D1, D2, D5.
+```
+
+An ID can be missing because it was dropped or merged earlier in this
+review, so say what exists rather than implying a typo. Nothing here changes
+`review_revision`, completeness, or either finalize/publication flag — no
+record moved.
+
+**The question block — at most one per reply** — every edit the batch could
+not resolve without an answer, gathered under a single heading rather than
+asked one message at a time:
+
+```text
+▸ **Before I apply the rest**
+
+- `D2 pst`: "Dispatching" isn't one of the PSTs — did you mean Dispatch?
+- The pasted `D1` card is missing the second half of `decision_details`
+  ("…aimed specifically at the pickup-point catchment problem"). Drop it, or keep it?
+```
+
+`review.md` tells each of its ambiguity paths to "ask one concise
+clarification question" — target omitted with several candidates,
+normalization landing on no single value, a pasted card that cannot be
+matched, a pasted diff exposing a probably-unintended change. Several of
+those can fire in one batch. They are gathered here, one bullet each, not
+split across several messages: one batch in, one batch out, and the user
+answers everything in a single reply.
+
+**Order within the reply is fixed:** `Applied`, then `Not applied`, then the
+question block. Result first, then what was skipped, and last the only thing
+that needs the reader to do something. A reply never carries two question
+blocks, and never asks a question that belongs in `Not applied` — a
+refusal is not a choice being offered.
 
 ## The missing-fields prompt
 
@@ -565,9 +688,9 @@ message, with no further separator:
   - A1 Documented the thread in the Confluence wiki (completed within the thread) — @arpit.goel — no date
   - A2 Add the logic that recreates the merchant list — @sengkeong.ho, @moch.zulfa, @rangga.pratama (requested, not yet acknowledged) — no date
 
-`D2: Wiki page to document the pricing-config variable (*)`
+`D2: Documenting the mex-specific pricing configs on this ExP variable (*)`
 
-- `decision_details(*)`: Create a wiki page documenting the mex-specific pricing configs carried on this ExP variable, and link the variable to that page so the wiki becomes the central source of truth for what each config is and why it exists. Scope is this one variable, not pricing configs across all markets.
+- `decision_details(*)`: The mex-specific pricing configs carried on this ExP variable will be documented, and the variable will link to that documentation so it becomes the central source of truth for what each config is and why it exists. The agreed mechanism is a wiki page. Scope is this one variable, not pricing configs across all markets.
 - `pst(*)`: FF Ecommerce
 - `rationale(*)`: The grabx merchant group carries no approvals, documentation, or freshness check, so mistakes go undetected and nobody can later reconstruct which merchants belong in a group or how they were derived (@arpit.goel). Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
@@ -576,7 +699,7 @@ message, with no further separator:
 - `conditions`: ? - optional to fill
 - `refs`: 3 sources (reply "D2 refs" to view)
 - **Actions**
-  - A3 Set up a wiki page for this variable and document the pricing configs there — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
+  - A3 Set up the wiki page for this variable, document the pricing configs there, and link the variable to it — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
 
 ────────────────────────
 
@@ -627,9 +750,9 @@ sync with it.
 ```text
 ▸ **Decisions to Save**
 
-`D2: Wiki page to document the pricing-config variable (*)`
+`D2: Documenting the mex-specific pricing configs on this ExP variable (*)`
 
-- `decision_details(*)`: Create a wiki page documenting the mex-specific pricing configs carried on this ExP variable, and link the variable to that page so the wiki becomes the central source of truth for what each config is and why it exists. Scope is this one variable, not pricing configs across all markets.
+- `decision_details(*)`: The mex-specific pricing configs carried on this ExP variable will be documented, and the variable will link to that documentation so it becomes the central source of truth for what each config is and why it exists. The agreed mechanism is a wiki page. Scope is this one variable, not pricing configs across all markets.
 - `pst(*)`: FF Ecommerce
 - `rationale(*)`: The grabx merchant group carries no approvals, documentation, or freshness check, so mistakes go undetected and nobody can later reconstruct which merchants belong in a group or how they were derived (@arpit.goel). Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
@@ -638,7 +761,7 @@ sync with it.
 - `conditions`: ? - optional to fill
 - `refs`: 3 sources (reply "D2 refs" to view)
 - **Actions**
-  - A3 Set up a wiki page for this variable and document the pricing configs there — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
+  - A3 Set up the wiki page for this variable, document the pricing configs there, and link the variable to it — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
 
 ▸ **Not Included**
 
@@ -659,39 +782,3 @@ Reply "Yes, save" to commit this version, or send any remaining changes.
   and reason — never drop one silently, and never treat silence as
   approval.
 - Never show raw JSON anywhere in this preview.
-
-## Worked check against the reference thread
-
-Building D1 and D2 against every rule above surfaces the same failure mode
-the original draft had: it is easy to state a rule and violate it three
-templates later. Checked line by line here:
-
-- D1's card and the full-set render both put a blank line between the
-  heading and the first `-` field, and between `▸ **Review Notes**` and
-  `- **Uncertain Decisions**` — no template above skips it.
-- D1's `decision_approver` reads `@randy.tedjakusuma / @oncall-lead
-  (awaiting approval); eng-PIC sign-off also required, person not named in thread (awaiting
-  approval)`, because Gate 3 found no closure signal but the thread still
-  names who the approval was addressed to and who was routed to review it.
-  The role-to-person inference is flagged in Review Notes' `Inferred Values
-  to Confirm`, exactly like `pst`. Its `decision_details` states only what
-  was decided and its final scope, with no comment on approval state — that
-  stays true even if a correction later makes this candidate `approved`. The
-  eng-PIC gate and the redirection still live only in Review Notes'
-  `Uncertain Decisions` category below; `conditions` carries none of it,
-  since neither is a condition on future execution.
-- D1's Actions (`A1`, `A2`) sit nested under `- **Actions**` inside D1's own
-  card — no separate Action Candidates section exists anywhere in this
-  file.
-- D1's fourth reference sanitizes the pasted Confluence URL out of the link
-  label while keeping it as the actual link target — the concrete fix for
-  defect 6.
-- D1's `rationale` cites `(@rahadiyan.wisesa)` — the person only, no
-  timestamp — while the same evidence is cited in its full `author + time`
-  form in Review Notes and `classification_reason`, per
-  `references/extraction.md`.
-- The publication preview excludes D1 (still `pending`, `decision_approver`
-  still marked `(awaiting approval)`) and
-  publishes D2 outright (`approved`, `@albert.lim`) — matching
-  `references/review.md` §10's own worked check — and needs no `Actions to
-  Save` section because D2's card already shows `A3`.

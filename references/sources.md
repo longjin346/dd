@@ -115,10 +115,35 @@ Present the discovered sources and let the user choose which, if any, to
 open — the exact prompt text and its formatting belong to
 `references/rendering.md`; this layer only owns what the choice means.
 Selection authorizes retrieval of exactly those first-level sources, nothing
-more: no write of any kind, and no later round of discovery. An unrelated
-reply is never read as a selection; an invalid or ambiguous one gets asked
-again. When the discovery pass finds nothing, skip the question entirely and
-move straight to reading the thread alone.
+more: no write of any kind, and no later round of discovery. When the
+discovery pass finds nothing, skip the question entirely and move straight to
+reading the thread alone.
+
+### Waiting for the answer
+
+This question blocks, and it is asked before the user has seen anything the
+skill produces — so the likeliest outcome is that nobody answers it. The
+thread simply carries on. There is no timer to fall back on: the skill only
+acts when a message arrives. So the rule is about what each incoming message
+means, and it is bounded so the bot can never nag.
+
+- **A message that is not addressed to the bot** — the thread continuing its
+  own conversation — is not an answer, and is not a reason to say anything.
+  Stay silent and keep waiting. **Do not re-ask.** This is the common case
+  in a live thread, and re-asking on each unrelated message is how a capture
+  bot becomes something people mute.
+- **A reply clearly aimed at the bot but not parseable as a selection**
+  ("read the jira one?", "up to you") — ask once more, more plainly. Once,
+  ever.
+- **Never ask a third time.** If the second attempt does not produce a
+  selection, proceed as though the answer were `none`: extract from the
+  thread alone, and record one source limitation saying the sources were
+  left unread because the choice was never settled. Say it as a fact about
+  the run, never as a complaint about the user.
+- **Read a plain-language reply generously**, per `SKILL.md`. "go ahead",
+  "just do it", "don't bother" all mean `none` — the user is telling you to
+  stop blocking, and honouring that is the point. Only an actual selection
+  of sources means anything else.
 
 ## Reading the selected sources
 
@@ -174,10 +199,16 @@ selected) and one overall status, so extraction always knows how complete
 what it's reading actually is:
 
 - **`complete`** — the whole thread was read, and every source the user
-  selected was read successfully.
-- **`partial`** — the whole thread was read, but either at least one
-  selected source could not be, or the thread fetch was truncated and the
-  user explicitly agreed to continue. Every limitation is carried forward
+  selected was read successfully. A user who answered `none` gives a
+  `complete` bundle: they saw what was on offer and declined it, so nothing
+  is missing that anyone wanted. **A choice that was never settled is not
+  the same thing** — see `partial`.
+- **`partial`** — the whole thread was read, but at least one of: a selected
+  source could not be read; the thread fetch was truncated and the user
+  explicitly agreed to continue; or the source-selection question was never
+  answered, so sources the user might have wanted went unread without anyone
+  deciding they should. That last case differs from `none` precisely because
+  nobody chose. Every limitation is carried forward
   for extraction and, eventually, for `- **Source Limitations**` in Review
   Notes (`references/rendering.md`) — never silently dropped, and never
   presented downstream as a complete extraction.
