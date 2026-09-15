@@ -167,6 +167,7 @@ the reviewer looks at a single card:
 ▸ **Read Me**
 
 - This is an AI-generated draft of Decision Candidates, each with its own attached Actions.
+- Nothing is saved to the Decision Bank until you've reviewed this and asked me to save it.
 - `(*)` fields must be filled before I can lock this version.
 - Fill each `? - need to fill` before finalizing. Anything else marked `? - optional to fill` can stay as is.
 - To update a Decision or Action, use either method:
@@ -192,13 +193,57 @@ the reviewer looks at a single card:
 Never render a missing `(*)` value as `null`. Never require the user to fill
 anything with no marker.
 
+## The opening line
+
+The first thing the skill ever sends, and the only message that goes out on
+every single invocation — including one triggered by a bare @-mention with
+no instruction. Someone who has never seen this bot before meets it here.
+
+One line, the same one every time, so it stays recognizable:
+
+```text
+I'll read this thread and work out what was decided.
+```
+
+**"Work out," not "pull out."** The skill infers what was decided; it does
+not lift a sentence that was already sitting there labelled as a decision.
+A verb that promises transcription sets up a reader to be surprised by
+Review Notes.
+
+Actions are not mentioned here, deliberately. An Action is an attribute of
+its Decision (`references/extraction.md`), and naming the two side by side
+would teach a structure the cards immediately contradict. The Read Me's
+first bullet already introduces the nesting, which is the right place for
+it.
+
+How it is sent depends on what the discovery pass found:
+
+- **External sources found** — the line, a blank line, then the
+  source-selection prompt below, all in one message. One message, not two:
+  the thread stays quiet.
+- **None found** — the line alone, as its own message, with one added
+  sentence so the silence that follows is expected:
+
+  ```text
+  I'll read this thread and work out what was decided. Back shortly with a draft for you to check.
+  ```
+
+  Nothing else goes out until the cards.
+
+Never in this line: the Decision Bank, a PST, a schema field name, a gate, or
+any stage name from this skill. Never narrate the step you are about to take
+internally — "let me first check whether there are any external sources"
+tells the reader nothing the prompt underneath it does not already show.
+Never promise a time. Never add a third sentence.
+
 ## The source-selection prompt
 
-Chronologically the first thing the skill ever sends, before any card
-exists: `references/sources.md` discovers what the thread links to without
-opening anything, and this prompt asks which of those to read. It is sent
-only when the discovery pass found at least one external source — with none
-found, the question is skipped entirely and no message goes out.
+The first thing sent after the opening line, and only when the discovery
+pass found at least one external source: `references/sources.md` discovers
+what the thread links to without opening anything, and this prompt asks
+which of those to read. With none found the question is skipped entirely and
+no message goes out — the opening line's second form covers that case on its
+own.
 
 Number the sources in the order they appear in the thread, label each by
 what Slack already reveals about it (unfurled title, Jira key, filename, or
@@ -470,6 +515,11 @@ every category is empty.** Nothing else gates it.
   into `Uncertain Decisions` as well.
 - Source Limitations, when present, is always last, one entry per unread or
   inaccessible selected source, stated once — never repeated per Candidate.
+  A run where the source-selection choice was never settled
+  (`references/sources.md`) contributes **one** entry covering all of them
+  together, not one per link: the sources went unread because the question
+  went unanswered, which is a single fact about the run. State it flatly —
+  it is never a complaint that nobody replied.
 
 ## The change receipt
 

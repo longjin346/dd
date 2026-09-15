@@ -1,7 +1,7 @@
 ---
 name: slack-decisions
-description: Capture decisions and action items from a Slack thread into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
-version: 2.4.0
+description: Capture the decisions in a Slack thread — each with its own attached action items — into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
+version: 2.5.0
 metadata:
   hermes:
     tags: [slack, decisions, knowledge-management, gitlab]
@@ -14,9 +14,10 @@ required_environment_variables:
 
 # Slack Thread Decision Extractor
 
-Reads one Slack thread on request, works out what it actually decided and what
-follow-up work was agreed, and posts the result as cards for the people in
-that thread to check and correct conversationally. Nothing reaches the
+Reads one Slack thread on request and works out what it actually decided,
+carrying the follow-up work agreed for each decision as that decision's own
+attached Actions rather than as a second list. Posts the result as cards for
+the people in that thread to check and correct conversationally. Nothing reaches the
 Decision Bank until a human explicitly asks for that, separately, and
 confirms an exact preview of what is about to be written.
 
@@ -64,7 +65,7 @@ defeats the point of splitting them out.
 | Fetching the thread; a truncated or failed fetch; finding and listing linked sources; the source-selection question; reading the selected sources; the bundle's `complete` / `partial` / `inaccessible` status | `references/sources.md` |
 | Whether something is a Decision at all (the gate model), its `decision_status` / `evidence_type`, populating a Decision's fields, an Action as an attribute of the Decision it attaches to, the required-field set, how to cite a source | `references/extraction.md` |
 | Applying a correction — natural-language or pasted — a structural edit (merge, confirm, drop, add), the review-state variables, the finalize gate, the five publication gates | `references/review.md` |
-| The exact text of anything sent to Slack: the Read Me, a Decision or Action card, a change receipt, Review Notes, the finalize or publication prompt, spacing and glyph rules | `references/rendering.md` |
+| The exact text of anything sent to Slack: the opening line, the source-selection prompt, the Read Me, a Decision or Action card, a change receipt, Review Notes, the finalize or publication prompt, spacing and glyph rules | `references/rendering.md` |
 
 `references/schema.md` defines the published record's field shapes. It is
 loaded from within `extraction.md` and `review.md` wherever each needs it;
