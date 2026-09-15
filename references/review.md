@@ -469,6 +469,19 @@ order, all required.
      that was locked.
    Never silently drop an unresolved candidate from the preview and never
    treat silence as approval.
+
+   **Ask about all of them at once.** Put every unresolved candidate into a
+   single prompt — `references/rendering.md` owns its text — and take every
+   resolution the reply gives, in one batch. Asking one candidate at a time
+   multiplies the whole loop by however many are unresolved: three pending
+   candidates would mean three reopenings, three completeness passes, three
+   full renders and three finalize confirmations, for a reply the user could
+   have written once. Re-enter the gate only for what the reply left
+   unresolved.
+
+   A single reply may mix both resolutions — exclude one, approve another —
+   and where any candidate was corrected to `approved`, the reopen-and-
+   re-finalize loop above runs once for the batch, not once per candidate.
 4. **Preview the exact publishable set.** Render the full, current
    publishable set — unconditionally, per §6's second moment — including
    every item excluded under gate 3 and its reason.
@@ -503,6 +516,13 @@ publication. An Action with no owner and no due date is captured and
 published exactly as the reviewer left it, attached to its Decision through
 the permanent ID the publisher derives from position at commit time (never a
 value authored or corrected during review).
+
+**The run ends with a result, either way.** Once the write returns, say what
+happened — which Decisions were committed and where, or that nothing was
+written and the locked version is still here to retry. The text belongs to
+`references/rendering.md`; what matters here is that neither outcome is
+allowed to end in silence. A user who replied "Yes, save" and then heard
+nothing has every reason to assume it worked.
 
 **Mechanics kept at policy level:** only the whitelisted publisher may ever
 write to the Bank — never the GitLab API or `git` directly, and never a

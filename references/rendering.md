@@ -738,6 +738,33 @@ Look right? Reply "Yes, finalize" to lock this version, or send any remaining ch
   of setting the finalize flag in the same turn; acknowledge the lock by
   referencing that already-shown revision.
 
+## The publication gate-3 prompt
+
+`references/review.md`'s publication gate 3 requires a human to resolve every
+candidate that is not `approved` before anything can be written. This is that
+question, and it carries **every** unresolved candidate at once — one prompt,
+one reply, however many there are. One candidate per message multiplies the
+whole reopen-and-re-finalize loop by however many are unresolved.
+
+```text
+▸ **Before saving — these aren't ready to go in**
+
+- `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — still `pending`, and `decision_approver` is awaiting @randy.tedjakusuma / @oncall-lead.
+- `D5: Extend the pilot` — still uncertain; nobody in the thread settled it.
+
+For each one, tell me either to leave it out of this save, or who actually approved it — for example "leave out D1, D5 approved by @jane". Anything left out stays here, and you can save it later once it's settled.
+```
+
+- Say why each one is being asked about, in plain words, using the same
+  source-grounded sentence Review Notes would use — never a gate number, an
+  enum name, or `evidence_type`.
+- The example reply is not decoration: it is what shows a first-time reader
+  that both resolutions can travel in one message.
+- Never imply that leaving something out discards it. It stays in the
+  finalized review and can be saved later.
+- Never ask this when every candidate is already `approved` — the gate is
+  satisfied and the run goes straight to the preview.
+
 ## The publication preview
 
 Renders unconditionally right before the one save confirmation — this is
@@ -782,3 +809,44 @@ Reply "Yes, save" to commit this version, or send any remaining changes.
   and reason — never drop one silently, and never treat silence as
   approval.
 - Never show raw JSON anywhere in this preview.
+
+## The publication result
+
+The last message of a successful run, and the only evidence the user has
+that anything was written. Sent once, immediately after the write returns.
+
+```text
+▸ **Saved to the Decision Bank**
+
+- `D2: Documenting the mex-specific pricing configs on this ExP variable` — [record](URL)
+
+Not saved: `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — left out at your request; still here if you want to save it later.
+```
+
+- One bullet per committed Decision, with the record address the publisher
+  returned for it. Its Actions were committed inside it and are not listed
+  again. When the publisher returns no address for a record, say so on that
+  bullet in plain words rather than linking to something invented — the
+  rule for a source with no URL, above, applies here for the same reason.
+- The "Not saved" line repeats what gate 3 excluded, so the thread carries
+  the full outcome in one place rather than only in a preview scrolled past.
+  Omit the line entirely when nothing was excluded.
+- Never restate the card contents here. The preview one message earlier
+  showed them, and this message answers a different question: did it land.
+
+**When the write fails**, the run still ends with a message — a silent
+failure after an explicit "Yes, save" is the worst possible outcome, because
+the user has every reason to believe it worked:
+
+```text
+▸ **Not saved**
+
+The write to the Decision Bank didn't go through, so nothing was written. The version you confirmed is still locked here — reply "Yes, save" to try it again.
+```
+
+- Never surface the raw tool or MCP error, per `SOUL.md`; say what happened
+  in plain language and what the user can do next.
+- Say explicitly that nothing was written. After a confirmation, the default
+  assumption is that it was.
+- Never leave the locked version in doubt: it is unchanged, and retrying
+  commits exactly what was previewed.
