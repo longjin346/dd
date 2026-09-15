@@ -523,7 +523,10 @@ every category is empty.** Nothing else gates it.
 
 ## The change receipt
 
-Follows every applied edit batch, always — never a re-rendered card set.
+Follows every edit batch, always — whether it applied in whole, in part, or
+not at all — and never a re-rendered card set. A batch where nothing could
+be applied still gets a reply: the user said something, and silence is not
+an answer to it.
 Structural changes (add, drop, merge, confirm) come first, in this order,
 then field-level changes, each showing previous → new value verbatim
 (shorten a long *previous* value to a few words plus `…`; never shorten the
@@ -551,6 +554,52 @@ new value):
   is decided by `references/review.md` §6, never here. When it calls for a
   single card, render that card in the Decision card format above. Never
   render the same card twice in one message.
+
+### What was not applied
+
+`references/review.md` requires several edits to be refused or held, and
+they need somewhere to go. Two blocks cover it, and a reply carries each one
+only when it has content:
+
+**The `Not applied` block** — edits refused outright, where there is nothing
+to ask. One line each, naming what was skipped and why, in plain language:
+
+```text
+▸ **Not applied**
+
+- `D7` — no Decision with that ID. Current IDs: D1, D2, D5.
+```
+
+An ID can be missing because it was dropped or merged earlier in this
+review, so say what exists rather than implying a typo. Nothing here changes
+`review_revision`, completeness, or either finalize/publication flag — no
+record moved.
+
+**The question block — at most one per reply** — every edit the batch could
+not resolve without an answer, gathered under a single heading rather than
+asked one message at a time:
+
+```text
+▸ **Before I apply the rest**
+
+- `D2 pst`: "Dispatching" isn't one of the PSTs — did you mean Dispatch?
+- The pasted `D1` card is missing the second half of `decision_details`
+  ("…aimed specifically at the pickup-point catchment problem"). Drop it, or keep it?
+```
+
+`review.md` tells each of its ambiguity paths to "ask one concise
+clarification question" — target omitted with several candidates,
+normalization landing on no single value, a pasted card that cannot be
+matched, a pasted diff exposing a probably-unintended change. Several of
+those can fire in one batch. They are gathered here, one bullet each, not
+split across several messages: one batch in, one batch out, and the user
+answers everything in a single reply.
+
+**Order within the reply is fixed:** `Applied`, then `Not applied`, then the
+question block. Result first, then what was skipped, and last the only thing
+that needs the reader to do something. A reply never carries two question
+blocks, and never asks a question that belongs in `Not applied` — a
+refusal is not a choice being offered.
 
 ## The missing-fields prompt
 

@@ -87,7 +87,10 @@ text list is given there.
   edit to it and name it when reporting back.
 - If omission leaves more than one plausible target, ask one concise
   clarification question before applying anything that depends on resolving
-  it. Unambiguous edits elsewhere in the same reply still apply.
+  it. Unambiguous edits elsewhere in the same reply still apply. Every
+  clarification this file calls for shares the one question block described
+  in `references/rendering.md` — one per reply, however many edits raised a
+  question.
 - **A named ID that does not exist is not a target to guess at.** Say so in
   one line, list the IDs that do currently exist, and leave everything
   unchanged for that ID — including when the reply names several targets and
@@ -295,11 +298,15 @@ are genuinely required together.
 One rule replaces the branching that used to decide between a receipt, a
 single card, or the whole set.
 
-- **A receipt follows every applied edit batch.** Always. It names every
-  structural change (add, drop, merge, confirm) before any field-level
-  change, and every field-level change with its prior and new value. It
-  mentions uncertainty only when this batch changed a candidate's uncertain
-  state.
+- **A receipt follows every edit batch.** Always — whether the batch applied
+  in whole, in part, or not at all. It names every structural change (add,
+  drop, merge, confirm) before any field-level change, and every field-level
+  change with its prior and new value. It mentions uncertainty only when
+  this batch changed a candidate's uncertain state. Edits this layer refuses
+  outright, and the questions it needs answered before applying the rest,
+  travel in the same reply — `references/rendering.md` owns their blocks and
+  the order the three appear in. A batch that applied nothing still gets a
+  reply.
 - **The full current set renders in addition to the receipt at exactly two
   moments** — both are moments where the reviewer is about to be asked to
   lock or commit a version whose *current, complete* contents they have not
