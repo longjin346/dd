@@ -657,7 +657,16 @@ can act on.
 These trace the reference thread (`examples/saver-discount-thread.txt`) line
 by line. Its full expected output is recorded in
 `examples/saver-discount-expected.md` — when any rule in this file changes,
-re-run that thread and diff against it. Verify any new example the same way
+re-run that thread and diff against it.
+
+**That thread is teaching material, and can never be a blind test of this
+skill.** Its answers are worked through below, so a run that reads this file
+has already been told them. Use it the way it is used here — to learn the
+method, and as a regression fixture to diff against after a rule change.
+Judging whether these rules can be applied at all takes a thread whose
+answers appear nowhere in `references/`. Conflating the two produces a run
+that looks correct and demonstrates nothing; it has happened, more than
+once. Verify any new example the same way
 before trusting it — a plausible-sounding reading that skips the actual
 message order is exactly how the old draft misattributed a decision below.
 
