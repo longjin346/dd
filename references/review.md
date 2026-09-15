@@ -68,8 +68,21 @@ Decision number, next Action number), seeded from extraction's own
 thread-chronological numbering. Adding a Decision or Action — whether from a
 blank template or as the product of extraction — draws the next value from
 that counter and advances it. Dropping or merging away a record retires its
-ID permanently; the counter never rewinds. `D2`, once gone, is never seen
-again in this review.
+ID permanently; the counter never rewinds. No other record ever becomes
+`D2`.
+
+**Retired is not the same as destroyed.** A dropped or merged-away record is
+withdrawn from the set, not deleted: it stops rendering, stops counting
+toward completeness, and cannot be published, but it is kept and can be
+restored by its own ID for the rest of the review (§3.6). Restoring is not a
+reassignment — the ID returns to the same record it always named, which is
+exactly what the rule above protects. What the rule forbids is `D2` coming
+back as something else.
+
+This retention lives in the conversation, like every other piece of review
+state; the skill keeps no store of its own. It lasts as long as the review
+does and no longer, which is the one thing a user must not be left guessing
+about — say so when it matters rather than implying a permanent undo.
 
 ## 3. Editing model
 
@@ -179,22 +192,61 @@ currently stored ones and apply only what actually changed.**
 
 ### 3.6 Structural operations on Decisions
 
-- **Merge** (`D1 and D3 are the same`): keep the lower ID, discard the
-  higher one. For each field, take the value from the card named first (or,
-  named symmetrically, the lower-ID card); where the two conflict on a
-  substantive field such as `decision_status`, surface the conflict as one
-  question and wait rather than guessing. Union and deduplicate `refs`.
-  Every Action that was attached to the discarded ID now attaches to the
+- **Merge** (`D1 and D3 are the same`): keep the lower ID, withdraw the
+  higher one. Where the two conflict on a field that carries a single
+  settled answer — `decision_status`, `pst`, `decision_approver`,
+  `decision_proposer` — surface the conflict as one question and wait rather
+  than guessing.
+
+  **The accumulating fields union rather than overwrite.** `refs` already
+  did; `rationale` and `conditions` join it, deduplicating strands that say
+  the same thing. The reasoning is extraction.md's own: a rationale is
+  supposed to carry every distinct reason the thread gave, from whoever gave
+  it. Two cards the reviewer says are the same decision are two readings of
+  one decision, so both sets of reasons are about it — taking only the
+  first-named card's would discard half the case the moment someone tidies
+  up the set, which is exactly the loss that rule exists to prevent.
+
+  For every remaining field, including `decision_details`, take the value
+  from the card named first (or, named symmetrically, the lower-ID card),
+  and **name any non-empty value that was displaced in the receipt** — a
+  merge must never quietly throw away text the user can see on screen one
+  message earlier.
+
+  Every Action that was attached to the withdrawn ID now attaches to the
   retained one — automatically, since the Action's link is positional, not a
-  value to reconcile.
+  value to reconcile. The withdrawn card itself is kept and restorable, as
+  with any drop.
 - **Confirm an Uncertain Decision** (`D2 should be treated as a Decision`):
   set `decision_classification: decision`. Change nothing else — status,
   evidence, and every stored field still reflect the thread evidence exactly
   as extracted.
-- **Drop a Decision** (`Drop D1`): remove it, and with it every Action
-  attached to it. This is not a cascade rule bolted onto a relational model —
-  an Action is part of its Decision, so removing the Decision removes what it
-  contains. There is nothing left over to orphan or clean up.
+- **Drop a Decision** (`Drop D1`): withdraw it from the set, and with it
+  every Action attached to it. This is not a cascade rule bolted onto a
+  relational model — an Action is part of its Decision, so withdrawing the
+  Decision withdraws what it contains. There is nothing left over to orphan
+  or clean up.
+
+  Withdrawn, not destroyed (§2). It stops rendering, stops counting toward
+  completeness, and cannot be published; its content and its Actions are
+  kept intact so the drop can be taken back. No confirmation is asked
+  first — the receipt already reports the drop and the Actions that went
+  with it, and a reported, reversible action does not need a round-trip in
+  front of it.
+- **Restore a Decision** (`Restore D1`, `undo that drop`, `put D1 back`):
+  return a withdrawn Decision to the set, with every field and every Action
+  exactly as they were. This matters most for what a user cannot retype:
+  `refs` are permalinks the acquisition layer collected, so a destroyed
+  Decision's evidence trail could only be recovered by re-running the whole
+  capture.
+
+  It is an ordinary edit batch — `review_revision += 1`, recompute
+  completeness — and on a finalized set it reopens review exactly like any
+  other post-finalize edit (§1). Restoring something that is already in the
+  set, or an ID that never existed, is refused the same way any unresolvable
+  target is (§3.1), not silently ignored. A restored Decision is subject to
+  every ordinary completeness, finalize, and publication rule from that
+  point on; nothing about having been away exempts it.
 - **Add a Decision from a blank template** (`add a decision`): the user's
   request is itself the human confirmation that this is a Decision —
   initialize `decision_classification: decision` immediately; never ask
@@ -231,13 +283,20 @@ removed with its parent." What remains are four plain edits:
   target ID is resolved — not a special "relink" operation, because the
   pointer is definitionally always valid once resolved: you are naming an
   existing Decision, nothing more.
-- **Drop** (`Drop A1`): remove the single Action. Nothing else references it.
+- **Drop** (`Drop A1`): withdraw the single Action. Nothing else references
+  it. Withdrawn, not destroyed, exactly as for a Decision (§2) — `Restore
+  A1` brings it back to the Decision it was attached to, or, if that
+  Decision has itself been withdrawn, restoring the Decision brings its
+  Actions with it.
 
 ## 4. Completeness and the missing-fields prompt
 
 After every applied edit batch (including the initial Step 3→4 handoff),
 recompute completeness against the **required** field set defined in
-extraction.md, across every current Decision.
+extraction.md, across every current Decision — meaning the ones in the set,
+never a Decision that has been withdrawn by a drop or a merge (§3.6). A
+withdrawn record holds no completeness claim on the set it is not part of,
+and restoring one brings its unfilled required fields back with it.
 
 - **Actions are never checked.** An Action has no required field at all
   (extraction.md), so it can never be incomplete and never appears in a
@@ -300,9 +359,9 @@ single card, or the whole set.
 
 - **A receipt follows every edit batch.** Always — whether the batch applied
   in whole, in part, or not at all. It names every structural change (add,
-  drop, merge, confirm) before any field-level change, and every field-level
-  change with its prior and new value. It mentions uncertainty only when
-  this batch changed a candidate's uncertain state. Edits this layer refuses
+  drop, restore, merge, confirm) before any field-level change, and every
+  field-level change with its prior and new value. It mentions uncertainty
+  only when this batch changed a candidate's uncertain state. Edits this layer refuses
   outright, and the questions it needs answered before applying the rest,
   travel in the same reply — `references/rendering.md` owns their blocks and
   the order the three appear in. A batch that applied nothing still gets a

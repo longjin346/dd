@@ -527,17 +527,20 @@ Follows every edit batch, always — whether it applied in whole, in part, or
 not at all — and never a re-rendered card set. A batch where nothing could
 be applied still gets a reply: the user said something, and silence is not
 an answer to it.
-Structural changes (add, drop, merge, confirm) come first, in this order,
-then field-level changes, each showing previous → new value verbatim
+Structural changes (add, drop, restore, merge, confirm) come first, in this
+order, then field-level changes, each showing previous → new value verbatim
 (shorten a long *previous* value to a few words plus `…`; never shorten the
 new value):
 
 ```text
 ▸ **Applied**
 
-- Dropped `D3: Pilot in SG` and its linked Action `A2`
+- Dropped `D3: Pilot in SG` and its linked Action `A2` — reply "Restore D3" to put it back
 - Merged `D4` into `D1`; kept `D1: Adopt option A`
+  - Combined the rationale and conditions from both
+  - `D4 decision_details` was displaced by `D1`'s: "Run the pilot in SG first, then…"
 - Added `D5: Extend the pilot`
+- Restored `D3: Pilot in SG` and its linked Action `A2`
 - Confirmed `D2` as a Decision; no field values changed
 - `D5 pst`: ? - need to fill → DCA
 - `D1 decision_status`: pending → approved
@@ -546,6 +549,16 @@ new value):
 - Show a previous placeholder verbatim (`? - need to fill` or `? - optional
   to fill (required only if approved for publishing)`) so the user can tell
   a filled blank from an overwritten value.
+- **A drop line carries the way back**, once, on the line itself — a drop is
+  reversible (`references/review.md` §3.6) and the user has no reason to
+  know that unless told at the moment it happens. Say it on the drop, not as
+  a standing note anywhere else, and not on a restore.
+- **A merge names what it displaced**, nested under the merge line: one line
+  saying the accumulating fields were combined, and one line per non-empty
+  value that lost out, with the winning text shortened to a few words plus
+  `…`. A merge that silently overwrites text the user could read on screen
+  one message earlier is the one structural operation that can lose content
+  without anyone noticing.
 - Mention uncertainty only when this batch actually changed a candidate's
   uncertain state — one line saying it's now confident, or newly uncertain
   with its `Why uncertain` sentence. Don't resend the whole category for no
