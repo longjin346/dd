@@ -1,7 +1,7 @@
 ---
 name: slack-decisions
 description: Capture the decisions in a Slack thread — each with its own attached action items — into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
-version: 2.5.0
+version: 2.6.0
 metadata:
   hermes:
     tags: [slack, decisions, knowledge-management, gitlab]
@@ -48,7 +48,9 @@ confirms an exact preview of what is about to be written.
 6. **Publish** — only on a separate, explicit request. Resolve every
    candidate that isn't yet `approved`, preview the exact set about to be
    written, and commit it. Publication sits behind five gates, all
-   required, checked in order.
+   required, checked in order. Report the outcome afterwards — what was
+   written and where, or that nothing was and the locked version is still
+   there to retry. A confirmed save never ends in silence.
 
 Stages 3–6 are governed by `references/review.md` (what happens and when)
 together with `references/rendering.md` (the exact text of everything sent
@@ -65,7 +67,7 @@ defeats the point of splitting them out.
 | Fetching the thread; a truncated or failed fetch; finding and listing linked sources; the source-selection question; reading the selected sources; the bundle's `complete` / `partial` / `inaccessible` status | `references/sources.md` |
 | Whether something is a Decision at all (the gate model), its `decision_status` / `evidence_type`, populating a Decision's fields, an Action as an attribute of the Decision it attaches to, the required-field set, how to cite a source | `references/extraction.md` |
 | Applying a correction — natural-language or pasted — a structural edit (merge, confirm, drop, add), the review-state variables, the finalize gate, the five publication gates | `references/review.md` |
-| The exact text of anything sent to Slack: the opening line, the source-selection prompt, the Read Me, a Decision or Action card, a change receipt, Review Notes, the finalize or publication prompt, spacing and glyph rules | `references/rendering.md` |
+| The exact text of anything sent to Slack: the opening line, the source-selection prompt, the Read Me, a Decision or Action card, a change receipt, Review Notes, the finalize prompt, the publication gate-3 prompt, the publication preview, the publication result, spacing and glyph rules | `references/rendering.md` |
 
 `references/schema.md` defines the published record's field shapes. It is
 loaded from within `extraction.md` and `review.md` wherever each needs it;
