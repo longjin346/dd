@@ -253,15 +253,13 @@ variable, and adds linking the variable to the wiki as the central source of
 truth. Final scope is the narrowed one; nobody explicitly re-confirms the
 narrowed version, which matters for Gate 5, not Gate 2.
 
-**The accepter's scope was wider, and that has to reach the reviewer.**
+**The accepter's scope was wider than what the record keeps.**
 `albert.lim 8:57 AM (Day 2)` accepts in terms of "the incoming new ones" —
 all new pricing configs — while `8:59 AM` narrows to this one variable.
 Rule 5.1 carries the acceptance forward, so the record keeps the narrow
-scope and D2 stays a `decision`; the gap itself is reported through the
-`Scope Narrowed After Acceptance` entry in Review Notes. Expect exactly one
-such entry from this thread. A run that resolves the narrowing silently, or
-that reacts to it by demoting D2 to `uncertain`, has got this wrong in
-opposite directions.
+scope and D2 stays a `decision`. Noted here because a run that reacts to the
+gap by demoting D2 to `uncertain` has misread Rule 5.1, which exists
+precisely to stop that.
 
 **The linking clause splits across two fields.** The committed property —
 the documentation is reachable from the config, making it the source of
@@ -453,10 +451,10 @@ itself indicate a regression.
   entirely — it is not a value, not an accepted reply, not an option named in
   any prompt anywhere in this skill. D1 is the worked case: nobody ever
   approved it, but the thread names an addressee
-  (`@randy.tedjakusuma` / `@oncall-lead`) and, once the eng-PIC role `cui.ju`
-  required is resolved by inference, a second awaited party
-  (`@arpit.goel`) — both recorded, both marked awaiting, neither confused
-  with D2's real approver `@albert.lim`. The invariant across all four
+  (`@randy.tedjakusuma` / `@oncall-lead`) and, separately, the eng-PIC
+  sign-off `cui.ju` asked for, which stays an unnamed role — both recorded,
+  the addressee marked awaiting, neither confused with D2's real approver
+  `@albert.lim`. The invariant across all four
   designs, and the thing any future change must preserve: a reviewer may be
   asked to confirm what the thread shows, never to supply what it does not —
   and an awaited approver must never render as a bare name, because that is

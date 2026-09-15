@@ -472,11 +472,6 @@ every category is empty.** Nothing else gates it.
     to. The additional eng-PIC sign-off that `cui.ju` asked for
     (`cui.ju 3:20 PM`) is left as a role — the thread never names who holds
     it. Confirm or name them.
-- **Scope Narrowed After Acceptance**
-  - `D2` — accepted at `albert.lim 8:57 AM` as documenting "the incoming new
-    ones", meaning all new pricing configs; narrowed by `@sengkeong.ho` at
-    `8:59 AM` to this one variable. The record keeps the narrower scope.
-    Confirm that is what was meant. [View source](slack-permalink)
 - **Uncertain Decisions**
   - `D1` — Why uncertain: eng-PIC approval was required before this could
     close (`cui.ju 3:20 PM`); no eng PIC appears anywhere in the available
@@ -506,13 +501,6 @@ every category is empty.** Nothing else gates it.
 - Never expose a Gate id, an enum name, `evidence_type`, or chain-of-thought
   in a `Why uncertain` line — rewrite it as one plain, source-grounded
   sentence.
-- Scope Narrowed After Acceptance carries one entry per candidate where
-  Rule 5.1 (`references/extraction.md`) carried an acceptance forward onto a
-  scope the accepter never saw. Name what was accepted, what it was narrowed
-  to, and who narrowed it. The candidate is still a `decision` and still
-  renders its own card normally — this category asks for a confirmation, it
-  does not report a problem, so never let an entry here pull a candidate
-  into `Uncertain Decisions` as well.
 - Source Limitations, when present, is always last, one entry per unread or
   inaccessible selected source, stated once — never repeated per Candidate.
   A run where the source-selection choice was never settled
@@ -727,9 +715,9 @@ Look right? Reply "Yes, finalize" to lock this version, or send any remaining ch
 ```
 
 - This is the exact block for defect 4: the re-render before locking never
-  repeats `Inferred Values to Confirm`, `Scope Narrowed After Acceptance`,
-  `Not Identified as Decisions`, or `Source Limitations` — those haven't
-  changed since Step 3 first showed them. It shows the `▸ **Review Notes**` heading together with only the
+  repeats `Inferred Values to Confirm`, `Not Identified as Decisions`, or
+  `Source Limitations` — those haven't changed since Step 3 first showed
+  them. It shows the `▸ **Review Notes**` heading together with only the
   `Uncertain Decisions` category, preceded by the standard separator, and
   nothing else from Review Notes accompanies it.
 - When no Decision remains at all, render the heading followed by the empty
@@ -794,39 +782,3 @@ Reply "Yes, save" to commit this version, or send any remaining changes.
   and reason — never drop one silently, and never treat silence as
   approval.
 - Never show raw JSON anywhere in this preview.
-
-## Worked check against the reference thread
-
-Building D1 and D2 against every rule above surfaces the same failure mode
-the original draft had: it is easy to state a rule and violate it three
-templates later. Checked line by line here:
-
-- D1's card and the full-set render both put a blank line between the
-  heading and the first `-` field, and between `▸ **Review Notes**` and
-  `- **Uncertain Decisions**` — no template above skips it.
-- D1's `decision_approver` reads `@randy.tedjakusuma / @oncall-lead
-  (awaiting approval); eng-PIC sign-off also required, person not named in
-  thread`, because Gate 3 found no closure signal but the thread still
-  names who the approval was addressed to and who was routed to review it.
-  The role-to-person inference is flagged in Review Notes' `Inferred Values
-  to Confirm`, exactly like `pst`. Its `decision_details` states only what
-  was decided and its final scope, with no comment on approval state — that
-  stays true even if a correction later makes this candidate `approved`. The
-  eng-PIC gate and the redirection still live only in Review Notes'
-  `Uncertain Decisions` category below; `conditions` carries none of it,
-  since neither is a condition on future execution.
-- D1's Actions (`A1`, `A2`) sit nested under `- **Actions**` inside D1's own
-  card — no separate Action Candidates section exists anywhere in this
-  file.
-- D1's fourth reference sanitizes the pasted Confluence URL out of the link
-  label while keeping it as the actual link target — the concrete fix for
-  defect 6.
-- D1's `rationale` cites `(@rahadiyan.wisesa)` — the person only, no
-  timestamp — while the same evidence is cited in its full `author + time`
-  form in Review Notes and `classification_reason`, per
-  `references/extraction.md`.
-- The publication preview excludes D1 (still `pending`, `decision_approver`
-  still marked `(awaiting approval)`) and
-  publishes D2 outright (`approved`, `@albert.lim`) — matching
-  `references/review.md` §10's own worked check — and needs no `Actions to
-  Save` section because D2's card already shows `A3`.

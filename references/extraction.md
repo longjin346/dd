@@ -255,15 +255,6 @@ Gate 2 established, not the scope at the moment of the signal.
   tightening of the one already accepted. This covers a narrowing by
   whoever voiced the object, which under rung 2 of `decision_proposer` is
   not the name in that field.
-
-  **Carrying the acceptance forward is not the same as confirming it.**
-  Whenever this rule applies, the record ends up narrower than what the
-  accepter actually agreed to, and they never saw the narrowed version. Say
-  so: every post-acceptance narrowing gets one `Scope Narrowed After
-  Acceptance` entry in Review Notes (`references/rendering.md`), naming what
-  was accepted, what it was narrowed to, and by whom. The candidate stays
-  `decision` — this is a confirmation to collect, not a reason to mark it
-  `uncertain`.
 - A **widening or other material change** after acceptance does reopen the
   candidate. The accepted signal covered the earlier, smaller or different
   proposition, not the changed one, so the candidate reverts to `uncertain`

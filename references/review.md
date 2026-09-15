@@ -511,27 +511,3 @@ to that publisher and never printed or logged. The write is non-overwriting.
 An edited Decision or Action is not automatically reflected in a prior
 commit; re-publishing after any post-commit edit requires all five gates
 again, from gate 1.
-
-## 10. Worked check against the reference thread
-
-- **D1** (uncertain, `pending`, unmet eng-PIC condition cited in
-  `classification_reason` and Review Notes rather than in `conditions`):
-  arrives with `decision_approver` already filled by rung 2 of the fallback
-  ladder — `@randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC
-  sign-off also required, person not named in thread` — because the
-  thread never closed it but does say who was supposed to. That leaves every
-  required field present, so D1 reaches the finalize prompt without a
-  missing-fields round-trip (§4–§5). At the publication gate (§8 gate 3) it
-  is resolved either by exclusion — D2 still publishes, and the
-  finalization survives untouched — or by correcting it to `approved`, which
-  requires naming an actual approver in that same reply, because an awaited
-  marker cannot stand on an `approved` candidate, reopens review, and
-  requires a fresh finalize before gate 3 can be re-entered.
-- **D2** (`approved`, approver `@albert.lim`): every required field is
-  present with a real approver, not one still marked awaited, so it
-  satisfies gate 3's field check outright and moves through the gate cleanly
-  once gates 1–2 hold.
-- **Actions with no owner and no date** (several, attached to both D1 and
-  D2): never appear in a missing-fields prompt, never block finalize, never
-  block publication — per §4 and §8's field check, exactly as extraction.md
-  requires.
