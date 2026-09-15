@@ -178,9 +178,12 @@ engagement could never have closed this candidate even had he said
 - **The awaited value is a filled, honest field, not a gap.**
   `decision_approver` names both parties the thread shows are owed a
   disposition — `@randy.tedjakusuma` / `@oncall-lead`, the original
-  addressee, and the eng PIC role `cui.ju` required, inferred as
-  `@arpit.goel` — each marked `(awaiting approval)` so neither can be
-  misread as a signal that was actually given. The distinction that matters,
+  addressee, marked `(awaiting approval)` so it cannot be misread as a
+  signal that was actually given, and the eng-PIC sign-off `cui.ju` asked
+  for, which stays an unnamed role for the reasons given under the field
+  above. **Not `@arpit.goel`** — resolving that role to a person is the
+  regression this baseline exists to catch, and naming him here would
+  contradict the field's own rule three paragraphs up. The distinction that matters,
   and the one this whole design turns on: a reviewer may be asked to
   *confirm what the thread shows*, never to *supply what it does not* — and
   rung 2 is exactly that confirmation, drawn straight from the thread.

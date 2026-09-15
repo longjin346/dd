@@ -223,6 +223,17 @@ I only open the sources you pick, and nothing linked inside them.
 - The closing line is not decoration: the one-hop boundary is a real limit
   on what the user is authorizing, and stating it is how they know what
   they are agreeing to.
+- **A source with no URL you can actually see renders as a plain label, with
+  no link.** `(URL)` above is a placeholder for a real one the fetch
+  supplied; when the unfurl carries a title but no resolvable address —
+  a Jira card rendered as an attachment, a file preview, a truncated paste —
+  write `2. Jira — Approval_Request - ID for Mart` and nothing more. Never
+  invent an address, never guess at one from the host or the title, and
+  never park explanatory text in the link target (`[label](URL not visible)`
+  renders as a broken link, which is worse than no link at all). The user is
+  being asked which sources to open; a fabricated address sends them
+  somewhere that does not exist, and a source they cannot identify from its
+  label they simply will not pick.
 - A source linked from several messages is one numbered entry, not several.
 - An ordinary permalink to another message in the same thread is not an
   external source and never appears in this list.
@@ -413,9 +424,9 @@ every category is empty.** Nothing else gates it.
   - `D1 pst`: FF Ecommerce — inferred from the thread calling this "this
     eComm decision" and tying the product to Fulfillment. Confirm or change.
   - `D1 decision_approver`: recorded as the party the request was addressed
-    to. The eng-PIC sign-off `cui.ju` also required (`cui.ju 3:20 PM`) is
-    left as a role — the thread never names that person. Confirm or name
-    them.
+    to. The additional eng-PIC sign-off that `cui.ju` asked for
+    (`cui.ju 3:20 PM`) is left as a role — the thread never names who holds
+    it. Confirm or name them.
 - **Scope Narrowed After Acceptance**
   - `D2` — accepted at `albert.lim 8:57 AM` as documenting "the incoming new
     ones", meaning all new pricing configs; narrowed by `@sengkeong.ho` at
@@ -682,8 +693,8 @@ templates later. Checked line by line here:
   heading and the first `-` field, and between `▸ **Review Notes**` and
   `- **Uncertain Decisions**` — no template above skips it.
 - D1's `decision_approver` reads `@randy.tedjakusuma / @oncall-lead
-  (awaiting approval); eng-PIC sign-off also required, person not named in thread (awaiting
-  approval)`, because Gate 3 found no closure signal but the thread still
+  (awaiting approval); eng-PIC sign-off also required, person not named in
+  thread`, because Gate 3 found no closure signal but the thread still
   names who the approval was addressed to and who was routed to review it.
   The role-to-person inference is flagged in Review Notes' `Inferred Values
   to Confirm`, exactly like `pst`. Its `decision_details` states only what

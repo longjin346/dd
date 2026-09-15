@@ -731,8 +731,13 @@ message order is exactly how the old draft misattributed a decision below.
   gate set in `cui.ju 3:20 PM`; review redirected to `arpit.goel` by `cui.ju`
   at `3:22 PM`, unendorsed by the originally addressed `randy.tedjakusuma`;
   no signal from any entitled party through the end of the thread." Neither
-  fact populates `conditions` (`null` here) — both are approval-process
-  facts, not a condition on execution. `pst`: `FF Ecommerce` (inferred — the
+  fact populates `conditions` — both are approval-process facts, not a
+  condition on execution. That leaves `conditions` carrying only what is a
+  genuine condition on future execution: the merchant group is a
+  business-team priority list, reviewed against partnership needs and
+  merchant performance rather than fixed (`@moch.zulfa`). **`conditions` is
+  not empty for this candidate** — the two approval-process facts are
+  excluded from it, not the field as a whole. `pst`: `FF Ecommerce` (inferred — the
   thread later calls this "this eComm decision" and ties the product to
   Fulfillment; flagged for reviewer confirmation).
 - This candidate is finalizable exactly as drafted: every required field is
