@@ -35,22 +35,22 @@ template in this file, and every message another file requires needs a row.
 | Truncation confirmation | The fetch came back at the limit, before anything is extracted | `sources.md` | The truncation confirmation |
 | Source-selection prompt | After the opening line, only if the discovery pass found a source | `sources.md` | The source-selection prompt |
 | Read Me | Once, heading the first card set | `SKILL.md` stage 3 | The required-field legend |
-| Decision card | With the Read Me, on request, and in the two full renders | `review.md` §6 | The Decision card |
+| Decision card | With the Read Me, on request, and in the save message | `review.md` §6 | The Decision card |
 | References list | Only when asked for a candidate's refs | `review.md` §6 | References, on request |
-| Review Notes | With the first card set; partially in the pre-lock render | `review.md` §6 | Review Notes |
+| Review Notes | With the first card set; `Uncertain Decisions` alone in the save message | `review.md` §6 | Review Notes |
 | Change receipt | After every edit batch, applied or not | `review.md` §6 | The change receipt |
 | `Not applied` block | In that receipt, when an edit was refused outright | `review.md` §3.1–3.3 | The change receipt → What was not applied |
 | Question block | In that receipt, when an edit needs an answer first | `review.md` §3.1–3.3 | The change receipt → What was not applied |
 | Missing-fields prompt | Ends the response whenever a finalize-required field is unresolved | `review.md` §4 | The missing-fields prompt |
-| Full current set | The two moments a reviewer is about to lock or commit unseen content | `review.md` §6 | The full current set, and the finalize prompt |
-| Finalize prompt | When the set is complete and not yet locked | `review.md` §7 | The full current set, and the finalize prompt |
-| Publication gate-3 prompt | Before a save, when any candidate is not `approved` | `review.md` §8 gate 3 | The publication gate-3 prompt |
-| Publication preview | Immediately before the save confirmation, unconditionally | `review.md` §8 gate 4 | The publication preview |
+| Finalize prompt | Closing any reply whose batch left every required field filled | `review.md` §7 | The full current set, and the finalize prompt |
+| Save message | On a finalize confirmation — cards, what cannot be saved, and the save request | `review.md` §6, §7 | The save message |
+| Correction re-render | A gate-3 reply corrected a candidate to `approved` | `review.md` §8 gate 4 | The save message → After a correction at the gate |
 | Publication result | Once the write returns, success or failure | `review.md` §9 | The publication result |
 
 Four of these were added after a walk through the flow found the rule
 requiring them and no text to send: the opening line, the `Not applied` and
-question blocks, the gate-3 prompt, and the publication result. Each had
+question blocks, what is now the save message, and the publication result.
+Each had
 been specified somewhere as something the skill does, and each left the
 model to invent the words.
 
@@ -555,6 +555,10 @@ every category is empty.** Nothing else gates it.
 ```text
 ▸ **Review Notes**
 
+- **Complete, but not a decision yet**
+  - `D1` — the record is finished; the thread just never records anyone
+    approving it, and the Bank only holds decisions that were actually made.
+    Tell me who approved it, or it stays here and out of any save.
 - **Inferred Values to Confirm**
   - `D1 pst`: <PST> — inferred from <what in the thread supports it>.
     Confirm or change.
@@ -578,6 +582,18 @@ every category is empty.** Nothing else gates it.
   - [Jira — ABC-123](URL) could not be read because access was denied.
 ```
 
+- **Complete, but not a decision yet** carries one entry per candidate that
+  cannot be published as it stands — `decision_status` not `approved`, or an
+  approver still marked `(awaiting approval)`. It comes first because it is
+  the only category that changes what a reviewer can do with the record, and
+  it appears from the first card set onward rather than waiting for the save
+  step. A reviewer who learns at the last gate that a candidate was never
+  publishable has been told too late; it was knowable at extraction.
+
+  Say it as a fact about the thread, never as a defect in the record. The
+  record is complete — every required field is filled, including an approver
+  honestly marked as awaited. What is missing is an approval that has not
+  happened, and no amount of reviewing produces one.
 - Never add a missing-fields category here — the inline `? - need to fill`
   markers and the Read Me block already say what's missing; repeating it
   would only duplicate and crowd out the notes that carry new information.
@@ -749,14 +765,18 @@ Please provide all known values in one reply. Anything else you want to change? 
 
 ## The full current set, and the finalize prompt
 
-Renders in full only at the two moments the reviewer is about to be asked to
-lock or commit something they have not yet seen whole in its current form —
-timing owned by `references/review.md`; this section only fixes its shape.
-Begin with every current Decision card (this format, nested Actions
-included). Then, only when at least one Decision is still uncertain, one
-separator followed by the `▸ **Review Notes**` heading carrying the
-`Uncertain Decisions` category alone. The finalize prompt closes the
-message, with no further separator:
+The finalize prompt closes any reply whose edit batch left every
+finalize-required field filled — a receipt and this prompt, nothing else.
+Editing never renders the cards (`references/review.md` §6); the reviewer
+reads deltas while they work.
+
+The full set below is what the **save message** renders once the reviewer
+confirms. It is kept here, with the finalize prompt, because the two share a
+shape: every current Decision card in this format, nested Actions included,
+then — only when at least one Decision is still uncertain — one separator and
+the `▸ **Review Notes**` heading carrying the `Uncertain Decisions` category
+alone. What differs is the closing block, and the save message supplies its
+own:
 
 ```text
 ▸ **Decision Candidates**
@@ -802,12 +822,12 @@ message, with no further separator:
 Look right? Reply "Yes, finalize" to lock this version, or send any remaining changes.
 ```
 
-- This is the exact block for defect 4: the re-render before locking never
-  repeats `Inferred Values to Confirm`, `Not Identified as Decisions`, or
-  `Source Limitations` — those haven't changed since Step 3 first showed
-  them. It shows the `▸ **Review Notes**` heading together with only the
-  `Uncertain Decisions` category, preceded by the standard separator, and
-  nothing else from Review Notes accompanies it.
+- A re-render never repeats `Inferred Values to Confirm`, `Complete, but not
+  a decision yet`, `Not Identified as Decisions`, or `Source Limitations` —
+  those have not changed since the first card set showed them. It carries the
+  `▸ **Review Notes**` heading with the `Uncertain Decisions` category alone,
+  preceded by the standard separator, and nothing else from Review Notes
+  accompanies it.
 - When no Decision remains at all, render the heading followed by the empty
   state, with the same blank line the spacing rule always requires between
   a heading and its list:
@@ -822,82 +842,85 @@ Look right? Reply "Yes, finalize" to lock this version, or send any remaining ch
   no longer have a section of their own; a Decision with no Actions simply
   omits its `- **Actions**` bullet, exactly as it does anywhere else in this
   file.
-- Confirming finalize renders nothing new — the set was just shown as part
-  of setting the finalize flag in the same turn; acknowledge the lock by
-  referencing that already-shown revision.
+- **When the prompt above shows, it shows alone.** A reply carrying the
+  finalize prompt carries the receipt and the prompt — never the cards. The
+  cards come next, in the save message, once the reviewer says yes.
 
-## The publication gate-3 prompt
+## The save message
 
-`references/review.md`'s publication gate 3 requires a human to resolve every
-candidate that is not `approved` before anything can be written. This is that
-question, and it carries **every** unresolved candidate at once — one prompt,
-one reply, however many there are. One candidate per message multiplies the
-whole reopen-and-re-finalize loop by however many are unresolved.
+Sent the moment a finalize confirmation lands. It replaces three things that
+used to be separate messages — a bare lock acknowledgement, a gate-3 prompt,
+and a publication preview — because they were asking the reviewer to hold
+three parts of one decision in their head across several turns.
+
+Three blocks, in this order, each rendered only when it applies:
+
+**1. The cards.** The full current set, in the shape above. Skip them only
+when no edit batch has been applied since they were last shown whole — the
+reviewer confirmed straight off the first card set and changed nothing, so
+the cards are one message up. `references/review.md` §6 owns that test.
+
+**2. What cannot be saved as it stands.** One line per candidate that is not
+`approved`, or whose approver still carries `(awaiting approval)`. Never a
+surprise: the same candidates have been flagged in Review Notes since the
+first card set.
+
+**3. The request to save.** Always.
 
 ```text
-▸ **Before saving — these aren't ready to go in**
+────────────────────────
 
-- `D1: <title>` — still `pending`, and `decision_approver` is awaiting @alias / @group-handle.
-- `D5: <title>` — still uncertain; <one plain sentence saying why>.
+▸ **Before saving**
 
-For each one, tell me either to leave it out of this save, or who actually approved it — for example "leave out D1, D5 approved by @jane". Anything left out stays here, and you can save it later once it's settled.
+- `D1: <title>` — still not approved, as flagged earlier. Leave it out, or tell me who approved it.
+- `D5: <title>` — <one plain sentence saying what is unresolved>.
+
+Say "save" when you're ready, and I'll write the rest to the Decision Bank. Nothing goes in until you do. Anything you leave out stays here.
 ```
 
-- Say why each one is being asked about, in plain words, using the same
-  source-grounded sentence Review Notes would use — never a gate number, an
-  enum name, or `evidence_type`.
-- The example reply is not decoration: it is what shows a first-time reader
-  that both resolutions can travel in one message.
-- Never imply that leaving something out discards it. It stays in the
+- **The closing line does the work a lock acknowledgement used to do badly.**
+  It says the version is settled, says nothing has been written, and says
+  what to send next — the three things a reviewer needs at the one point in
+  the flow where they have just finished everything they thought was asked
+  of them.
+- **Where block 2 is empty**, the message is the cards and a closing line
+  with no `Before saving` heading: `Say "save" when you're ready…`. Never
+  render an empty heading.
+- **Say what each item needs in plain words**, using the same
+  source-grounded sentence Review Notes uses — never a gate number, an enum
+  name, or `evidence_type`.
+- **Never imply that leaving something out discards it.** It stays in the
   finalized review and can be saved later.
-- Never ask this when every candidate is already `approved` — the gate is
-  satisfied and the run goes straight to the preview.
+- **When the save was already requested** — a reply that finalized and asked
+  to save in one message — the closing line asks for confirmation instead:
+  `Reply "yes" to write this to the Decision Bank.` Everything above it is
+  unchanged.
 
-## The publication preview
+### After a correction at the gate
 
-Renders unconditionally right before the one save confirmation — this is
-irreversible, so the reviewer sees the exact set that is about to commit,
-including anything excluded at the gate. Because an Action now lives inside
-its Decision's card, a saved Decision's card already shows every Action
-attached to it — there is no separate `Actions to Save` section to keep in
-sync with it.
+A reply that only excludes candidates changes no record, so the save
+proceeds against what was already shown. A reply that corrects one to
+`approved` changes what will be written, and the confirmation given for the
+earlier version cannot carry across it.
+
+Re-render only the cards that changed, then ask again:
 
 ```text
-▸ **Decisions to Save**
+`D1: <title> (*)`
 
-`D2: <decision title> (*)`
-
-- `decision_details(*)`: <what was decided and its final scope — where an instrument was agreed, it appears here as the mechanism, never in the title>
-- `pst(*)`: <PST>
-- `rationale(*)`: <the need this decision answers, from whoever raised it> (@alias). <a second reason> (@second-alias). <a third> (@third-alias).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
-- `decision_proposer(*)`: @alias (raised the need; proposed by @second-alias)
-- `decision_approver(*)`: @third-alias
-- `conditions`: ? - optional to fill
-- `refs`: []
-- **Actions**
-  - A3 <a task still to do> — @alias (requested, not yet acknowledged) — no date
-  - A4 <a task nobody was assigned> — no owner — no date
+- `decision_approver(*)`: @alias
+- <the rest of the card, unchanged>
 
-▸ **Not Included**
-
-- `D1: <title>` — excluded (still `pending`; `decision_approver` still marked `(awaiting approval)`). Reply "D1 approved by <name>" to include it instead.
-
-▸ **Ready to Save?**
-These are the exact Decisions and Actions that will be saved to the Decision Bank.
-
-Reply "Yes, save" to commit this version, or send any remaining changes.
+▸ **Ready to save?**
+That's `D1` updated. Reply "yes" and this goes to the Decision Bank.
 ```
 
-- Every Decision shown here already carries every required field, with
-  `decision_approver` naming an actual person, people, or forum who really
-  approved it — never one still carrying the `(awaiting approval)` marker —
-  and `decision_status: approved`; that field check is owned by
-  `references/review.md` §8, this section only renders its result.
-- List every excluded item under `▸ **Not Included**` with its ID, title,
-  and reason — never drop one silently, and never treat silence as
-  approval.
-- Never show raw JSON anywhere in this preview.
+- **Never repeat the whole set here.** A reviewer who corrected one
+  candidate needs to see that candidate. Repeating the others buries the
+  change they are being asked to check.
+- The card renders in full, not as a diff — this is the last thing seen
+  before an irreversible write, and a diff cannot be read as a record.
 
 ## The publication result
 
