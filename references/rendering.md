@@ -262,7 +262,7 @@ URL host — never opened to get a better one), and link each to its own URL:
 ▸ **Additional sources found in this thread**
 
 1. [Link — <what the unfurl already shows>](URL)
-2. [Jira — <issue key and title, as unfurled>](URL)
+2. Jira — <issue key and title, as unfurled>
 3. [Confluence — <page title, as unfurled>](URL)
 
 Reply with the ones you want me to read:
