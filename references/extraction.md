@@ -67,6 +67,26 @@ declared no-objection forum) stays a plain name with no `@`. An author+time
 citation itself — `cui.ju 3:20 PM` — is a distinct notation, not a mention,
 and keeps the form this section already defines.
 
+**Never expand an abbreviation the source did not expand.** Write `MEX` as
+`MEX`. Do not translate it into what it probably stands for, do not infer a
+country, product, or team from its shape, and never let a plausible reading
+of an acronym enter `decision_title`, `decision_details`, `rationale`, or
+`conditions` as though it were a fact the thread stated.
+
+A three-letter token that looks like a country code, a currency, or a
+standard is exactly where being wrong is invisible: the sentence reads
+perfectly, cites real messages, and is false. `MEX` means merchant in these
+threads and `ID` means Indonesia — one is a country code here and the other
+is not, and the shape of the token cannot tell you which.
+
+Three sources of meaning, in order: the thread's own expansion where it
+gives one; `references/glossary.md` where it has a confirmed entry; and
+otherwise the token exactly as written. That third case is a correct
+outcome, not a gap to be filled — a record carrying the same shorthand the
+team uses is readable by the team that wrote it. `glossary.md` also lists
+terms known to have no confirmed meaning; those are the third case
+emphatically, never a hint to guess from.
+
 ## The gate model
 
 Classification answers one question per candidate: *did this thread reach a
