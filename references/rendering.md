@@ -702,9 +702,10 @@ message, with no further separator:
 - `decision_proposer(*)`: @alias (raised the need; proposed by @second-alias)
 - `decision_approver(*)`: @third-alias
 - `conditions`: ? - optional to fill
-- `refs`: 3 sources (reply "D2 refs" to view)
+- `refs`: []
 - **Actions**
   - A3 <a task still to do> — @alias (requested, not yet acknowledged) — no date
+  - A4 <a task nobody was assigned> — no owner — no date
 
 ────────────────────────
 
@@ -791,9 +792,10 @@ sync with it.
 - `decision_proposer(*)`: @alias (raised the need; proposed by @second-alias)
 - `decision_approver(*)`: @third-alias
 - `conditions`: ? - optional to fill
-- `refs`: 3 sources (reply "D2 refs" to view)
+- `refs`: []
 - **Actions**
   - A3 <a task still to do> — @alias (requested, not yet acknowledged) — no date
+  - A4 <a task nobody was assigned> — no owner — no date
 
 ▸ **Not Included**
 
