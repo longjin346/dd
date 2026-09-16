@@ -47,6 +47,26 @@ What is needed:
   contradicted itself on D1's approver in three places before that was
   caught.
 
+## Three messages with no template
+
+`references/rendering.md` opens with a table of every user-facing message and
+who decides when it is sent. Building that table found three that
+`references/sources.md` requires and nobody ever wrote:
+
+- **Truncation confirmation.** The fetch came back at the limit, so the tail
+  is probably missing — and the tail is where approvals live. The run must
+  stop and ask before extracting anything, and proceed only on an explicit
+  yes. This is the most consequential of the three: it decides whether a
+  record gets built from a thread known to be incomplete.
+- **Single-thread offer.** A request to sweep a whole channel is refused,
+  with an offer to run the single-thread version instead. A refusal plus an
+  offer is exactly where wording matters.
+- **Target question.** Invoked with nothing to point at, the run asks which
+  thread to read.
+
+Each is marked `none yet` in that table, so the gap is visible at the point
+someone would look for the text rather than discovered by a run improvising.
+
 ## Known gaps, roughly by cost of being wrong
 
 - **A truncated URL has no rule.** The rules cover "no address at all"
