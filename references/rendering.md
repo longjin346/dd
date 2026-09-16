@@ -15,6 +15,54 @@ shown as a complete, ready-to-copy example rather than described in the
 abstract — a rule that is only stated gets applied inconsistently; a rule
 that is shown gets copied.
 
+## Every user-facing message, and who decides when it is sent
+
+This file owns the exact text of everything the skill sends. Another file
+almost always owns *when* — `references/review.md` for the review and
+publication steps, `references/sources.md` for acquisition,
+`references/extraction.md` for what goes in a card. That division is
+deliberate, and it is also where things fall through: a file can require a
+message that was never written here, and nothing notices.
+
+So this table is the join. Read it both ways — every row below needs a
+template in this file, and every message another file requires needs a row.
+
+| Message | Sent when | Timing owned by | Template |
+|---|---|---|---|
+| Opening line | Every invocation, first | `SKILL.md` | The opening line |
+| Single-thread offer | A request to sweep a channel, refused | `sources.md` | **none yet** |
+| Target question | Invoked with nothing to point at | `sources.md` | **none yet** |
+| Truncation confirmation | The fetch came back at the limit, before anything is extracted | `sources.md` | **none yet** |
+| Source-selection prompt | After the opening line, only if the discovery pass found a source | `sources.md` | The source-selection prompt |
+| Read Me | Once, heading the first card set | `SKILL.md` stage 3 | The required-field legend |
+| Decision card | With the Read Me, on request, and in the two full renders | `review.md` §6 | The Decision card |
+| References list | Only when asked for a candidate's refs | `review.md` §6 | References, on request |
+| Review Notes | With the first card set; partially in the pre-lock render | `review.md` §6 | Review Notes |
+| Change receipt | After every edit batch, applied or not | `review.md` §6 | The change receipt |
+| `Not applied` block | In that receipt, when an edit was refused outright | `review.md` §3.1–3.3 | The change receipt → What was not applied |
+| Question block | In that receipt, when an edit needs an answer first | `review.md` §3.1–3.3 | The change receipt → What was not applied |
+| Missing-fields prompt | Ends the response whenever a finalize-required field is unresolved | `review.md` §4 | The missing-fields prompt |
+| Full current set | The two moments a reviewer is about to lock or commit unseen content | `review.md` §6 | The full current set, and the finalize prompt |
+| Finalize prompt | When the set is complete and not yet locked | `review.md` §7 | The full current set, and the finalize prompt |
+| Publication gate-3 prompt | Before a save, when any candidate is not `approved` | `review.md` §8 gate 3 | The publication gate-3 prompt |
+| Publication preview | Immediately before the save confirmation, unconditionally | `review.md` §8 gate 4 | The publication preview |
+| Publication result | Once the write returns, success or failure | `review.md` §9 | The publication result |
+
+Four of these were added after a walk through the flow found the rule
+requiring them and no text to send: the opening line, the `Not applied` and
+question blocks, the gate-3 prompt, and the publication result. Each had
+been specified somewhere as something the skill does, and each left the
+model to invent the words.
+
+**Three rows say `none yet`.** Building this table is what found them —
+`sources.md` requires all three and no text for any of them exists. Until
+one is written, that row is a warning rather than a pointer: the message
+still has to be sent, the rule for it lives in `sources.md`, and the words
+are yours. Take particular care with the truncation confirmation, which
+decides whether a run proceeds on a thread it knows is incomplete; say
+plainly what was cut off and what continuing means, and never let a reply
+that is not an explicit yes carry the run forward.
+
 ## Every fence in this file is an exhibit, not output
 
 **Every value inside those exhibits is a placeholder.** Anything in angle
