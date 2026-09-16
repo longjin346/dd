@@ -101,10 +101,6 @@ disagree by one option, on purpose.
   decision twice after an edit leaves two records with two `record_url`s and
   nothing saying which is current. May be the publisher's concern; that repo
   is not here, so the behaviour is unknown rather than wrong.
-- **"Finalize and save" in one reply renders the full set twice.** §6
-  removed that echo on the finalize side but does not cover the combined
-  reply, so the finalize prompt and publication preview render the same set
-  back to back.
 - **`SOUL.md` and `SKILL.md` disagree on the principal.** "Long Jin's
   Decision Memory agent" and "the admitted user" against "anyone in the
   channel can trigger it, not just the bank owner". Decide which is true;
