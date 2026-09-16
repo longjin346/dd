@@ -32,7 +32,7 @@ template in this file, and every message another file requires needs a row.
 | Opening line | Every invocation, first | `SKILL.md` | The opening line |
 | Single-thread offer | A request to sweep a channel, refused | `sources.md` | **none yet** |
 | Target question | Invoked with nothing to point at | `sources.md` | **none yet** |
-| Truncation confirmation | The fetch came back at the limit, before anything is extracted | `sources.md` | **none yet** |
+| Truncation confirmation | The fetch came back at the limit, before anything is extracted | `sources.md` | The truncation confirmation |
 | Source-selection prompt | After the opening line, only if the discovery pass found a source | `sources.md` | The source-selection prompt |
 | Read Me | Once, heading the first card set | `SKILL.md` stage 3 | The required-field legend |
 | Decision card | With the Read Me, on request, and in the two full renders | `review.md` §6 | The Decision card |
@@ -54,14 +54,13 @@ question blocks, the gate-3 prompt, and the publication result. Each had
 been specified somewhere as something the skill does, and each left the
 model to invent the words.
 
-**Three rows say `none yet`.** Building this table is what found them —
-`sources.md` requires all three and no text for any of them exists. Until
-one is written, that row is a warning rather than a pointer: the message
-still has to be sent, the rule for it lives in `sources.md`, and the words
-are yours. Take particular care with the truncation confirmation, which
-decides whether a run proceeds on a thread it knows is incomplete; say
-plainly what was cut off and what continuing means, and never let a reply
-that is not an explicit yes carry the run forward.
+**Two rows say `none yet`.** Building this table is what found them —
+`sources.md` requires both and no text for either exists. Until one is
+written, that row is a warning rather than a pointer: the message still has
+to be sent, the rule for it lives in `sources.md`, and the words are yours.
+The third of the three found that way, the truncation confirmation, is
+written below, since it decides whether a run proceeds on a thread it
+already knows is incomplete.
 
 ## Every fence in this file is an exhibit, not output
 
@@ -292,6 +291,41 @@ any stage name from this skill. Never narrate the step you are about to take
 internally — "let me first check whether there are any external sources"
 tells the reader nothing the prompt underneath it does not already show.
 Never promise a time. Never add a third sentence.
+
+## The truncation confirmation
+
+`references/sources.md` fetches a thread in one call against a hard limit
+with no pagination. When the number of messages returned equals the limit
+requested, the thread is probably cut off — and the end of a thread is where
+approvals and objections land, so what is missing is disproportionately the
+part that decides things.
+
+This is the first of the skill's two pauses and it is a real stop: the run
+extracts nothing until an explicit go-ahead arrives.
+
+```text
+▸ **This thread is longer than I can read in one go**
+
+I read <number> messages, which is as many as I can fetch at once, so there may be more after that — and the end of a thread is usually where the approvals and objections land.
+
+Reply "go ahead" and I'll work from what I have. Anything I produce will say it came from a partial read, so nobody later mistakes it for the whole thread. Without that, I'll stop here rather than guess at what I'm missing.
+```
+
+- **Give the number.** "Some messages may be missing" cannot be judged;
+  `I read 200 messages` can — the reader knows their own thread and can tell
+  at a glance whether that is most of it or half of it.
+- **Say what continuing costs, in plain words.** Not `partial`, not
+  `inaccessible`, not "the bundle" — those are internal states. What the
+  reader needs to know is that the result will carry the limitation with it.
+- **Only an explicit go-ahead continues.** Silence, a reaction, an unrelated
+  message in the thread, and a reply about something else are all not a
+  go-ahead. Do not ask twice; the question stands until it is answered.
+- **Never send this and extract anyway.** The one thing this message must
+  not become is a notice that the run is proceeding regardless.
+- **Do not offer to split the thread and retry.** `sources.md` names that as
+  the alternative, but a person cannot split a Slack thread, and this file
+  does not invent a mechanism to make the offer true. The honest second
+  option is stopping.
 
 ## The source-selection prompt
 
