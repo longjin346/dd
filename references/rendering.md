@@ -17,6 +17,15 @@ that is shown gets copied.
 
 ## Every fence in this file is an exhibit, not output
 
+**Every value inside those exhibits is a placeholder.** Anything in angle
+brackets — `<decision title>`, `<PST>`, `<one reason the thread gave>` — marks
+a slot, not text to emit, and the people are `@alias`, `@second-alias`,
+`@group-handle` rather than anyone real. What the exhibits demonstrate is
+shape: which markers sit where, what wraps, what gets a blank line. A worked
+thread and the values a run should actually produce from it live in
+`examples/`, kept out of this file on purpose, so that reading the format
+rules never doubles as reading the answers.
+
 Every triple-backtick block below — including ones written as ` ```text ` —
 exists so you can see the finished artifact. **None of them, including the
 fence characters themselves, are ever emitted to Slack.** The Gateway forbids
@@ -118,9 +127,9 @@ Gateway reads as a new, un-bulleted paragraph, breaking the list.
 
 ```text
 - **Uncertain Decisions**
-  - `D1` — Why uncertain: an eng-PIC approval was required before this could
-    close (`cui.ju 3:20 PM`); no eng PIC signs off anywhere in the available
-    thread. [View source](slack-permalink)
+  - `D1` — Why uncertain: <one plain sentence, grounded in the source,
+    saying what stopped this from closing> (`alias 3:20 PM`).
+    [View source](slack-permalink)
 ```
 
 ### Where the separator goes
@@ -252,9 +261,9 @@ URL host — never opened to get a better one), and link each to its own URL:
 ```text
 ▸ **Additional sources found in this thread**
 
-1. [Link — experiments.grab.com variable](URL)
-2. [Jira — Approval_Request - ID for Mart](URL)
-3. [Confluence — foodSaverOptionDiscount](URL)
+1. [Link — <what the unfurl already shows>](URL)
+2. Jira — <issue key and title, as unfurled>
+3. [Confluence — <page title, as unfurled>](URL)
 
 Reply with the ones you want me to read:
 
@@ -272,7 +281,7 @@ I only open the sources you pick, and nothing linked inside them.
   no link.** `(URL)` above is a placeholder for a real one the fetch
   supplied; when the unfurl carries a title but no resolvable address —
   a Jira card rendered as an attachment, a file preview, a truncated paste —
-  write `2. Jira — Approval_Request - ID for Mart` and nothing more. Never
+  write `2. Jira — <issue key and title>` and nothing more. Never
   invent an address, never guess at one from the host or the title, and
   never park explanatory text in the link target (`[label](URL not visible)`
   renders as a broken link, which is worse than no link at all). The user is
@@ -299,19 +308,19 @@ in a field's own text cites the person only, with no timestamp
 (`references/extraction.md` owns why).
 
 ```text
-`D1: Saver-fare discount for Kalbe & Wardah (tactical) (*)`
+`D1: <decision title> (*)`
 
-- `decision_details(*)`: Apply a Saver-fare discount to a selected merchant group — Kalbe and Wardah — as a tactical measure, configured on the ExP variable behind Mart's Saver option rather than as a change to standard fares. In effect it gives these two merchants free delivery, aimed specifically at the pickup-point catchment problem rather than at their pricing generally.
-- `pst(*)`: FF Ecommerce
-- `rationale(*)`: Many PAX sit far from Kalbe & Wardah pickup points, and the delivery cost that creates is what caps demand; free delivery removes the barrier and unlocks volume beyond the existing catchment (@rahadiyan.wisesa). Commercially, these merchants carry Grab's e-commerce partnerships with FMCG principals, and a competitive Saver fare is one of the requirements for those partnerships to drive enough sales volume to stay sustainable (@moch.zulfa).
+- `decision_details(*)`: <what was decided and its final scope, in two to four sentences — the substance, the boundary, and the mechanism if one was agreed>
+- `pst(*)`: <PST>
+- `rationale(*)`: <one reason the thread gave> (@alias). <a second, different reason, from someone else> (@second-alias).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
-- `decision_proposer(*)`: @rahadiyan.wisesa
-- `decision_approver(*)`: @randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC sign-off also required, person not named in thread
-- `conditions`: The merchant group is a business-team priority list reviewed against partnership needs and merchant performance, not a fixed setup — membership is expected to change as relevance does (@moch.zulfa).
+- `decision_proposer(*)`: @alias
+- `decision_approver(*)`: @alias / @group-handle (awaiting approval); <a further sign-off the thread required>, person not named in thread
+- `conditions`: <a condition on future execution> (@alias).
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
-  - A1 Documented the thread in the Confluence wiki (completed within the thread) — @arpit.goel — no date
-  - A2 Add the logic that recreates the merchant list — @sengkeong.ho, @moch.zulfa, @rangga.pratama (requested, not yet acknowledged) — no date
+  - A1 <a task already done, in the past tense> (completed within the thread) — @alias — no date
+  - A2 <a task still to do> — @alias, @second-alias (requested, not yet acknowledged) — no date
 ```
 
 ### One sequence, no classification on the card
@@ -342,9 +351,9 @@ contract above and applied identically to every card:
 - `decision_proposer` names the party whose need the decision serves, which
   is not always whoever typed the proposal
   (`references/extraction.md` owns which). When the thread splits those two
-  roles, the value carries the voicer inline — `@arpit.goel (raised the
-  need; proposed by @sengkeong.ho)` — one field, both people, no second
-  field on the card. Render it as one value; never split it across two
+  roles, the value carries the voicer inline — `@alias (raised the need;
+  proposed by @second-alias)` — one field, both people, no second field on
+  the card. Render it as one value; never split it across two
   bullets, and never drop the parenthetical to shorten the card.
 - `decision_status` always shows the full compact label
   `` `decision_status(*)(options:approved|rejected|pending)` `` followed by
@@ -424,26 +433,25 @@ asked ("D1 refs"). Each reference is one bullet with one compact link:
 ```text
 `D1` references
 
-- [slack, "may we proceed with this approval request from rahadiyan.wisesa"](slack-permalink-1)
-- [slack, "please inform the respective eng PIC and get approval from them first"](slack-permalink-2)
-- [slack, "Since there is no governance on the grabx group…"](slack-permalink-3)
-- [wiki, "I have documented the thread here…"](https://grabtaxi.atlassian.net/wiki/spaces/.../foodSaverOptionDiscount)
+- [slack, "<excerpt>"](slack-permalink-1)
+- [slack, "<excerpt>"](slack-permalink-2)
+- [slack, "<excerpt>"](slack-permalink-3)
+- [wiki, "<excerpt, cut before the URL the message pasted>…"](<the real URL, kept as the link target>)
 ```
 
 Link text is `ref_type, "excerpt"` — and an excerpt is free text pulled
 verbatim from the thread, so it can contain exactly the characters that
-break a Markdown link: a closing bracket or parenthesis, or a URL (several
-messages in the reference thread paste one directly into their text, as in
-the fourth bullet above). Sanitize before building the link, every time:
+break a Markdown link: a closing bracket or parenthesis, or a URL — people
+routinely paste one straight into the message text, which is the case the
+fourth bullet above stands for. Sanitize before building the link, every
+time:
 
 1. Scan the excerpt for the first `]`, `)`, or a recognizable URL (a
-   `http://`/`https://` run, or a bare domain-shaped fragment like
-   `grabtaxi.atlassian.net/…`).
+   `http://`/`https://` run, or a bare domain-shaped fragment).
 2. If found, cut the excerpt immediately before it and append `…`. That is
-   the entire fix for the fourth bullet above: the raw excerpt is `I have
-   documented the thread here - grabtaxi.atlassian.net/wiki/…` — the
-   sanitized label stops at `I have documented the thread here…`, and the
-   real URL still lives where it belongs, as the link's actual target.
+   the entire fix for the fourth bullet above: the label stops at the last
+   word before the pasted URL, and the real URL still lives where it
+   belongs, as the link's actual target.
 3. If that cut would leave nothing usable (the offending character sits at
    or near the start), fall back to the source title or key instead — the
    same fallback already used when `excerpt` is null.
@@ -466,27 +474,24 @@ every category is empty.** Nothing else gates it.
 ▸ **Review Notes**
 
 - **Inferred Values to Confirm**
-  - `D1 pst`: FF Ecommerce — inferred from the thread calling this "this
-    eComm decision" and tying the product to Fulfillment. Confirm or change.
+  - `D1 pst`: <PST> — inferred from <what in the thread supports it>.
+    Confirm or change.
   - `D1 decision_approver`: recorded as the party the request was addressed
-    to. The additional eng-PIC sign-off that `cui.ju` asked for
-    (`cui.ju 3:20 PM`) is left as a role — the thread never names who holds
-    it. Confirm or name them.
+    to. The additional sign-off that `alias` asked for (`alias 3:20 PM`) is
+    left as a role — the thread never names who holds it. Confirm or name
+    them.
 - **Uncertain Decisions**
-  - `D1` — Why uncertain: eng-PIC approval was required before this could
-    close (`cui.ju 3:20 PM`); no eng PIC appears anywhere in the available
-    thread, and the review that followed was redirected to `@arpit.goel`,
-    who was never the entitled party. [View source](slack-permalink)
+  - `D1` — Why uncertain: <one plain sentence saying what stopped this from
+    closing> (`alias 3:20 PM`), <and, where it applies, that the review went
+    to someone the thread never entitled>. [View source](slack-permalink)
 - **Not Identified as Decisions**
-  - Interim ZFF/EAR stopgap — reported as the team's existing approach, not
-    proposed for a decision here. [View source](slack-permalink)
-  - The fare-certainty/batching principle and the FR capacity-vs-pricing
-    discussion — background reasoning, no proposed course of action.
+  - <the topic, named briefly> — <why it is not a decision object>.
     [View source](slack-permalink)
-  - The request to use the capture tool, and the question about available
-    sources — messages about the capture process itself.
-  - "Heart, Hunger, Honour, Humility" — an automated values-bot message, no
-    proposal content.
+  - <a topic covering two related discussions at once, where they failed for
+    the same reason> — <why>. [View source](slack-permalink)
+  - <a message about the capture process itself> — excluded by Gate 1's own
+    carve-out.
+  - <an automated or bot message, quoted> — no proposal content.
 - **Source Limitations**
   - [Jira — ABC-123](URL) could not be read because access was denied.
 ```
@@ -523,14 +528,14 @@ new value):
 ```text
 ▸ **Applied**
 
-- Dropped `D3: Pilot in SG` and its linked Action `A2` — reply "Restore D3" to put it back
-- Merged `D4` into `D1`; kept `D1: Adopt option A`
+- Dropped `D3: <title>` and its linked Action `A4` — reply "Restore D3" to put it back
+- Merged `D4` into `D1`; kept `D1: <title>`
   - Combined the rationale and conditions from both
-  - `D4 decision_details` was displaced by `D1`'s: "Run the pilot in SG first, then…"
-- Added `D5: Extend the pilot`
-- Restored `D3: Pilot in SG` and its linked Action `A2`
+  - `D4 decision_details` was displaced by `D1`'s: "<first few words of the value that won>…"
+- Added `D5: <title>`
+- Restored `D3: <title>` and its linked Action `A4`
 - Confirmed `D2` as a Decision; no field values changed
-- `D5 pst`: ? - need to fill → DCA
+- `D5 pst`: ? - need to fill → <PST>
 - `D1 decision_status`: pending → approved
 ```
 
@@ -583,9 +588,9 @@ asked one message at a time:
 ```text
 ▸ **Before I apply the rest**
 
-- `D2 pst`: "Dispatching" isn't one of the PSTs — did you mean Dispatch?
+- `D2 pst`: "<what the user typed>" isn't one of the PSTs — did you mean <nearest valid PST>?
 - The pasted `D1` card is missing the second half of `decision_details`
-  ("…aimed specifically at the pickup-point catchment problem"). Drop it, or keep it?
+  ("<the text that went missing>"). Drop it, or keep it?
 ```
 
 `review.md` tells each of its ambiguity paths to "ask one concise
@@ -609,11 +614,11 @@ message — whenever a finalize-required field is still unresolved on any
 current Decision. Actions are never checked; they have no required field at
 either tier.
 
-The reference thread fills every finalize-required field on both of its
-Decisions, so it never triggers this prompt at all (see
-`examples/saver-discount-expected.md`). The example below therefore shows
-the shape using a Decision added from a blank template, which is the common
-case for an unresolved `pst`:
+A candidate extracted from a thread that named a PST, an approver and a
+rationale reaches finalize with nothing outstanding, so this prompt never
+fires for it. The example below therefore shows the shape using a Decision
+added from a blank template, which is the common case for an unresolved
+`pst`:
 
 ```text
 ▸ **Still needed before finalizing**
@@ -674,41 +679,42 @@ message, with no further separator:
 ```text
 ▸ **Decision Candidates**
 
-`D1: Saver-fare discount for Kalbe & Wardah (tactical) (*)`
+`D1: <decision title> (*)`
 
-- `decision_details(*)`: Apply a Saver-fare discount to a selected merchant group — Kalbe and Wardah — as a tactical measure, configured on the ExP variable behind Mart's Saver option rather than as a change to standard fares. In effect it gives these two merchants free delivery, aimed specifically at the pickup-point catchment problem rather than at their pricing generally.
-- `pst(*)`: FF Ecommerce
-- `rationale(*)`: Many PAX sit far from Kalbe & Wardah pickup points, and the delivery cost that creates is what caps demand; free delivery removes the barrier and unlocks volume beyond the existing catchment (@rahadiyan.wisesa). Commercially, these merchants carry Grab's e-commerce partnerships with FMCG principals, and a competitive Saver fare is one of the requirements for those partnerships to drive enough sales volume to stay sustainable (@moch.zulfa).
+- `decision_details(*)`: <what was decided and its final scope, in two to four sentences — the substance, the boundary, and the mechanism if one was agreed>
+- `pst(*)`: <PST>
+- `rationale(*)`: <one reason the thread gave> (@alias). <a second, different reason, from someone else> (@second-alias).
 - `decision_status(*)(options:approved|rejected|pending)`: pending
-- `decision_proposer(*)`: @rahadiyan.wisesa
-- `decision_approver(*)`: @randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC sign-off also required, person not named in thread
-- `conditions`: The merchant group is a business-team priority list reviewed against partnership needs and merchant performance, not a fixed setup — membership is expected to change as relevance does (@moch.zulfa).
+- `decision_proposer(*)`: @alias
+- `decision_approver(*)`: @alias / @group-handle (awaiting approval); <a further sign-off the thread required>, person not named in thread
+- `conditions`: <a condition on future execution> (@alias).
 - `refs`: 4 sources (reply "D1 refs" to view)
 - **Actions**
-  - A1 Documented the thread in the Confluence wiki (completed within the thread) — @arpit.goel — no date
-  - A2 Add the logic that recreates the merchant list — @sengkeong.ho, @moch.zulfa, @rangga.pratama (requested, not yet acknowledged) — no date
+  - A1 <a task already done, in the past tense> (completed within the thread) — @alias — no date
+  - A2 <a task still to do> — @alias, @second-alias (requested, not yet acknowledged) — no date
 
-`D2: Documenting the mex-specific pricing configs on this ExP variable (*)`
+`D2: <decision title> (*)`
 
-- `decision_details(*)`: The mex-specific pricing configs carried on this ExP variable will be documented, and the variable will link to that documentation so it becomes the central source of truth for what each config is and why it exists. The agreed mechanism is a wiki page. Scope is this one variable, not pricing configs across all markets.
-- `pst(*)`: FF Ecommerce
-- `rationale(*)`: The grabx merchant group carries no approvals, documentation, or freshness check, so mistakes go undetected and nobody can later reconstruct which merchants belong in a group or how they were derived (@arpit.goel). Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
+- `decision_details(*)`: <what was decided and its final scope — where an instrument was agreed, it appears here as the mechanism, never in the title>
+- `pst(*)`: <PST>
+- `rationale(*)`: <the need this decision answers, from whoever raised it> (@alias). <a second reason> (@second-alias). <a third> (@third-alias).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
-- `decision_proposer(*)`: @arpit.goel (raised the need; proposed by @sengkeong.ho)
-- `decision_approver(*)`: @albert.lim
+- `decision_proposer(*)`: @alias (raised the need; proposed by @second-alias)
+- `decision_approver(*)`: @third-alias
 - `conditions`: ? - optional to fill
-- `refs`: 3 sources (reply "D2 refs" to view)
+- `refs`: []
 - **Actions**
-  - A3 Set up the wiki page for this variable, document the pricing configs there, and link the variable to it — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
+  - A3 <a task still to do> — @alias (requested, not yet acknowledged) — no date
+  - A4 <a task nobody was assigned> — no owner — no date
 
 ────────────────────────
 
 ▸ **Review Notes**
 
 - **Uncertain Decisions**
-  - `D1` — Why uncertain: eng-PIC approval was required before this could
-    close (`cui.ju 3:20 PM`); no eng PIC appears anywhere in the available
-    thread. [View source](slack-permalink)
+  - `D1` — Why uncertain: <one plain sentence, grounded in the source,
+    saying what stopped this from closing> (`alias 3:20 PM`).
+    [View source](slack-permalink)
 
 ▸ **Ready to finalize?**
 Look right? Reply "Yes, finalize" to lock this version, or send any remaining changes.
@@ -749,8 +755,8 @@ whole reopen-and-re-finalize loop by however many are unresolved.
 ```text
 ▸ **Before saving — these aren't ready to go in**
 
-- `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — still `pending`, and `decision_approver` is awaiting @randy.tedjakusuma / @oncall-lead.
-- `D5: Extend the pilot` — still uncertain; nobody in the thread settled it.
+- `D1: <title>` — still `pending`, and `decision_approver` is awaiting @alias / @group-handle.
+- `D5: <title>` — still uncertain; <one plain sentence saying why>.
 
 For each one, tell me either to leave it out of this save, or who actually approved it — for example "leave out D1, D5 approved by @jane". Anything left out stays here, and you can save it later once it's settled.
 ```
@@ -777,22 +783,23 @@ sync with it.
 ```text
 ▸ **Decisions to Save**
 
-`D2: Documenting the mex-specific pricing configs on this ExP variable (*)`
+`D2: <decision title> (*)`
 
-- `decision_details(*)`: The mex-specific pricing configs carried on this ExP variable will be documented, and the variable will link to that documentation so it becomes the central source of truth for what each config is and why it exists. The agreed mechanism is a wiki page. Scope is this one variable, not pricing configs across all markets.
-- `pst(*)`: FF Ecommerce
-- `rationale(*)`: The grabx merchant group carries no approvals, documentation, or freshness check, so mistakes go undetected and nobody can later reconstruct which merchants belong in a group or how they were derived (@arpit.goel). Handling mex-specific pricing configs on ExP is established practice, so what is missing is documentation rather than the mechanism itself (@sengkeong.ho). The team currently cannot remove or trace legacy configs set up by ops long ago, because nothing records what they were for or who asked for them; documenting new configs as they are created is what stops that recurring (@albert.lim).
+- `decision_details(*)`: <what was decided and its final scope — where an instrument was agreed, it appears here as the mechanism, never in the title>
+- `pst(*)`: <PST>
+- `rationale(*)`: <the need this decision answers, from whoever raised it> (@alias). <a second reason> (@second-alias). <a third> (@third-alias).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
-- `decision_proposer(*)`: @arpit.goel (raised the need; proposed by @sengkeong.ho)
-- `decision_approver(*)`: @albert.lim
+- `decision_proposer(*)`: @alias (raised the need; proposed by @second-alias)
+- `decision_approver(*)`: @third-alias
 - `conditions`: ? - optional to fill
-- `refs`: 3 sources (reply "D2 refs" to view)
+- `refs`: []
 - **Actions**
-  - A3 Set up the wiki page for this variable, document the pricing configs there, and link the variable to it — @rahadiyan.wisesa (requested, not yet acknowledged) — no date
+  - A3 <a task still to do> — @alias (requested, not yet acknowledged) — no date
+  - A4 <a task nobody was assigned> — no owner — no date
 
 ▸ **Not Included**
 
-- `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — excluded (still `pending`; `decision_approver` still marked `(awaiting approval)`). Reply "D1 approved by <name>" to include it instead.
+- `D1: <title>` — excluded (still `pending`; `decision_approver` still marked `(awaiting approval)`). Reply "D1 approved by <name>" to include it instead.
 
 ▸ **Ready to Save?**
 These are the exact Decisions and Actions that will be saved to the Decision Bank.
@@ -818,9 +825,9 @@ that anything was written. Sent once, immediately after the write returns.
 ```text
 ▸ **Saved to the Decision Bank**
 
-- `D2: Documenting the mex-specific pricing configs on this ExP variable` — [record](URL)
+- `D2: <title>` — [record](URL)
 
-Not saved: `D1: Saver-fare discount for Kalbe & Wardah (tactical)` — left out at your request; still here if you want to save it later.
+Not saved: `D1: <title>` — left out at your request; still here if you want to save it later.
 ```
 
 - One bullet per committed Decision, with the record address the publisher

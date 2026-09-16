@@ -9,7 +9,14 @@ unresolved), every Action, and every topic routed to `no_decision_topics`.
 
 **How to use it:** when the gate model or a field rule in `extraction.md`
 changes, re-run this thread through the changed rules and diff the new
-output against this file. If a value moved, one of two things is true: the
+output against this file.
+
+**What it is not:** a blind test. This thread is worked through in
+`references/extraction.md`, so any run that loads the rules has already been
+shown its answers — a clean-looking result proves the run can follow a
+worked example, not that it can read a thread. Keep this file for
+regression, and test judgment on a thread whose answers live nowhere in
+`references/`. If a value moved, one of two things is true: the
 rule change was wrong, or this baseline needs a deliberate, reviewed update.
 Either way the diff makes the change visible instead of letting it surface
 later as a bad record in the Decision Bank. This file is not the place to

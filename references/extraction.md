@@ -67,6 +67,26 @@ declared no-objection forum) stays a plain name with no `@`. An author+time
 citation itself — `cui.ju 3:20 PM` — is a distinct notation, not a mention,
 and keeps the form this section already defines.
 
+**Never expand an abbreviation the source did not expand.** Write `MEX` as
+`MEX`. Do not translate it into what it probably stands for, do not infer a
+country, product, or team from its shape, and never let a plausible reading
+of an acronym enter `decision_title`, `decision_details`, `rationale`, or
+`conditions` as though it were a fact the thread stated.
+
+A three-letter token that looks like a country code, a currency, or a
+standard is exactly where being wrong is invisible: the sentence reads
+perfectly, cites real messages, and is false. `MEX` means merchant in these
+threads and `ID` means Indonesia — one is a country code here and the other
+is not, and the shape of the token cannot tell you which.
+
+Three sources of meaning, in order: the thread's own expansion where it
+gives one; `references/glossary.md` where it has a confirmed entry; and
+otherwise the token exactly as written. That third case is a correct
+outcome, not a gap to be filled — a record carrying the same shorthand the
+team uses is readable by the team that wrote it. `glossary.md` also lists
+terms known to have no confirmed meaning; those are the third case
+emphatically, never a hint to guess from.
+
 ## The gate model
 
 Classification answers one question per candidate: *did this thread reach a
@@ -657,7 +677,16 @@ can act on.
 These trace the reference thread (`examples/saver-discount-thread.txt`) line
 by line. Its full expected output is recorded in
 `examples/saver-discount-expected.md` — when any rule in this file changes,
-re-run that thread and diff against it. Verify any new example the same way
+re-run that thread and diff against it.
+
+**That thread is teaching material, and can never be a blind test of this
+skill.** Its answers are worked through below, so a run that reads this file
+has already been told them. Use it the way it is used here — to learn the
+method, and as a regression fixture to diff against after a rule change.
+Judging whether these rules can be applied at all takes a thread whose
+answers appear nowhere in `references/`. Conflating the two produces a run
+that looks correct and demonstrates nothing; it has happened, more than
+once. Verify any new example the same way
 before trusting it — a plausible-sounding reading that skips the actual
 message order is exactly how the old draft misattributed a decision below.
 
