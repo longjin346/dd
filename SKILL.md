@@ -1,7 +1,7 @@
 ---
 name: slack-decisions
 description: Capture the decisions in a Slack thread — each with its own attached action items — into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
-version: 2.9.0
+version: 3.0.0
 metadata:
   hermes:
     tags: [slack, decisions, knowledge-management, gitlab]
@@ -43,11 +43,14 @@ confirms an exact preview of what is about to be written.
    thread, natural-language or a pasted, edited card, one batch per reply;
    report back a short receipt of exactly what changed.
 5. **Finalize** — once every finalize-required field is filled and the
-   reviewer gives an explicit lock confirmation, freeze that exact version
-   for possible publication.
-6. **Publish** — only on a separate, explicit request. Resolve every
-   candidate that isn't yet `approved`, preview the exact set about to be
-   written, and commit it. Publication sits behind five gates, all
+   reviewer gives an explicit lock confirmation, freeze that exact version,
+   then show it: the whole set, whatever in it cannot be saved as it
+   stands, and the request to save. Editing shows deltas; this is where the
+   reviewer sees the record whole, at the moment it decides something.
+6. **Publish** — only on a separate, explicit request. Every candidate that
+   isn't `approved` is resolved by a human — left out, or corrected with
+   who actually approved it — and a correction means showing that candidate
+   again before the write. Publication sits behind five gates, all
    required, checked in order. Report the outcome afterwards — what was
    written and where, or that nothing was and the locked version is still
    there to retry. A confirmed save never ends in silence.
@@ -67,7 +70,7 @@ defeats the point of splitting them out.
 | Fetching the thread; a truncated or failed fetch; finding and listing linked sources; the source-selection question; reading the selected sources; the bundle's `complete` / `partial` / `inaccessible` status | `references/sources.md` |
 | Whether something is a Decision at all (the gate model), its `decision_status` / `evidence_type`, populating a Decision's fields, an Action as an attribute of the Decision it attaches to, the required-field set, how to cite a source | `references/extraction.md` |
 | Applying a correction — natural-language or pasted — a structural edit (merge, confirm, drop, add), the review-state variables, the finalize gate, the five publication gates | `references/review.md` |
-| The exact text of anything sent to Slack: the opening line, the source-selection prompt, the Read Me, a Decision or Action card, a change receipt, Review Notes, the finalize prompt, the publication gate-3 prompt, the publication preview, the publication result, spacing and glyph rules | `references/rendering.md` |
+| The exact text of anything sent to Slack: the opening line, the source-selection prompt, the Read Me, a Decision or Action card, a change receipt, Review Notes, the finalize prompt, the save message, the publication result, spacing and glyph rules | `references/rendering.md` |
 
 `references/glossary.md` records the in-house terms these threads use — what
 a confirmed one means, and which are known to have no confirmed meaning.

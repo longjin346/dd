@@ -11,7 +11,7 @@ first — and does not redefine any judgment call that belongs there
 It never specifies a card layout, a template, an exact prompt string, or a
 spacing rule — that is `references/rendering.md`. Where a rendered artifact
 is needed, it is named (the change receipt, the finalize prompt, the full
-current set, the publication preview) and left to that file. `schema.md`
+current set, the save message) and left to that file. `schema.md`
 defines the published record's field shapes; it is stale on one point —
 Action fields as publication-required — and this file does not inherit that
 part (see Publication record, below).
@@ -315,8 +315,8 @@ and restoring one brings its unfilled required fields back with it.
   what is wanted — who approved this, or who it is awaiting
   (`references/rendering.md`). Never ask the user to fill an optional field.
 - Complete: set `awaiting_finalize_revision` to the current revision and
-  issue the finalize prompt (§7). Apply the render rule in §6 to decide
-  whether the full set accompanies it.
+  close the reply with the finalize prompt (§7). The cards do not accompany
+  it — §6 keeps them for the save message.
 - Never show the missing-fields prompt and the finalize prompt in the same
   response — a revision is either missing something or ready to lock, never
   presented as both.
@@ -366,33 +366,30 @@ single card, or the whole set.
   travel in the same reply — `references/rendering.md` owns their blocks and
   the order the three appear in. A batch that applied nothing still gets a
   reply.
-- **The full current set renders in addition to the receipt at exactly two
-  moments** — both are moments where the reviewer is about to be asked to
-  lock or commit a version whose *current, complete* contents they have not
-  yet been shown whole:
-  1. Whenever `awaiting_finalize_revision` is being set for a revision the
-     reviewer has not already seen in full — that is, this batch is the one
-     that first reaches completeness, or membership changed since the set
-     was last shown whole (a Decision or Action was added, dropped, or
-     merged away), even if the set was already complete. A batch that only
-     changes field values on a set the reviewer has already seen whole does
-     **not** re-trigger this: the receipt is a complete, legible delta
-     against a baseline they already have. The governing test is *has the
-     reviewer seen this revision whole*, not *did completeness just change*.
-     A set that arrives already complete at the Step 3→4 handoff was shown
-     whole by the cards themselves, so it takes the finalize prompt alone,
-     with no second render.
-  2. Immediately before the publication confirmation (Step 5 gate 4),
-     unconditionally — because gate 3's exclusions and corrections can
-     change what is actually about to be committed relative to what was
-     last shown, and because this step is irreversible.
-- **Confirming finalize renders nothing new.** The full set was just shown as
-  part of setting `awaiting_finalize_revision` in the same turn the
-  confirmation responds to; acknowledge the lock by referencing that
-  already-disclosed revision rather than repeating it. This removes the
-  redundant echo between the finalize prompt and the finalize confirmation —
-  the set is shown once before the lock (point 1 above) and once before the
-  commit (point 2 above), never a third time in between.
+- **Editing never renders the full set.** However many candidates a batch
+  adds, drops, restores or merges, the reply is the receipt. The reviewer
+  reads deltas while they work and sees the whole thing once, at the point
+  it decides something.
+
+  This replaces a rule that tried to work out whether the reviewer had
+  "seen this revision whole", which needed a maintained list of what counts
+  as a membership change — and that list went stale the moment `Restore`
+  was added to §3.6 without being added to it. A rule that has to enumerate
+  operations will keep going stale as operations are added.
+- **A finalize confirmation renders the full set, and asks for the save in
+  the same message.** One test decides whether the cards are repeated: has
+  any edit batch been applied since the set was last shown whole? If yes,
+  render it. If no — the reviewer confirmed straight off the first card
+  set, changing nothing — the cards are one message up, so send the save
+  message without them.
+
+  That message carries three things in order: the cards (per the test
+  above), every candidate that cannot be published as it stands, and the
+  request to save. `references/rendering.md` owns its text. Folding them
+  together is what makes the sequence honest — the reviewer is looking at
+  the complete record at the moment they are asked whether it should be
+  written, rather than approving a lock and then discovering, several
+  messages later, that one candidate was never publishable.
 - **Anything else is on request** — a named card, a candidate's references,
   or the whole set — and never changes `review_revision`, completeness, or
   either finalize/publication flag.
@@ -413,20 +410,31 @@ back and lock the stale revision.
 
 **Early confirmation** (no finalize prompt currently active): treat it as a
 request to run the completeness check now, not as a confirmation in itself.
-Incomplete → ask for the gaps (§4); complete → this is the moment
-completeness was reached, so render the full set and set
-`awaiting_finalize_revision` per §6, and still wait for an actual
-confirmation before locking.
+Incomplete → ask for the gaps (§4). Complete → set
+`awaiting_finalize_revision` and send the finalize prompt, then wait for an
+actual confirmation before locking. Do not shortcut into the save message on
+the strength of a confirmation given before there was anything to confirm.
 
 **Finalize + save in one reply** (e.g. "yes, finalize and save to the
 bank"): satisfies this gate and Publication gate 2 (§8) simultaneously.
 Publication gates 3–5 are still required afterward in full — this reply is
-not a shortcut past them.
+not a shortcut past them. The message that follows is the same one, with one
+difference: the save has already been asked for, so it closes by asking the
+reviewer to confirm what they are now looking at rather than to request a
+save they have already requested.
 
 **On success:** `review_state: finalized`; `finalized_revision` ← the
 confirmed revision; `awaiting_finalize_revision` → unset. Snapshot the
-publication record (§9) internally. Per §6, do not re-render the full set as
-part of this response.
+publication record (§9) internally. Then send the message §6 describes: the
+full set (unless nothing has been edited since it was last shown whole),
+every candidate that cannot be published as it stands, and the request to
+save.
+
+There is no bare acknowledgement of the lock. A message that says only "this
+version is locked" leaves the reviewer at the one point in the flow with
+nothing telling them what happens next — and they have just done everything
+they believe was asked of them, so they have no reason to expect a further
+step. The save request *is* the acknowledgement.
 
 **Editing a finalized set:** return to `review_state: reviewing`,
 `finalized_revision` → unset, and apply the new reply as an ordinary edit
@@ -460,9 +468,9 @@ order, all required.
      carry an approver still marked awaited — if it still carries that
      marker, resolve it to who actually approved in the same response — this
      is the one place the §5 coupling applies. Recompute completeness,
-     obtain a fresh finalize confirmation
-     (full render, per §6's first moment), then re-enter gate 3 for
-     whatever, if anything, still needs resolving. The save request from
+     obtain a fresh finalize confirmation, then re-enter gate 3 for
+     whatever, if anything, still needs resolving. Gate 4 governs what that
+     re-confirmation shows: the corrected cards, not the whole set. The save request from
      gate 2 still stands across this loop — never make the user ask to save
      a second time, only to re-confirm the version — and say plainly why
      re-confirmation is being asked for: the correction changed the record
@@ -470,26 +478,39 @@ order, all required.
    Never silently drop an unresolved candidate from the preview and never
    treat silence as approval.
 
-   **Ask about all of them at once.** Put every unresolved candidate into a
-   single prompt — `references/rendering.md` owns its text — and take every
-   resolution the reply gives, in one batch. Asking one candidate at a time
-   multiplies the whole loop by however many are unresolved: three pending
-   candidates would mean three reopenings, three completeness passes, three
-   full renders and three finalize confirmations, for a reply the user could
-   have written once. Re-enter the gate only for what the reply left
-   unresolved.
+   **They were already named, and they were named early.** Every candidate
+   that cannot be published as it stands is listed in the save message §7
+   sends, and flagged in Review Notes from the first card set onward
+   (`references/rendering.md`). This gate is not where the reviewer finds
+   out — it is where they answer. A candidate reaching it is never news.
 
-   A single reply may mix both resolutions — exclude one, approve another —
-   and where any candidate was corrected to `approved`, the reopen-and-
-   re-finalize loop above runs once for the batch, not once per candidate.
-4. **Preview the exact publishable set.** Render the full, current
-   publishable set — unconditionally, per §6's second moment — including
-   every item excluded under gate 3 and its reason.
-5. **One confirmation, bound to that exact preview.** The confirmation
-   applies only to the set and `finalized_revision` just previewed. Never
-   alter a field or re-run reasoning silently between preview and commit; a
-   reply that changes something restarts from the gate it affects instead of
-   proceeding.
+   **Take every resolution in one batch.** A single reply may mix them —
+   exclude one, approve another — and where any was corrected to `approved`,
+   the reopen-and-re-finalize loop above runs once for the batch, not once
+   per candidate. Handling them one at a time would multiply that loop by
+   however many are unresolved, for a reply the reviewer could have written
+   once. Re-enter the gate only for what the reply left unresolved.
+4. **The reviewer has seen what is about to be written.** The save message
+   §7 sends showed the full set, and gate 3's items were named in it. So
+   this gate asks only whether anything has changed since — and exactly one
+   thing can have: a gate-3 resolution that corrected a candidate to
+   `approved`.
+
+   - **Nothing changed.** An exclusion changes no record, so what is about
+     to be written is what was shown. Proceed to gate 5.
+   - **A candidate was corrected.** What gets written is no longer what was
+     shown. Re-render the cards that changed, and ask for one more
+     confirmation against them. Never carry the earlier confirmation across
+     a correction — it was given for a different set.
+
+   Do not re-render the whole set for this. A reviewer who just corrected
+   one candidate needs to see that candidate, not a repeat of the rest.
+5. **One confirmation, bound to what was last shown.** The confirmation
+   applies only to the set and `finalized_revision` the reviewer most
+   recently saw — the save message, or the re-render from gate 4 where there
+   was one. Never alter a field or re-run reasoning silently between that
+   and the commit; a reply that changes something restarts from the gate it
+   affects instead of proceeding.
 
 **Field check before gate 5 can be satisfied:** every candidate in the
 previewed set carries every required field from extraction.md (including a
