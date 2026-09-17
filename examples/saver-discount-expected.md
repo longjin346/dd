@@ -39,11 +39,12 @@ wrong. No need to read the rest of the file to answer them.
    as the former, with the page as the agreed mechanism. *If the page is the
    decision:* the title, the details and the Action all change, and the page
    `@arpit.goel` already made reads as satisfying it.
-4. **Is `@arpit.goel` the "respective eng PIC" `cui.ju` asked for?** Taken as
-   no — `cui.ju 15:22` names him, but read in sequence that answers
-   `jomil.villareal 15:21` about who to contact while `randy.tedjakusuma` is
-   away, not the eng-PIC requirement two messages earlier. *If yes:* D1's
-   approver names him, and the gate is met or nearly so.
+4. ~~**Is `@arpit.goel` the "respective eng PIC"?**~~ **Answered: yes.**
+   This file previously said no, on the grounds that `cui.ju 15:22` answers
+   the cover-for-randy question rather than the eng-PIC requirement. The
+   owner confirms he holds the role — his conduct through the thread settles
+   it where the wording does not. `decision_approver` names him, and Gate 5
+   no longer finds an unendorsed redirection.
 5. **Is "the list will continue to be reviewed and maintained"
    (`@moch.zulfa 17:11`) a condition on execution?** Taken as yes, so it
    sits in `conditions`. *If it is just background:* `conditions` is empty
@@ -52,10 +53,11 @@ wrong. No need to read the rest of the file to answer them.
    D2's?** Taken as D2's: it is an argument *against* proceeding with D1 as
    things stand, and the reason D2 exists. *If it belongs to D1:* a run that
    puts it there is right and this file is wrong.
-7. **The wiki page `@arpit.goel` already made — does it attach to D1 or
-   D2?** Taken as D1, since it documents this thread rather than the
-   variable's configs. *If D2:* it and the outstanding page sit on the same
-   Decision, and the overlap note reads differently.
+7. ~~**The wiki page `@arpit.goel` already made — D1 or D2?**~~
+   **Answered: neither — it is not a separate Action.** It is the same piece
+   of work as the page requested at `08:59`, so D1 carries only the
+   merchant-list change. The `Actions That May Overlap` check raised exactly
+   this pair; the question was right and this file's answer was wrong.
 
 Until these are answered, treat a clean diff against this file as evidence
 that behaviour has not **changed**, never that it is **right**.
@@ -126,16 +128,18 @@ sits on the proposal or on any disposition of it:
 
 **Gate 4 — Unmet condition:** UNMET, blocking. `cui.ju 2026-08-25 15:20` —
 "please inform the respective eng PIC and get approval from them first" —
-sets an in-thread gate on a role. No eng PIC signs off anywhere in the
-source.
+sets an in-thread gate. The PIC is `@arpit.goel`, and he never signs off
+anywhere in the source: he asks questions and the thread ends. The gate is
+unmet because the approval never came, not because nobody could be found to
+give it.
 
-**Gate 5 — Scope/authority fit:** FAIL on authority conferral, moot in
-practice since Gate 3 found no signal. `cui.ju 2026-08-25 15:22` redirects
-review to `@arpit.goel`. The request was addressed to `@randy.tedjakusuma` /
-`@pricing-team`; `cui.ju` is not shown to be that party, and
-`@randy.tedjakusuma` never reappears to endorse the redirect. Under Rule 5.2
-this transfers nothing — which is why `arpit.goel`'s extensive engagement
-could not have closed this candidate even had he said "approved".
+**Gate 5 — Scope/authority fit:** PASS, and moot in practice since Gate 3
+found no signal. `cui.ju 2026-08-25 15:22` — "@arpit.goel could you help to
+check?" — is **routing to the eng PIC the gate at 15:20 called for**, not a
+third party redirecting review on its own initiative. `@arpit.goel` is that
+PIC (confirmed by the thread owner), so nothing needs transferring and Rule
+5.2 does not bite. Had he said "approved", it would have closed this
+candidate.
 
 **Result:** `uncertain` · `pending` · `none`.
 
@@ -179,28 +183,30 @@ could not have closed this candidate even had he said "approved".
   recorded an argument against something as an argument for it.
 - `decision_status`: `pending`
 - `decision_proposer`: `@rahadiyan.wisesa`
-- `decision_approver`: **`@randy.tedjakusuma / @pricing-team (awaiting
-  approval); eng-PIC sign-off also required, person not named in thread`**
+- `decision_approver`: **`@arpit.goel (awaiting approval)`** — the eng PIC,
+  confirmed by the thread owner.
 
-  Rung 1 fails outright — Gate 3 found no closure signal — so extraction
-  drops to rung 2, and the thread names an awaited party twice: the request
-  at `15:18` is addressed to `@randy.tedjakusuma` / `@pricing-team`
-  directly, and `cui.ju 15:20` additionally requires sign-off from "the
-  respective eng PIC", a role with no name.
+  Rung 1 fails outright, since Gate 3 found no closure signal, so extraction
+  drops to rung 2 and records who is supposed to approve. `cui.ju
+  2026-08-25 15:20` sets the requirement — "please inform the respective eng
+  PIC and get approval from them first" — and `cui.ju 15:22` routes it:
+  "@arpit.goel could you help to check?"
 
-  **The role stays unresolved, and this is the trap in this thread.**
-  `cui.ju 2026-08-25 15:22` names `@arpit.goel`, who then engages on exactly
-  the engineering-side concerns an eng PIC would own, which makes resolving
-  the role to him look well-supported. Read in sequence it is not: that
-  message answers `jomil.villareal 15:21` asking who to contact while
-  `randy.tedjakusuma` is on leave — not the eng-PIC requirement two messages
-  earlier. Nothing says `@arpit.goel` holds that role. Naming him here sends
-  a reviewer chasing the wrong person, and turns any later "ok" from him
-  into an approval the thread never gave.
+  **The thread does not state that he holds the role, and the sequence
+  argues against it** — 15:22 sits directly after `jomil.villareal 15:21`
+  asking who to contact while `randy.tedjakusuma` is away, so read narrowly
+  it answers that question instead. Earlier versions of this file took that
+  narrow reading and left the role unnamed. **That was wrong.** What settles
+  it is his conduct: he probes the tactical reasons, the merchant-group
+  composition, and how it will be maintained (`15:23`, `17:06`, `17:29`,
+  `18:18`), which is an engineering owner exercising a gate rather than a
+  colleague helping out.
 
-  Nothing in this value was filled by inference, so it gets **no**
-  `Inferred Values to Confirm` entry. The open role reaches the reviewer
-  through `Uncertain Decisions`, where the eng-PIC gate already goes.
+  So this value is reached by inference, and it is flagged under `Inferred
+  Values to Confirm`. A run that leaves the role unnamed has not broken a
+  rule — it has been too literal about a role the thread fills by behaviour
+  rather than by title.
+
 - `conditions`: the merchant group is a business-team priority list,
   reviewed and maintained against partnership needs and merchant
   performance rather than fixed, and adjustable as relevance changes
@@ -211,13 +217,15 @@ could not have closed this candidate even had he said "approved".
   belong in `classification_reason`, and a run that files either here has
   put process into a field about the decision.
 - `refs`: available — the approval-request message, the eng-PIC condition,
-  the redirection, the rationale messages.
+  the routing to `@arpit.goel`, the rationale messages.
 
-**`classification_reason`** should name the deciding gates and nothing else:
-approval requested in `jomil.villareal 2026-08-25 15:18`; eng-PIC gate set
-in `cui.ju 15:20`; review redirected to `arpit.goel` by `cui.ju` at `15:22`,
-unendorsed by the originally addressed `randy.tedjakusuma`; no signal from
-any entitled party through the end of the thread.
+**`classification_reason`** should name the deciding gate and nothing else:
+approval requested in `jomil.villareal 2026-08-25 15:18`; eng-PIC sign-off
+required by `cui.ju 15:20` and routed to `@arpit.goel` at `15:22`; he
+questions the request through to the end of the thread and never disposes of
+it. **One gate decides this candidate now, not three** — the earlier reading
+also cited an unendorsed redirection and a missing entitled party, and
+neither survives the eng-PIC correction.
 
 **Completeness:** all seven required fields present, `decision_approver`
 included. An awaited value, marked as awaited, is a filled and honest value,
@@ -328,44 +336,38 @@ exchange was raised by `arpit.goel` the day before.
 
 # Actions
 
-**Labels follow thread chronology, across the whole thread — not grouped by
-Decision.** `references/extraction.md` is explicit. Two of the three sit in
-the same message, where textual order is the only ordering available.
+**Two Actions, not three.** Labels follow thread chronology across the whole
+thread, never grouped by Decision.
 
 | | Task | Source | Attaches to |
 |---|---|---|---|
 | **A1** | Set up the wiki page for this variable, document the configs there, and link the variable to it | `sengkeong.ho 2026-08-26 08:59` | D2 |
-| **A2** | Documented the thread in the Confluence wiki (completed within the thread) | `arpit.goel 2026-08-26 23:23` | D1 |
-| **A3** | Add the logic that recreates the merchant list | `arpit.goel 2026-08-26 23:23` | D1 |
+| **A2** | Add the logic that recreates the merchant list | `arpit.goel 2026-08-26 23:23` | D1 |
 
 - **A1 is one Action, not two.** One message asks one person to stand up the
   page and wire the variable to it; they are steps of a single piece of
   work. A run that splits the linking into its own Action has put an
-  artificial handoff in the record — three Actions across this thread, not
-  four. `action_owner`: `@rahadiyan.wisesa (requested, not yet
-  acknowledged)` — he does not speak again anywhere in the source. No date
-  given, none guessed.
-- **A2** is past tense with the in-thread completion note inside the
-  `action` value. Owner `@arpit.goel`.
-- **A3** has three named owners, stored as a list, requested and not
-  acknowledged.
+  artificial handoff in the record. `action_owner`:
+  `@rahadiyan.wisesa (requested, not yet acknowledged)`.
+- **A2** has three named owners, stored as a list, requested and not
+  acknowledged. No date given, none guessed. This is the only Action D1
+  carries — the change someone has to make.
 
-## Actions that may overlap
+## The page arpit.goel made is not a third Action
 
-One entry expected, naming **`A1` and `A2`**.
+`arpit.goel 2026-08-26 23:23` says "I have documented the thread here", and
+earlier versions of this file recorded that as its own completed Action on
+D1, reasoning that it documents *the thread* while A1 documents *the
+variable's configs* — two different pages.
 
-Both produce a wiki page, and they sit on different Decisions, so nothing in
-the card set ever shows them together. `A2` is done — `@arpit.goel` made it
-inside the thread, documenting **the thread**. `A1` is outstanding with
-`@rahadiyan.wisesa`, documenting **the variable's pricing configs**. Read
-carefully they are two different pages; the thread never says so, and it is
-the same tool, the same area, four minutes of reading apart.
+**They are the same piece of work** (confirmed by the thread owner). So it
+is not a second Action; it is work against A1.
 
-This is the flagged shape exactly: one completed in-thread, one outstanding,
-a shared artifact the thread never connected. A run that renders no entry
-has missed it. **A run that merges them, drops either, or rewrites one to
-reference the other is wrong** — the entry names the pair and leaves the
-call to the reviewer, and nothing about it reaches the Bank.
+This is the single most useful thing the `Actions That May Overlap` check
+does, and this thread is its case: the two sat on different Decisions, so
+nothing in the card set ever showed them together, and only a flag brings
+them into the same view. The check was right to raise the pair. What this
+file got wrong was the answer, not the question.
 
 ---
 
@@ -389,7 +391,7 @@ failures, has dropped them silently.
    the real FR levers, `DMS-Go+`. Background reasoning.
 4. **Merchant-list governance explanation.** `moch.zulfa 2026-08-25 17:11`
    describes how the group is currently prioritized and maintained,
-   answering a question. It feeds D1's `conditions` and motivates A3, but
+   answering a question. It feeds D1's `conditions` and motivates A2, but
    proposes nothing new.
 5. **Capture-process messages.** `albert.lim 2026-08-26 08:50` asking
    `long.jin` to use the decision-capture tool, `long.jin 08:55` asking what
@@ -412,7 +414,11 @@ Five of the six categories have content; `Source Limitations` does not.
 - **Uncertain Decisions** — `D1`, with the unmet eng-PIC gate and the
   unendorsed redirection, in plain language, with a source link. Never a
   gate id or an enum name.
-- **Actions That May Overlap** — `A1` and `A2`.
+- **Actions That May Overlap** — **absent.** With the duplicate resolved
+  there is one wiki Action, so no pair remains to flag. A run that has not
+  resolved it will raise the pair, and raising it is correct behaviour on
+  the evidence the thread gives; the entry disappears only once someone
+  answers.
 - **Not Identified as Decisions** — the six above.
 - **Source Limitations** — **absent.** The user answered `none`, which makes
   the bundle `complete`: they saw what was on offer and declined it, so
@@ -444,8 +450,9 @@ Kept short on purpose. Each of these has actually happened.
 - **D2 titled after the wiki page** rather than the commitment.
 - **D2's first rationale strand dropped** — the governance gap that
   motivated the proposal sits before it in the thread.
-- **`arpit.goel` named as the eng PIC**, on a message that answers a
-  different question.
+- **The eng-PIC role left unnamed.** Reading `cui.ju 15:22` narrowly — as
+  answering the cover-for-randy question — is defensible from the wording
+  and still wrong. He is the PIC.
 - **`Not Identified as Decisions` omitted entirely** while the run's own
   reasoning listed the Gate 1 failures correctly.
 - **Action labels grouped by Decision** instead of thread chronology.
