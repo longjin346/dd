@@ -29,12 +29,15 @@ leaves the reasoning pass anyway — citing it bought no traceability. Instead:
 **Citing evidence.** Cite by author and displayed time, copied from the
 thread — never computed or re-numbered:
 
-- Default: `cui.ju 3:20 PM`
+- Default: `alias 3:20 PM` — the displayed time, whatever form the source
+  displays it in. An export that shows `15:20` is cited as `alias 15:20`;
+  never convert between clock forms.
 - Same author, more than one message in the same displayed minute: add a
-  short verbatim fragment to disambiguate — `jomil.villareal 3:21 PM
-  ("Product is from under Fulfillment")`.
+  short verbatim fragment to disambiguate —
+  `alias 3:21 PM ("a few words, verbatim")`.
 - Thread spans more than one day: include the date —
-  `jane.doe 2026-08-29 11:23 PM`.
+  `alias 2026-08-29 11:23 PM`. A source that carries dates is always cited
+  with them.
 - When the source carries clock times but no calendar dates, as some thread
   exports do, never synthesize one. Where the ordering is unambiguous —
   times ascend, then restart lower, which can only be the next day — label
@@ -49,7 +52,7 @@ This author + time format governs internal reasoning, `classification_refs`,
 locate the exact message to verify a judgment. It is not used inside a
 Decision record field that appears on the card (`rationale`,
 `decision_details`, `conditions`): there, cite the person only, with no
-timestamp — `(@rahadiyan.wisesa)`, never `(rahadiyan.wisesa 3:26 PM)`. The
+timestamp — `(@rahadiyan.wisesa)`, never `(rahadiyan.wisesa 2026-08-25 15:26)`. The
 timestamp does little work on the card itself — `refs` sits two lines below
 with exact permalinks — and on a thread whose export carries clock times but
 no dates, a bare time on the card is actively ambiguous. The published `refs`
@@ -64,7 +67,7 @@ never a display name. This is a general rule, not one limited to
 `decision_proposer`, `decision_approver`, and `action_owner` — those fields
 simply happen to be entirely a person value. A non-person approver (a
 declared no-objection forum) stays a plain name with no `@`. An author+time
-citation itself — `cui.ju 3:20 PM` — is a distinct notation, not a mention,
+citation itself — `cui.ju 2026-08-25 15:20` — is a distinct notation, not a mention,
 and keeps the form this section already defines.
 
 **Never expand an abbreviation the source did not expand.** Write `MEX` as
@@ -680,8 +683,8 @@ to drive review and never reaches the Bank.
 Workflow carries: `decision_classification` (`decision` or `uncertain`),
 `decision_status`, `evidence_type`, `classification_reason` (one concise,
 source-verifiable sentence naming the gate that decided it — "Approval
-requested in `jomil.villareal 3:18 PM`; eng-PIC gate set in
-`cui.ju 3:20 PM`; no signal from that party through the end of the thread",
+requested in `jomil.villareal 2026-08-25 15:18`; eng-PIC gate set in
+`cui.ju 2026-08-25 15:20`; no signal from that party through the end of the thread",
 never "seems approved"), `classification_refs`, `completeness_status`, and
 `missing_required_fields`.
 
@@ -720,7 +723,7 @@ can act on.
 
 ## Worked examples
 
-These trace the reference thread (`examples/saver-discount-thread.txt`) line
+These trace the reference thread (`examples/saver-discount-thread.md`) line
 by line. Its full expected output is recorded in
 `examples/saver-discount-expected.md` — when any rule in this file changes,
 re-run that thread and diff against it.
@@ -739,7 +742,7 @@ examples below turn on reading the order rather than the resemblance.
 
 ### D1 — the Saver-discount approval request
 
-- **Gate 1:** `jomil.villareal 3:18 PM` asks "may we proceed with this
+- **Gate 1:** `jomil.villareal 2026-08-25 15:18` asks "may we proceed with this
   approval request from rahadiyan.wisesa" — an approval request, explicitly
   relayed. Object exists. Attribution: the object belongs to
   `rahadiyan.wisesa`, the named source, not to `jomil.villareal`, who is only
@@ -750,18 +753,18 @@ examples below turn on reading the order rather than the resemblance.
   group (Kalbe & Wardah) — is never itself narrowed or widened. The
   surrounding discussion about merchant-list governance is related context
   and produces Actions, not a scope change to this object.
-- **Gate 3:** `cui.ju 3:20 PM` responds with a condition, not a disposition.
-  `arpit.goel` probes repeatedly (`3:23 PM`, `5:06 PM`, `5:29 PM`, `6:18 PM`)
+- **Gate 3:** `cui.ju 2026-08-25 15:20` responds with a condition, not a disposition.
+  `arpit.goel` probes repeatedly (`2026-08-25 15:23`, `2026-08-25 17:06`, `2026-08-25 17:29`, `2026-08-25 18:18`)
   but never says approved, rejected, or equivalent, and closes by saying "I
-  have documented the thread here" (`arpit.goel 11:23 PM (Day 2)`) —
+  have documented the thread here" (`arpit.goel 2026-08-26 23:23`) —
   documentation is a wrap-up, not a disposition. No closure signal exists.
   `evidence_type: none`.
-- **Gate 4:** `cui.ju 3:20 PM` sets an unmet in-thread gate — "please inform
+- **Gate 4:** `cui.ju 2026-08-25 15:20` sets an unmet in-thread gate — "please inform
   the respective eng PIC and get approval from them first." No eng PIC signs
   off anywhere in the available source. Unmet.
-- **Gate 5:** `cui.ju 3:22 PM` — "arpit.goel could you help to check?" —
+- **Gate 5:** `cui.ju 2026-08-25 15:22` — "arpit.goel could you help to check?" —
   redirects review to `arpit.goel`. The approval was addressed to
-  `randy.tedjakusuma` / `@oncall-lead` at `3:18 PM`; `cui.ju` is not shown to
+  `randy.tedjakusuma` / `@pricing-team` at `2026-08-25 15:18`; `cui.ju` is not shown to
   be that party, and `randy.tedjakusuma` never reappears to endorse the
   redirect. Under Rule 5.2 the redirection does not transfer closing
   authority to `arpit.goel` — moot in practice here since Gate 3 already
@@ -770,23 +773,23 @@ examples below turn on reading the order rather than the resemblance.
 - **Result:** `uncertain`, `decision_status: pending`, `evidence_type: none`.
   `decision_approver`: rung 1 fails outright — Gate 3 found no closure
   signal — so extraction drops to rung 2. The thread names an awaited party
-  twice: the original approval request at `jomil.villareal 3:18 PM` is
-  addressed to `randy.tedjakusuma` / `@oncall-lead` directly, and
-  `cui.ju 3:20 PM` additionally requires sign-off from "the respective eng
+  twice: the original approval request at `jomil.villareal 2026-08-25 15:18` is
+  addressed to `randy.tedjakusuma` / `@pricing-team` directly, and
+  `cui.ju 2026-08-25 15:20` additionally requires sign-off from "the respective eng
   PIC" — a role, not a name. **That role stays unresolved**, and why is the
-  part of this example worth learning. `cui.ju 3:22 PM` names `@arpit.goel`,
+  part of this example worth learning. `cui.ju 2026-08-25 15:22` names `@arpit.goel`,
   who then engages substantively on exactly the engineering-side concerns
   (merchant-group maintenance, governance, documentation freshness) an eng
   PIC would own, through to the end of the available source — which makes
   resolving the role to him look well-supported. Read in sequence it is not:
-  that message answers `jomil.villareal 3:21 PM` asking who to contact while
+  that message answers `jomil.villareal 2026-08-25 15:21` asking who to contact while
   `randy.tedjakusuma` is on leave, not the eng-PIC requirement two messages
   earlier. Nothing in the thread says `@arpit.goel` holds that role, and
   putting him in this field would send a reviewer chasing the wrong person —
   or turn a later "ok" from him into an approval the thread never gave. This
   is the sequence check rung 2 of the ladder calls for, on the case it was
   written for. Value:
-  `@randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC sign-off
+  `@randy.tedjakusuma / @pricing-team (awaiting approval); eng-PIC sign-off
   also required, person not named in thread`.
 
   Nothing in that value was filled by inference, so it gets **no**
@@ -804,9 +807,9 @@ examples below turn on reading the order rather than the resemblance.
   The eng-PIC gate and the unendorsed redirection remain what
   `classification_reason` cites as
   the deciding gates — recording who is awaited does not remove either from
-  that reasoning: "Approval requested in `jomil.villareal 3:18 PM`; eng-PIC
-  gate set in `cui.ju 3:20 PM`; review redirected to `arpit.goel` by `cui.ju`
-  at `3:22 PM`, unendorsed by the originally addressed `randy.tedjakusuma`;
+  that reasoning: "Approval requested in `jomil.villareal 2026-08-25 15:18`; eng-PIC
+  gate set in `cui.ju 2026-08-25 15:20`; review redirected to `arpit.goel` by `cui.ju`
+  at `2026-08-25 15:22`, unendorsed by the originally addressed `randy.tedjakusuma`;
   no signal from any entitled party through the end of the thread." Neither
   fact populates `conditions` — both are approval-process facts, not a
   condition on execution. That leaves `conditions` carrying only what is a
@@ -823,12 +826,12 @@ examples below turn on reading the order rather than the resemblance.
 
 ### D2 — documenting the pricing configs on the ExP variable
 
-- **Gate 1:** `sengkeong.ho 8:55 AM` — "If it helps, can we set up an wiki
+- **Gate 1:** `sengkeong.ho 2026-08-26 08:55` — "If it helps, can we set up an wiki
   page to document this for all markets?" — a proposal. Object exists, but
   **the wiki page is not it.** Both signals point the same way: the proposal
   states its own purpose ("to document this") and offers the page
   conditionally ("if it helps"), and the acceptance restates the commitment
-  without it — `albert.lim 8:57 AM`, "part of solving that problem is to
+  without it — `albert.lim 2026-08-26 08:57`, "part of solving that problem is to
   properly document the incoming new ones." Substitution confirms it: put
   the documentation somewhere other than a wiki and what was agreed still
   stands. The object is the commitment to document these configs, with the
@@ -836,7 +839,7 @@ examples below turn on reading the order rather than the resemblance.
   as the Action.
 
   The thread itself demonstrates why this matters. The wiki page that
-  actually got made came from `arpit.goel 11:23 PM` — a different person
+  actually got made came from `arpit.goel 2026-08-26 23:23` — a different person
   from the one asked, documenting the thread rather than the variable's
   configs. Framed as "`@rahadiyan.wisesa` creates a wiki page", the record
   reads as unfulfilled; framed as the commitment, that message is partial
@@ -844,12 +847,12 @@ examples below turn on reading the order rather than the resemblance.
   `decision_proposer` resolves on **rung 2**, not to the person who typed
   the proposal: the same message opens "Can I understand the concern about
   documentation further?", which makes it explicitly responsive to the
-  documentation gap `arpit.goel` stated the day before (`5:29 PM`,
-  `6:18 PM`). `albert.lim 8:57 AM` voices the same need again, but a later
+  documentation gap `arpit.goel` stated the day before (`2026-08-25 17:29`,
+  `2026-08-25 18:18`). `albert.lim 2026-08-26 08:57` voices the same need again, but a later
   restatement does not transfer it. So `decision_proposer`:
   `@arpit.goel (raised the need; proposed by @sengkeong.ho)`, and the
   **proposing side** is `arpit.goel` + `sengkeong.ho`.
-- **Gate 2:** `sengkeong.ho 8:59 AM` — "rahadiyan.wisesa lets set up a wiki
+- **Gate 2:** `sengkeong.ho 2026-08-26 08:59` — "rahadiyan.wisesa lets set up a wiki
   page for this variable and document all the configs here? and then find a
   way to link this variable to this wiki so this becomes the central source
   of truth" — narrows the object from "all markets" to the single variable,
@@ -861,27 +864,27 @@ examples below turn on reading the order rather than the resemblance.
   change of tool and belongs in `decision_details`. "Find a way to" is
   unresolved work with no mechanism chosen, so it is part of the Action.
 
-  Note also that `albert.lim`'s acceptance at `8:57 AM` speaks of "the
+  Note also that `albert.lim`'s acceptance at `2026-08-26 08:57` speaks of "the
   incoming new ones" — all new pricing configs, wider than the single
   variable this narrows to. Rule 5.1 carries the acceptance forward to the
   narrower scope; the gap between the two is what that rule's Review Notes
   entry exists to surface.
-- **Gate 3:** `albert.lim 8:57 AM` — "sengkeong.ho ya that helps" — explicit
+- **Gate 3:** `albert.lim 2026-08-26 08:57` — "sengkeong.ho ya that helps" — explicit
   acceptance. The thread names no specific approver for this proposal, so
   under Rule 3.2 a disposition from any participant outside the proposing
   side can close it. `albert.lim` is neither `arpit.goel` nor
   `sengkeong.ho`, so he qualifies. Valid, unambiguous form.
 
   This is where rung 2's "whoever stated it first" tiebreak earns its
-  keep. `albert.lim` restates the same documentation need at `8:57 AM`; had
+  keep. `albert.lim` restates the same documentation need at `2026-08-26 08:57`; had
   the restatement carried the need to him, he would be on the proposing
   side, his own "ya that helps" would fall to Rule 3.3, and D2 would close
   as `uncertain` with no approver — from a thread that plainly settled the
   question. The need stays with `arpit.goel`, who stated it first and never
   responded to the proposal, and the acceptance stands.
-- **Gate 5 (scope fit):** the narrowing at `8:59 AM` comes from
+- **Gate 5 (scope fit):** the narrowing at `2026-08-26 08:59` comes from
   `sengkeong.ho`, who voiced the object and is therefore on the proposing
-  side, and happens after `albert.lim`'s acceptance at `8:57 AM`. A
+  side, and happens after `albert.lim`'s acceptance at `2026-08-26 08:57`. A
   narrowing from that side after acceptance does not reopen the candidate,
   so the acceptance carries forward to the narrowed scope. Note that Rule
   5.1 has to be read against the side here: `sengkeong.ho` is not the name
@@ -902,12 +905,12 @@ examples below turn on reading the order rather than the resemblance.
 
   **Check which message came first before crediting a motivating concern.**
   It is tempting to read the accepter as the person whose concern prompted
-  the proposal — `albert.lim` accepts at `8:57 AM` and, in the same message,
+  the proposal — `albert.lim` accepts at `2026-08-26 08:57` and, in the same message,
   talks about cleaning up legacy pricing configs. But that remark arrives
   *after* his acceptance, as supporting context he adds. The governance
   concern that actually motivated the exchange — "no governance on the grabx
   group... no documentation on knowing what the right set of merchants
-  are" — was raised by `arpit.goel` at `5:29 PM` and `6:18 PM` the day
+  are" — was raised by `arpit.goel` at `2026-08-25 17:29` and `2026-08-25 18:18` the day
   before. Attribute a motivating concern to whoever raised it, not to
   whoever happens to accept a later proposal that answers it.
 
@@ -916,7 +919,7 @@ examples below turn on reading the order rather than the resemblance.
   `albert.lim` restated it and then accepted, so he closes it. One reading
   of the thread, two fields.
 
-- **Action (attaches to D2):** `sengkeong.ho 8:59 AM` asks
+- **A1 (attaches to D2):** `sengkeong.ho 2026-08-26 08:59` asks
   `@rahadiyan.wisesa` to set up the wiki page, document the configs there,
   and link the variable to it. **One Action, not two** — the same person is
   asked, in one message, to stand up a page and wire it to the config; they
@@ -927,50 +930,57 @@ examples below turn on reading the order rather than the resemblance.
 
 ### Actions attaching to D1
 
-- `arpit.goel 11:23 PM (Day 2)` asks `@sengkeong.ho`, `@moch.zulfa`, and
+Both come from `arpit.goel 2026-08-26 23:23`, and both are later than D2's
+Action, so they take the later labels: **labels run in thread chronology
+across the whole thread, never grouped by Decision.** Within one message,
+textual order is the only ordering there is.
+
+- **A2** — "I have documented the thread here" is a completed action:
+  `action`: "Documented the thread in the Confluence wiki (completed within
+  the thread)", owner `@arpit.goel`, no date needed. It appears first in the
+  message.
+- **A3** — the same message asks `@sengkeong.ho`, `@moch.zulfa`, and
   `@rangga.pratama` to add the logic that recreates the merchant list. Three
   named owners, store as a list; requested, not yet acknowledged in the
   available source; no date given.
-- The same message — "I have documented the thread here" — is a completed
-  action: `action`: "Documented the thread in the Confluence wiki (completed
-  within the thread)", owner `@arpit.goel`, no date needed.
 
 ### The overlap in this thread
 
-`A1` and `A3` both produce a wiki page, and they sit on different Decisions,
-so nothing in the flow ever shows them together. `A1` is `@arpit.goel`'s,
-already made inside the thread, documenting **the thread**. `A3` is
+`A1` and `A2` both produce a wiki page, and they sit on different Decisions,
+so nothing in the flow ever shows them together. `A1` is
 `@rahadiyan.wisesa`'s, still outstanding, documenting **the variable's
-pricing configs**. Read carefully they are two different pages — but the
-thread never says so, and it is the same person's area, the same tool, and
-one message apart.
+pricing configs** (`sengkeong.ho 2026-08-26 08:59`). `A2` is
+`@arpit.goel`'s, already made inside the thread, documenting **the thread**
+(`arpit.goel 2026-08-26 23:23`). Read carefully they are two different
+pages — but the thread never says so, and it is the same tool, the same
+area, and the same day.
 
-So this is the flagged case exactly: one done, one outstanding, a shared
+So this is the flagged case exactly: one outstanding, one done, a shared
 artifact the thread never connected. Left alone, the record sends someone
 after `@rahadiyan.wisesa` for a page that may already exist, or lets
 `@arpit.goel`'s finished one stand in for work nobody did.
 
-What does **not** happen: they are not merged, neither is dropped, and `A3`
-is not rewritten to point at `A1`. The entry names both, says what each is,
-and gives the reviewer — who was in the thread — the two options. D2's Gate 1
-note above reaches the same pair from the other direction, and for the same
-reason: framing the decision as "make a wiki page" is what makes `A1` look
-like it already satisfied `A3`.
+What does **not** happen: they are not merged, neither is dropped, and
+neither is rewritten to point at the other. The entry names both, says what
+each is, and gives the reviewer — who was in the thread — the two options.
+D2's Gate 1 note above reaches the same pair from the other direction, and
+for the same reason: framing the decision as "make a wiki page" is what
+makes `A2` look as though it already satisfied `A1`.
 
 ### Not decisions
 
 - "Our interim stopgap is to use mex ZFF and correct for dax EAR by
-  overpaying for these jobs" (`sengkeong.ho 9:06 AM`) — reported as the
+  overpaying for these jobs" (`sengkeong.ho 2026-08-26 09:06`) — reported as the
   existing approach, not put forward for disposition. Fails Gate 1.
-- The fare-certainty/batching principle (`sengkeong.ho 8:54 AM`) and the FR
-  capacity/pricing-lever discussion (`albert.lim 9:02 AM`) — background
+- The fare-certainty/batching principle (`sengkeong.ho 2026-08-26 08:54`) and the FR
+  capacity/pricing-lever discussion (`albert.lim 2026-08-26 09:02`) — background
   reasoning, no proposed course of action. Fails Gate 1.
-- `moch.zulfa 5:11 PM` explaining how the merchant group is currently
+- `moch.zulfa 2026-08-25 17:11` explaining how the merchant group is currently
   prioritized and maintained, answering a question — describes existing
   practice, proposes nothing new. It feeds D1's conditions and motivates an
   Action, but is not itself an object.
-- `albert.lim 8:50 AM` asking `long.jin` to use the capture tool, and
-  `long.jin 8:55 AM` asking what sources are available — messages about the
+- `albert.lim 2026-08-26 08:50` asking `long.jin` to use the capture tool, and
+  `long.jin 2026-08-26 08:55` asking what sources are available — messages about the
   capture process itself. Excluded by Gate 1's explicit carve-out.
-- `Grab 8:51 AM` — "Heart, Hunger, Honour, Humility" — an automated values-bot
+- `Grab 2026-08-26 08:51` — "Heart, Hunger, Honour, Humility" — an automated values-bot
   message with no proposal content.

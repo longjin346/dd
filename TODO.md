@@ -29,7 +29,7 @@ a run read `MEX` as Mexico.
 
 ## The eval set
 
-**One thread, and it is the wrong one to test on.** `examples/saver-discount-thread.txt`
+**One thread, and it is the wrong one to test on.** `examples/saver-discount-thread.md`
 is worked through gate by gate in `references/extraction.md`, so any run that
 loads the rules has already been shown its answers. It is the teaching
 example and the regression fixture; it cannot measure judgment.
