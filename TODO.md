@@ -104,6 +104,36 @@ acquisition, which is a different repository's problem.
 Until either exists, the honest advice to a reviewer is: do not leave a
 decision out planning to come back for it.
 
+## Rule changes the owner's corrections imply
+
+Collected as the baseline review proceeds, **not yet applied** — the review
+is still open and each of these moves a rule that decides more than one
+thing. Each is a case where the run followed the rule and the rule was
+wrong.
+
+- **`pst` is what the decision acts on, not where the conversation sits.**
+  `extraction.md`'s rule offers *"a decision the thread explicitly calls
+  'this eComm decision'"* as its worked example of a sound inference. That
+  is the exact inference that produced the wrong value: a Saver discount is
+  a discount on pax pricing, and "this eComm decision" describes the
+  surrounding conversation. Replace the example with this case as a worked
+  negative, and state the distinction the owner drew.
+- **Read the named person's conduct, not only the naming message.** The
+  rung-2 passage tells a reader to check what question a naming message was
+  answering, and illustrates it with *"who is covering for an absent
+  addressee"* — which is precisely the case where the name is right, since
+  the person covering held the role. Its fallback, *leave the role
+  unresolved when the sequence is ambiguous*, produced a worse record than
+  naming him. What settled it was that he then probed the request like
+  someone exercising a gate. The rule inspects the naming message's
+  neighbours and never looks at what the named person does next.
+- **`Saver` belongs in the glossary.** Reaching the right `pst` depends on
+  knowing a Saver discount is a discount on pax pricing, and the skill has
+  no way to know it. Sits in the unconfirmed list above.
+- **Nothing to fix in the overlap check.** It flagged the right pair, on two
+  Decisions that never appear together, and the owner's answer was that they
+  are the same work. The 3.5.0 feature did its job on its first real test.
+
 ## From the first run on a corrected fixture
 
 Three findings, kept apart because they need different things.

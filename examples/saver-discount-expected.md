@@ -39,12 +39,12 @@ wrong. No need to read the rest of the file to answer them.
    as the former, with the page as the agreed mechanism. *If the page is the
    decision:* the title, the details and the Action all change, and the page
    `@arpit.goel` already made reads as satisfying it.
-4. ~~**Is `@arpit.goel` the "respective eng PIC"?**~~ **Answered: yes.**
-   This file previously said no, on the grounds that `cui.ju 15:22` answers
-   the cover-for-randy question rather than the eng-PIC requirement. The
-   owner confirms he holds the role — his conduct through the thread settles
-   it where the wording does not. `decision_approver` names him, and Gate 5
-   no longer finds an unendorsed redirection.
+4. ~~**Is `@arpit.goel` the "respective eng PIC"?**~~ **Answered: yes — he
+   is the pricing eng PIC.** So the awaited party is one person, not two:
+   Randy is on leave and Arpit covers that role, which makes `cui.ju 15:22`
+   the answer to both questions on the table. This file previously read the
+   two as separate and left the role unnamed. Gate 5 no longer finds an
+   unendorsed redirection.
 5. **Is "the list will continue to be reviewed and maintained"
    (`@moch.zulfa 17:11`) a condition on execution?** Taken as yes, so it
    sits in `conditions`. *If it is just background:* `conditions` is empty
@@ -183,29 +183,30 @@ candidate.
   recorded an argument against something as an argument for it.
 - `decision_status`: `pending`
 - `decision_proposer`: `@rahadiyan.wisesa`
-- `decision_approver`: **`@arpit.goel (awaiting approval)`** — the eng PIC,
-  confirmed by the thread owner.
+- `decision_approver`: **`@arpit.goel (awaiting approval)`** — the pricing
+  eng PIC, confirmed by the thread owner.
 
   Rung 1 fails outright, since Gate 3 found no closure signal, so extraction
-  drops to rung 2 and records who is supposed to approve. `cui.ju
-  2026-08-25 15:20` sets the requirement — "please inform the respective eng
-  PIC and get approval from them first" — and `cui.ju 15:22` routes it:
-  "@arpit.goel could you help to check?"
+  drops to rung 2 and records who is supposed to approve. One party, not
+  two: the request goes to `@randy.tedjakusuma / @pricing-team`
+  (`2026-08-25 15:18`), `cui.ju 15:20` requires the respective eng PIC's
+  sign-off, and `cui.ju 15:22` routes it — "@arpit.goel could you help to
+  check?"
 
-  **The thread does not state that he holds the role, and the sequence
-  argues against it** — 15:22 sits directly after `jomil.villareal 15:21`
-  asking who to contact while `randy.tedjakusuma` is away, so read narrowly
-  it answers that question instead. Earlier versions of this file took that
-  narrow reading and left the role unnamed. **That was wrong.** What settles
-  it is his conduct: he probes the tactical reasons, the merchant-group
-  composition, and how it will be maintained (`15:23`, `17:06`, `17:29`,
-  `18:18`), which is an engineering owner exercising a gate rather than a
-  colleague helping out.
+  **Those look like two separate awaited parties and are one.** Randy is on
+  leave (`jomil.villareal 15:21`), and Arpit is the pricing eng PIC, so
+  `15:22` answers the cover-for-Randy question *and* names the eng PIC —
+  the two questions have the same answer.
 
-  So this value is reached by inference, and it is flagged under `Inferred
-  Values to Confirm`. A run that leaves the role unnamed has not broken a
-  rule — it has been too literal about a role the thread fills by behaviour
-  rather than by title.
+  This is worth stating because the wording invites a wrong turn. Earlier
+  versions of this file argued that `15:22` answers only the cover question
+  and therefore leaves the eng-PIC role unnamed. The sequence does read that
+  way; it is still wrong, because the premise that the two questions have
+  different answers is false.
+
+  The value is reached by inference — the thread never says Arpit holds the
+  role — so it is flagged under `Inferred Values to Confirm`. A run that
+  leaves the role unnamed has been too literal, not disobedient.
 
 - `conditions`: the merchant group is a business-team priority list,
   reviewed and maintained against partnership needs and merchant
@@ -450,9 +451,10 @@ Kept short on purpose. Each of these has actually happened.
 - **D2 titled after the wiki page** rather than the commitment.
 - **D2's first rationale strand dropped** — the governance gap that
   motivated the proposal sits before it in the thread.
-- **The eng-PIC role left unnamed.** Reading `cui.ju 15:22` narrowly — as
-  answering the cover-for-randy question — is defensible from the wording
-  and still wrong. He is the PIC.
+- **The eng-PIC role left unnamed**, or recorded as a second awaited party
+  alongside `@randy.tedjakusuma`. Reading `cui.ju 15:22` as answering only
+  the cover-for-Randy question is defensible from the wording and still
+  wrong: Arpit is the pricing eng PIC, so both questions resolve to him.
 - **`Not Identified as Decisions` omitted entirely** while the run's own
   reasoning listed the Gate 1 failures correctly.
 - **Action labels grouped by Decision** instead of thread chronology.
