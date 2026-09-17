@@ -9,6 +9,57 @@ has already been shown these answers. Use this to diff after a rule change.
 Measuring whether the rules can be applied at all takes a thread whose
 answers appear nowhere in `references/`.
 
+## Status: baseline, not a gold set
+
+Every judgment below is derived from the rules in `references/`, by one
+reader, and **no one who was in the thread has confirmed any of it.** That
+matters more than it sounds: a baseline derived from the rules cannot detect
+a wrong rule, because it will be wrong in the same direction and the diff
+comes back clean. It checks consistency, not correctness.
+
+The **facts** are solid — who said what and when, the addresses, the
+handles, the reactions all come from the export. The **readings** are not.
+
+### Seven readings awaiting the thread owner
+
+Answer these and this file becomes a gold set for this thread. Each states
+the message, the reading taken here, and what changes if the reading is
+wrong. No need to read the rest of the file to answer them.
+
+1. **Did `albert.lim`'s "ya that helps" (`2026-08-26 08:57`) approve the
+   commitment to document?** Taken as yes, which is the whole basis for D2
+   being `approved` rather than `pending`. *If no:* D2 becomes `uncertain`
+   with no approver, and this thread records no completed decision at all.
+   **Most load-bearing question here** — one run has already disagreed.
+2. **Whose decision is D2?** Taken as `@arpit.goel`'s: he raised the
+   documentation need (`2026-08-25 17:29`, `18:18`), `@sengkeong.ho` offered
+   the solution. *If it is sengkeong's instead:* the proposer changes, and
+   `albert.lim`'s acceptance still stands.
+3. **Is D2 "record these configs somewhere" or "make a wiki page"?** Taken
+   as the former, with the page as the agreed mechanism. *If the page is the
+   decision:* the title, the details and the Action all change, and the page
+   `@arpit.goel` already made reads as satisfying it.
+4. **Is `@arpit.goel` the "respective eng PIC" `cui.ju` asked for?** Taken as
+   no — `cui.ju 15:22` names him, but read in sequence that answers
+   `jomil.villareal 15:21` about who to contact while `randy.tedjakusuma` is
+   away, not the eng-PIC requirement two messages earlier. *If yes:* D1's
+   approver names him, and the gate is met or nearly so.
+5. **Is "the list will continue to be reviewed and maintained"
+   (`@moch.zulfa 17:11`) a condition on execution?** Taken as yes, so it
+   sits in `conditions`. *If it is just background:* `conditions` is empty
+   for D1.
+6. **Does `@arpit.goel`'s governance concern belong to D1's rationale or
+   D2's?** Taken as D2's: it is an argument *against* proceeding with D1 as
+   things stand, and the reason D2 exists. *If it belongs to D1:* a run that
+   puts it there is right and this file is wrong.
+7. **The wiki page `@arpit.goel` already made — does it attach to D1 or
+   D2?** Taken as D1, since it documents this thread rather than the
+   variable's configs. *If D2:* it and the outstanding page sit on the same
+   Decision, and the overlap note reads differently.
+
+Until these are answered, treat a clean diff against this file as evidence
+that behaviour has not **changed**, never that it is **right**.
+
 ## About the source
 
 `saver-discount-thread.md` is an export prepared by hand from the real

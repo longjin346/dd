@@ -34,6 +34,17 @@ is worked through gate by gate in `references/extraction.md`, so any run that
 loads the rules has already been shown its answers. It is the teaching
 example and the regression fixture; it cannot measure judgment.
 
+**The nearest step is not a new thread.** `examples/saver-discount-expected.md`
+now carries seven readings awaiting the thread's owner — the judgment calls
+the rest of the file rests on. Answered, that file stops being one reader's
+derivation and becomes a gold set for this thread, which is what makes a
+clean diff mean anything. Until then a clean diff says behaviour has not
+changed, never that it is right.
+
+New threads are still needed, but for a different job: the seven answers make
+*this* thread's standard trustworthy, and only an unseen thread measures
+whether the rules generalise.
+
 What is needed:
 
 - **Real threads, three to five.** Picked by recency or at random from
