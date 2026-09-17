@@ -574,6 +574,43 @@ Decision, not an independent record with its own foreign key to maintain.
   date only when it is certain from the source. No date is a normal, complete
   Action.
 
+### Two Actions may name the same artifact
+
+Actions are captured one Decision at a time, so nothing about the flow ever
+puts two of them side by side — and the pair worth noticing usually sits on
+two *different* Decisions. Once the full set is drafted, read the Actions
+against each other once, looking for one specific collision.
+
+**The signal is narrow: both name the same thing being produced** — a page,
+a dashboard, a ticket, a document. Not similar work, not the same owner, not
+the same topic. Two people doing related things is ordinary and is not this.
+
+**The case with consequences is one completed in-thread and one still
+outstanding.** The record then says someone was asked to produce something
+that may already exist, and it reads wrong in both directions: a reader
+months later chases a person for a page that is already sitting there, or
+takes the finished one as evidence for work that was never done. Which of
+those it is usually cannot be settled from the thread — if the thread had
+connected them, it would have said so — so it goes to the reviewer, who was
+there, through Review Notes' `Actions That May Overlap`
+(`references/rendering.md`).
+
+**Flagging is the whole action.** Never merge the two, never drop either,
+never rewrite one to reference the other, and never change which Decision
+either attaches to. Nothing about this observation reaches the Bank; it is a
+question for the person reviewing, and they have `Drop` and an ordinary edit
+if the answer is yes.
+
+Not this, and not worth a note: several steps of one piece of work asked of
+one person in one message, which is already a single Action; two Actions that
+plainly produce two different things; and anything the thread resolves
+itself. When no shared artifact is visible, there is nothing to flag — this
+looks for one collision, not for general overlap.
+
+This runs once, on the drafted set. An Action the reviewer adds later is not
+re-checked against the others: the reviewer is the one who would be told, and
+they just wrote it.
+
 ## Completeness: one required-field set
 
 Completeness is judged only after classification and record drafting, and it
@@ -888,6 +925,28 @@ examples below turn on reading the order rather than the resemblance.
 - The same message — "I have documented the thread here" — is a completed
   action: `action`: "Documented the thread in the Confluence wiki (completed
   within the thread)", owner `@arpit.goel`, no date needed.
+
+### The overlap in this thread
+
+`A1` and `A3` both produce a wiki page, and they sit on different Decisions,
+so nothing in the flow ever shows them together. `A1` is `@arpit.goel`'s,
+already made inside the thread, documenting **the thread**. `A3` is
+`@rahadiyan.wisesa`'s, still outstanding, documenting **the variable's
+pricing configs**. Read carefully they are two different pages — but the
+thread never says so, and it is the same person's area, the same tool, and
+one message apart.
+
+So this is the flagged case exactly: one done, one outstanding, a shared
+artifact the thread never connected. Left alone, the record sends someone
+after `@rahadiyan.wisesa` for a page that may already exist, or lets
+`@arpit.goel`'s finished one stand in for work nobody did.
+
+What does **not** happen: they are not merged, neither is dropped, and `A3`
+is not rewritten to point at `A1`. The entry names both, says what each is,
+and gives the reviewer — who was in the thread — the two options. D2's Gate 1
+note above reaches the same pair from the other direction, and for the same
+reason: framing the decision as "make a wiki page" is what makes `A1` look
+like it already satisfied `A3`.
 
 ### Not decisions
 

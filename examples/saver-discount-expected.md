@@ -383,6 +383,27 @@ baseline records the corrected attribution.
   artificial handoff in the record — three Actions total across this thread,
   not four.
 
+## Actions that may overlap
+
+One entry expected, naming `A1` and `A3`:
+
+- Both produce a wiki page, and they sit on different Decisions, so nothing
+  in the card set ever shows them together.
+- `A1` is done — `@arpit.goel` made it inside the thread, documenting **the
+  thread**. `A3` is outstanding with `@rahadiyan.wisesa`, documenting **the
+  variable's pricing configs**.
+- Read carefully they are two different pages. The thread never says so, and
+  it is the same tool, the same area, one message apart.
+
+This is the flagged shape exactly: one completed in-thread, one outstanding,
+a shared artifact the thread never connected. A run that renders this entry
+is right; a run that renders none has missed it.
+
+**A run is wrong to merge them, drop either, or rewrite `A3` to reference
+`A1`.** The entry names the pair, says what each one's state is, and leaves
+the call to the reviewer, who was in the thread. Nothing about it reaches
+the Bank.
+
 ## Topics routed to `no_decision_topics` (Gate 1 failures)
 
 - **FR-balancing principle during crunch.** `albert.lim 8:51 AM (Day 2)`
