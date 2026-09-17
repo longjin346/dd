@@ -118,6 +118,13 @@ wrong.
   a discount on pax pricing, and "this eComm decision" describes the
   surrounding conversation. Replace the example with this case as a worked
   negative, and state the distinction the owner drew.
+- **A decision about another decision inherits its PST.** D2 documents the
+  behaviour D1 sets, so it is `Pax Pricing` because D1 is — not because
+  anything in the thread places the documentation work in a product area.
+  The current rule only looks for evidence about the decision in front of
+  it, and has nothing for a decision whose subject is another decision.
+  Same principle as the entry above, applied one level up: the PST follows
+  what the decision acts on, and here what it acts on is D1.
 - **Read the named person's conduct, not only the naming message.** The
   rung-2 passage tells a reader to check what question a naming message was
   answering, and illustrates it with *"who is covering for an absent

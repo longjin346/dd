@@ -298,16 +298,14 @@ not the field** — `sengkeong.ho` is not the name in `decision_proposer`.
 - `decision_details`: the need to document the tactical pricing configs for
   the ExP variable, with the wiki page as the agreed platform, and the
   variable linked to that page so the change is traceable.
-- `pst`: **`Pricing`** — *set by the owner, and not an active value in
-  `references/psts.json`, which offers `Pax Pricing` and nothing else
-  pricing-shaped.* Unresolved on purpose: either this is shorthand for
-  `Pax Pricing`, or the PST list is missing a value for pricing-config
-  governance as distinct from consumer-facing pricing. **Do not coerce it to
-  `Pax Pricing` to make it validate** — a baseline that quietly rounds an
-  owner's value to the nearest legal one stops being a standard.
+- `pst`: **`Pax Pricing`** — the same as D1's, and for a reason worth
+  stating: **D2 documents the behaviour of D1**, so it takes the PST of the
+  decision it is about. A decision that records, governs or tracks another
+  one does not get its own subject area; it inherits.
 
-  Note that this is a different answer from D1's, which is `Pax Pricing`.
-  The two decisions in this thread do not share a PST.
+  This is not something the thread says, and it is not something the current
+  rules derive. A run reaching it has to notice that D2's subject is D1.
+
 - `rationale`: **three strands, and the first is the one runs drop.**
   - Legacy configs carry no approvals, documentation or freshness check, so
     mistakes go undetected and nobody can later reconstruct which merchants
@@ -417,9 +415,17 @@ Five of the six categories have content; `Source Limitations` does not.
 
 - **Complete, but not a decision yet** — `D1`. What the reviewer can do
   about it. Does not repeat `Uncertain Decisions`' evidence.
-- **Inferred Values to Confirm** — `D1 pst` and `D2 pst`, the second flagged
-  as the weaker chain. **No `decision_approver` entry**: that value came
-  from direct evidence and its open role is not an inferred value.
+- **Inferred Values to Confirm** — three entries.
+  - `D1 pst`: `Pax Pricing`, reached from knowing what a Saver discount is
+    rather than from anything the thread states.
+  - `D2 pst`: `Pax Pricing`, inherited because D2 documents D1.
+  - `D1 decision_approver`: `@arpit.goel`, reached from his conduct through
+    the thread. Nothing says he holds the eng-PIC role.
+
+  **This reverses what earlier versions of this file expected.** They said
+  the approver carried no entry, on the reasoning that it came from direct
+  evidence. It does not: naming him is an inference, and one a reviewer
+  should be asked to confirm.
 - **Uncertain Decisions** — `D1`, with the unmet eng-PIC gate and the
   unendorsed redirection, in plain language, with a source link. Never a
   gate id or an enum name.
