@@ -75,6 +75,38 @@ message so the window starts further down might work, but that was not
 verified and so was not promised. Until then the rule and the template
 disagree by one option, on purpose.
 
+## Publishing the same record twice
+
+Two ways in, one cause. **Nothing in the skill records that a Decision was
+written.** `references/review.md` §1 defines exactly four state variables
+and none of them is about publication, and gate 3 — the only mechanism for
+keeping a candidate out of a write — only reaches candidates that cannot be
+published as they stand. An already-committed `approved` candidate has no
+exit.
+
+- **Inside one conversation.** Save D2, leave D1 out, then come back and
+  name D1's approver. That is an edit, so review reopens, and §6's test
+  ("has any batch been applied since the set was last shown whole?") makes
+  the save message render the full set — D1 *and* D2. Nothing marks D2 as
+  written, `Before saving` is empty because both are approved, and the write
+  commits D2 a second time. Every message on this path has a template and
+  every gate passes.
+- **Across conversations.** The save message and the publication result both
+  promise that what was left out is "still here... later". **Here is the
+  conversation**; there is no store. A day later the whole pipeline re-runs
+  from Acquire, re-extracts D1 and D2, and cannot tell that half its output
+  is already in the Bank — the skill has no read path to it.
+
+Cheap fix for the first, which would also make a deliberate re-save
+possible: a fifth state variable holding the Decision IDs the publisher
+confirmed, with their record URLs; gate 5 writes only IDs not in it, and
+gate 3 lists the committed ones as *already saved — re-save to create an
+updated record, or leave as is.* The second needs the Bank read during
+acquisition, which is a different repository's problem.
+
+Until either exists, the honest advice to a reviewer is: do not leave a
+decision out planning to come back for it.
+
 ## Known gaps, roughly by cost of being wrong
 
 - **A truncated URL has no rule.** The rules cover "no address at all"
@@ -100,7 +132,14 @@ disagree by one option, on purpose.
 - **Non-overwriting writes have no supersession story.** Publishing the same
   decision twice after an edit leaves two records with two `record_url`s and
   nothing saying which is current. May be the publisher's concern; that repo
-  is not here, so the behaviour is unknown rather than wrong.
+  is not here, so the behaviour is unknown rather than wrong. What is *not*
+  the publisher's concern is the skill sending the same record twice in the
+  first place — see above.
+- **A second, plainer source-selection re-ask has no template.**
+  `sources.md` allows exactly one ("ask once more, more plainly"), and the
+  message index in `rendering.md` has no row for it, since its trigger is
+  not the trigger the source-selection prompt row describes. Small, but it
+  is the fourth message found by reading that table backwards.
 - **`SOUL.md` and `SKILL.md` disagree on the principal.** "Long Jin's
   Decision Memory agent" and "the admitted user" against "anyone in the
   channel can trigger it, not just the bank owner". Decide which is true;

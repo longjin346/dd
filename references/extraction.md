@@ -688,7 +688,8 @@ answers appear nowhere in `references/`. Conflating the two produces a run
 that looks correct and demonstrates nothing; it has happened, more than
 once. Verify any new example the same way
 before trusting it — a plausible-sounding reading that skips the actual
-message order is exactly how the old draft misattributed a decision below.
+message order is the most common way an example comes out wrong, and both
+examples below turn on reading the order rather than the resemblance.
 
 ### D1 — the Saver-discount approval request
 
@@ -726,26 +727,36 @@ message order is exactly how the old draft misattributed a decision below.
   twice: the original approval request at `jomil.villareal 3:18 PM` is
   addressed to `randy.tedjakusuma` / `@oncall-lead` directly, and
   `cui.ju 3:20 PM` additionally requires sign-off from "the respective eng
-  PIC" — a role, not a name. That role is resolvable: `cui.ju 3:22 PM`
-  routes the same review to `arpit.goel`, who then engages substantively on
-  exactly the engineering-side concerns (merchant-group maintenance,
-  governance, documentation freshness) an eng PIC would own, through to the
-  end of the available source. Resolving the role to `arpit.goel` is an
-  inference, not a stated fact, so it is flagged for the reviewer under
-  Review Notes' `Inferred Values to Confirm`, same as `pst` below. This is
-  independent of Gate 5's finding — `arpit.goel`'s standing came only from
-  `cui.ju`'s unendorsed redirection, so his signal still could not have
-  closed this candidate even if he had given one; who is awaited and who is
-  entitled to close are separate questions. Value:
-  `@randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC sign-off
-  also required, person not named in thread`. The role stays unresolved on
-  purpose: `cui.ju 3:22 PM` names `@arpit.goel`, but read in sequence that
-  message answers `jomil.villareal 3:21 PM` asking who to contact while
-  `randy.tedjakusuma` is on leave — not the eng-PIC requirement two messages
+  PIC" — a role, not a name. **That role stays unresolved**, and why is the
+  part of this example worth learning. `cui.ju 3:22 PM` names `@arpit.goel`,
+  who then engages substantively on exactly the engineering-side concerns
+  (merchant-group maintenance, governance, documentation freshness) an eng
+  PIC would own, through to the end of the available source — which makes
+  resolving the role to him look well-supported. Read in sequence it is not:
+  that message answers `jomil.villareal 3:21 PM` asking who to contact while
+  `randy.tedjakusuma` is on leave, not the eng-PIC requirement two messages
   earlier. Nothing in the thread says `@arpit.goel` holds that role, and
-  putting him in this field would send a reviewer chasing the wrong person.
-  The eng-PIC gate and the
-  unendorsed redirection also remain what `classification_reason` cites as
+  putting him in this field would send a reviewer chasing the wrong person —
+  or turn a later "ok" from him into an approval the thread never gave. This
+  is the sequence check rung 2 of the ladder calls for, on the case it was
+  written for. Value:
+  `@randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC sign-off
+  also required, person not named in thread`.
+
+  Nothing in that value was filled by inference, so it gets **no**
+  `Inferred Values to Confirm` entry — that category is for values the model
+  supplied, not for a role the thread left open. The open role reaches the
+  reviewer through `Uncertain Decisions`, which is already where the eng-PIC
+  gate goes. `pst` below is the inferred value on this candidate, and the
+  only one.
+
+  Keeping the role unresolved is also independent of Gate 5's finding:
+  `arpit.goel`'s standing came only from `cui.ju`'s unendorsed redirection,
+  so his signal could not have closed this candidate even if he had given
+  one. Who is awaited and who is entitled to close are separate questions.
+
+  The eng-PIC gate and the unendorsed redirection remain what
+  `classification_reason` cites as
   the deciding gates — recording who is awaited does not remove either from
   that reasoning: "Approval requested in `jomil.villareal 3:18 PM`; eng-PIC
   gate set in `cui.ju 3:20 PM`; review redirected to `arpit.goel` by `cui.ju`
@@ -843,23 +854,21 @@ message order is exactly how the old draft misattributed a decision below.
   set up long ago, which is what documenting new ones prevents
   (`@albert.lim`).
 
-  **Correcting a prior misreading:** an earlier draft of this example
-  described the accepter as "the person whose cleanup concern prompted" the
-  proposal. That does not hold up against the thread. The governance concern
-  that motivated the whole exchange — "no governance on the grabx group... no
-  documentation on knowing what the right set of merchants are" — was raised
-  earlier by a different person, `arpit.goel`, at `5:29 PM` and `6:18 PM` the
-  day before. `albert.lim`'s own remark about cleaning up legacy pricing
-  configs arrives at `8:57 AM`, immediately *after* his acceptance, as
-  supporting context he adds — not as the concern that prompted
-  `sengkeong.ho`'s proposal. Do not attribute a stakeholder's motivating
-  concern to whoever happens to accept a later, related proposal without
-  checking which message came first and who said which.
+  **Check which message came first before crediting a motivating concern.**
+  It is tempting to read the accepter as the person whose concern prompted
+  the proposal — `albert.lim` accepts at `8:57 AM` and, in the same message,
+  talks about cleaning up legacy pricing configs. But that remark arrives
+  *after* his acceptance, as supporting context he adds. The governance
+  concern that actually motivated the exchange — "no governance on the grabx
+  group... no documentation on knowing what the right set of merchants
+  are" — was raised by `arpit.goel` at `5:29 PM` and `6:18 PM` the day
+  before. Attribute a motivating concern to whoever raised it, not to
+  whoever happens to accept a later proposal that answers it.
 
-  That same message order is what rung 2 of `decision_proposer` now reads
-  deliberately rather than incidentally: `arpit.goel` raised the need, so
-  the decision is attributed to him; `albert.lim` restated it and then
-  accepted, so he closes it. One reading of the thread, two fields.
+  That message order is exactly what rung 2 of `decision_proposer` reads:
+  `arpit.goel` raised the need, so the decision is attributed to him;
+  `albert.lim` restated it and then accepted, so he closes it. One reading
+  of the thread, two fields.
 
 - **Action (attaches to D2):** `sengkeong.ho 8:59 AM` asks
   `@rahadiyan.wisesa` to set up the wiki page, document the configs there,

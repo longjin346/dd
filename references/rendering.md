@@ -29,11 +29,11 @@ template in this file, and every message another file requires needs a row.
 
 | Message | Sent when | Timing owned by | Template |
 |---|---|---|---|
-| Opening line | Every invocation, first | `SKILL.md` | The opening line |
+| Opening line | Every invocation, opening whatever message goes out first | `SKILL.md` | The opening line |
 | Single-thread offer | A request to sweep a channel, refused | `sources.md` | **none yet** |
 | Target question | Invoked with nothing to point at | `sources.md` | **none yet** |
-| Truncation confirmation | The fetch came back at the limit, before anything is extracted | `sources.md` | The truncation confirmation |
-| Source-selection prompt | After the opening line, only if the discovery pass found a source | `sources.md` | The source-selection prompt |
+| Truncation confirmation | The fetch came back at the limit, before anything is extracted — carries the opening line above it | `sources.md` | The truncation confirmation |
+| Source-selection prompt | After the fetch, only if the discovery pass found a source | `sources.md` | The source-selection prompt |
 | Read Me | Once, heading the first card set | `SKILL.md` stage 3 | The required-field legend |
 | Decision card | With the Read Me, on request, and in the save message | `review.md` §6 | The Decision card |
 | References list | Only when asked for a candidate's refs | `review.md` §6 | References, on request |
@@ -44,7 +44,7 @@ template in this file, and every message another file requires needs a row.
 | Missing-fields prompt | Ends the response whenever a finalize-required field is unresolved | `review.md` §4 | The missing-fields prompt |
 | Finalize prompt | Closing any reply whose batch left every required field filled | `review.md` §7 | The full current set, and the finalize prompt |
 | Save message | On a finalize confirmation — cards, what cannot be saved, and the save request | `review.md` §6, §7 | The save message |
-| Correction re-render | A gate-3 reply corrected a candidate to `approved` | `review.md` §8 gate 4 | The save message → After a correction at the gate |
+| Correction re-render | A gate-3 reply corrected a candidate rather than excluding it | `review.md` §8 gate 4 | The save message → After a correction at the gate |
 | Publication result | Once the write returns, success or failure | `review.md` §9 | The publication result |
 
 Four of these were added after a walk through the flow found the rule
@@ -272,13 +272,24 @@ would teach a structure the cards immediately contradict. The Read Me's
 first bullet already introduces the nesting, which is the right place for
 it.
 
-How it is sent depends on what the discovery pass found:
+**It is never sent on its own account.** The line opens whichever message
+the run sends first, and what that message is depends on what the fetch and
+the discovery pass turned up. It cannot be sent before them: every form
+below needs something only the fetch knows, and a bare "I'll read this
+thread" followed moments later by a second message is two notifications
+where the skill promised one (`SKILL.md`, *keep the thread quiet*).
 
+- **The fetch came back at the limit** — the line, a blank line, then the
+  truncation confirmation. This is the case that decides the rule: a
+  truncation stop is the first thing a stranger would otherwise see, and it
+  opens by saying the bot cannot do something before ever saying what it is.
+  Discovery has not run yet at this point, so the source-selection prompt is
+  not part of this message; it follows after the go-ahead, without the
+  opening line, which has already been sent.
 - **External sources found** — the line, a blank line, then the
-  source-selection prompt below, all in one message. One message, not two:
-  the thread stays quiet.
-- **None found** — the line alone, as its own message, with one added
-  sentence so the silence that follows is expected:
+  source-selection prompt below, all in one message.
+- **Neither** — the line alone, with one added sentence so the silence that
+  follows is expected:
 
   ```text
   I'll read this thread and work out what was decided. Back shortly with a draft for you to check.
@@ -303,7 +314,13 @@ part that decides things.
 This is the first of the skill's two pauses and it is a real stop: the run
 extracts nothing until an explicit go-ahead arrives.
 
+It is also, on a truncated thread, the first message the run sends, so it
+carries the opening line above it — otherwise a stranger's introduction to
+this bot is a sentence about what it cannot do:
+
 ```text
+I'll read this thread and work out what was decided.
+
 ▸ **This thread is longer than I can read in one go**
 
 I read <number> messages, which is as many as I can fetch at once, so there may be more after that — and the end of a thread is usually where the approvals and objections land.
@@ -329,8 +346,9 @@ Reply "go ahead" and I'll work from what I have. Anything I produce will say it 
 
 ## The source-selection prompt
 
-The first thing sent after the opening line, and only when the discovery
-pass found at least one external source: `references/sources.md` discovers
+Sent once the discovery pass has found at least one external source, and
+only then — carrying the opening line above it, unless a truncation
+confirmation already carried it: `references/sources.md` discovers
 what the thread links to without opening anything, and this prompt asks
 which of those to read. With none found the question is skipped entirely and
 no message goes out — the opening line's second form covers that case on its
@@ -500,8 +518,8 @@ it, or, if nobody has yet, whoever it is awaiting, marked inline as
 - `refs`: ? - optional to fill
 ```
 
-`add an action` no longer sends a card — a single blank line, naming its
-parent Decision as established at creation:
+`add an action` sends a single blank line, not a card, naming its parent
+Decision as established at creation:
 
 ```text
 A{next} ? - optional to fill (task) — ? - optional to fill (owner) — ? - optional to fill (date)
@@ -556,16 +574,12 @@ every category is empty.** Nothing else gates it.
 ▸ **Review Notes**
 
 - **Complete, but not a decision yet**
-  - `D1` — the record is finished; the thread just never records anyone
-    approving it, and the Bank only holds decisions that were actually made.
-    Tell me who approved it, or it stays here and out of any save.
+  - `D1` — the record is finished; the Bank only holds decisions that were
+    actually made. Tell me who approved it, or it stays here and out of any
+    save.
 - **Inferred Values to Confirm**
   - `D1 pst`: <PST> — inferred from <what in the thread supports it>.
     Confirm or change.
-  - `D1 decision_approver`: recorded as the party the request was addressed
-    to. The additional sign-off that `alias` asked for (`alias 3:20 PM`) is
-    left as a role — the thread never names who holds it. Confirm or name
-    them.
 - **Uncertain Decisions**
   - `D1` — Why uncertain: <one plain sentence saying what stopped this from
     closing> (`alias 3:20 PM`), <and, where it applies, that the review went
@@ -594,13 +608,24 @@ every category is empty.** Nothing else gates it.
   record is complete — every required field is filled, including an approver
   honestly marked as awaited. What is missing is an approval that has not
   happened, and no amount of reviewing produces one.
+
+  **A candidate usually appears here and under `Uncertain Decisions` both**,
+  since whatever stopped it closing is usually also what leaves it
+  unpublishable. Split the work rather than saying it twice: this category
+  carries what the reviewer can do about it, `Uncertain Decisions` carries
+  the evidence and the link. Neither restates the other's half. Two adjacent
+  bullets that both explain that nobody approved `D1` teach the reviewer to
+  skim the section.
 - Never add a missing-fields category here — the inline `? - need to fill`
   markers and the Read Me block already say what's missing; repeating it
   would only duplicate and crowd out the notes that carry new information.
 - List an inferred value only when the model actually filled it by
   inference — never a value taken from direct source evidence, and never a
   field that's simply unresolved (that's already `? - need to fill` on the
-  card).
+  card). A `decision_approver` that names an awaited party the thread
+  stated, with a required role left open because nobody was named, is both
+  of those and belongs in neither: the value came from the source, and the
+  open role is what `Uncertain Decisions` already reports.
 - Never expose a Gate id, an enum name, `evidence_type`, or chain-of-thought
   in a `Why uncertain` line — rewrite it as one plain, source-grounded
   sentence.
@@ -618,24 +643,29 @@ Follows every edit batch, always — whether it applied in whole, in part, or
 not at all — and never a re-rendered card set. A batch where nothing could
 be applied still gets a reply: the user said something, and silence is not
 an answer to it.
-Structural changes (add, drop, restore, merge, confirm) come first, in this
-order, then field-level changes, each showing previous → new value verbatim
-(shorten a long *previous* value to a few words plus `…`; never shorten the
-new value):
+Structural changes come first, in this fixed order — **add, drop, restore,
+merge, move, confirm** — then field-level changes, each showing previous
+→ new value verbatim (shorten a long *previous* value to a few words plus
+`…`; never shorten the new value):
 
 ```text
 ▸ **Applied**
 
+- Added `D5: <title>`
 - Dropped `D3: <title>` and its linked Action `A4` — reply "Restore D3" to put it back
+- Restored `D6: <title>` and its linked Action `A7`
 - Merged `D4` into `D1`; kept `D1: <title>`
   - Combined the rationale and conditions from both
   - `D4 decision_details` was displaced by `D1`'s: "<first few words of the value that won>…"
-- Added `D5: <title>`
-- Restored `D3: <title>` and its linked Action `A4`
+- Moved `A2` from `D1` to `D5`
 - Confirmed `D2` as a Decision; no field values changed
 - `D5 pst`: ? - need to fill → <PST>
 - `D1 decision_status`: pending → approved
 ```
+
+That block shows every line shape at once, which no single batch would
+produce — a real receipt carries only the lines its own edits earned, in
+that order, and nothing else.
 
 - Show a previous placeholder verbatim (`? - need to fill` or `? - optional
   to fill (required only if approved for publishing)`) so the user can tell
@@ -650,6 +680,17 @@ new value):
   `…`. A merge that silently overwrites text the user could read on screen
   one message earlier is the one structural operation that can lose content
   without anyone noticing.
+- **A structural operation with no line here cannot be reported at all.**
+  Adding one to `review.md` §3.6 or §3.7 means adding it to the order above
+  and giving it a line shape. The receipt is the only channel an edit batch
+  has — editing never renders the cards (`review.md` §6) — so an operation
+  this list forgets happens silently.
+- **A move names both ends.** `review.md` §3.7's `Link A1 to D2` changes
+  which Decision an Action attaches to, and that attachment is positional —
+  there is no parent field on the card, so a move cannot be reported as a
+  field-level change and needs this structural line instead. Name where the
+  Action came from as well as where it went: the reviewer is checking that
+  it left the right Decision as much as that it arrived at the right one.
 - Mention uncertainty only when this batch actually changed a candidate's
   uncertain state — one line saying it's now confident, or newly uncertain
   with its `Why uncertain` sentence. Don't resend the whole category for no
@@ -686,10 +727,23 @@ asked one message at a time:
 ```text
 ▸ **Before I apply the rest**
 
-- `D2 pst`: "<what the user typed>" isn't one of the PSTs — did you mean <nearest valid PST>?
+- `D2 pst`: "<what the user typed>" isn't one of the PSTs. Reply with a number:
+  1. DCA
+  2. Dispatch
+  <… every remaining active PST, in `psts.json` order …>
 - The pasted `D1` card is missing the second half of `decision_details`
   ("<the text that went missing>"). Drop it, or keep it?
 ```
+
+**An invalid `pst` gets the list, never a guess.** `review.md` §3.2 forbids
+fuzzy-matching a typo and §3.5 forbids selecting the closest-looking value,
+so "did you mean X?" is not available here even as a question — it puts one
+candidate in front of the user on a resemblance the rules say not to
+compute, and a wrong guess that reads as helpful is the one they are most
+likely to accept. The numbered list costs more lines and asks nothing the
+user has to overrule. The full list is written out once, under the
+missing-fields prompt below; render every active value here too, elided
+above only so this file carries one copy of `psts.json` rather than two.
 
 `review.md` tells each of its ambiguity paths to "ask one concise
 clarification question" — target omitted with several candidates,
@@ -762,6 +816,11 @@ Please provide all known values in one reply. Anything else you want to change? 
   unmarked field.
 - A missing `pst` always gets the numbered list, in `psts.json`'s configured
   order, so a bare number reply resolves against it.
+- **The list above is a copy, and `psts.json` is the original.** It is
+  written out once in this file so the shape is unambiguous — bare numbers,
+  no codes, no descriptions — but nothing keeps the two in sync. Read the
+  active values from `psts.json` at render time and use those; if they
+  disagree with the exhibit, the exhibit is out of date, not the config.
 
 ## The full current set, and the finalize prompt
 
@@ -848,10 +907,10 @@ Look right? Reply "Yes, finalize" to lock this version, or send any remaining ch
 
 ## The save message
 
-Sent the moment a finalize confirmation lands. It replaces three things that
-used to be separate messages — a bare lock acknowledgement, a gate-3 prompt,
-and a publication preview — because they were asking the reviewer to hold
-three parts of one decision in their head across several turns.
+Sent the moment a finalize confirmation lands. It carries the lock, what
+cannot be saved, and the request to save in one message, because these are
+three parts of one decision and splitting them asks the reviewer to hold
+them in their head across several turns.
 
 Three blocks, in this order, each rendered only when it applies:
 
@@ -899,9 +958,10 @@ Say "save" when you're ready, and I'll write the rest to the Decision Bank. Noth
 ### After a correction at the gate
 
 A reply that only excludes candidates changes no record, so the save
-proceeds against what was already shown. A reply that corrects one to
-`approved` changes what will be written, and the confirmation given for the
-earlier version cannot carry across it.
+proceeds against what was already shown. A reply that corrects one — setting
+it to `approved`, or naming who actually approved a candidate whose approver
+was still marked awaited — changes what will be written, and the
+confirmation given for the earlier version cannot carry across it.
 
 Re-render only the cards that changed, then ask again:
 

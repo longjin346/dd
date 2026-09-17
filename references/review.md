@@ -12,9 +12,7 @@ It never specifies a card layout, a template, an exact prompt string, or a
 spacing rule — that is `references/rendering.md`. Where a rendered artifact
 is needed, it is named (the change receipt, the finalize prompt, the full
 current set, the save message) and left to that file. `schema.md`
-defines the published record's field shapes; it is stale on one point —
-Action fields as publication-required — and this file does not inherit that
-part (see Publication record, below).
+defines the published record's field shapes, and this file follows it.
 
 ## 1. Review state
 
@@ -46,7 +44,7 @@ completeness at revision 4.
 | Valid finalize confirmation | `review_state: finalized`, `finalized_revision` ← the confirmed revision, `awaiting_finalize_revision` → unset. Snapshot the publication record internally (§9). |
 | A finalized set is edited | `review_state: reviewing`, `finalized_revision` → unset, then apply the edit as an ordinary batch (`review_revision += 1`, recompute completeness, etc.). |
 | Publication gate 3: a candidate is **excluded** | No state change. `finalized_revision` remains valid. |
-| Publication gate 3: a candidate is **corrected to approved** | Same as "a finalized set is edited," above — this is an edit, not an exclusion. |
+| Publication gate 3: a candidate is **corrected** (set to `approved`, or its awaited approver resolved) | Same as "a finalized set is edited," above — this is an edit, not an exclusion. |
 
 `awaiting_finalize_revision` is only ever set in the same response that
 either displays the full current set or a receipt that fully accounts for
@@ -452,15 +450,31 @@ order, all required.
 2. **Explicit save request.** The user has explicitly asked to save/commit/
    store to the bank in this conversation. Never infer it from a vague
    acknowledgement, and never from the original capture request itself.
-3. **Every non-approved candidate is resolved by a human.** A candidate
-   still `uncertain`, `pending`, or `rejected` must be either:
+3. **Every candidate that cannot be published as it stands is resolved by a
+   human.** Two things put a candidate here, and the predicate is the same
+   one the save message and Review Notes' `Complete, but not a decision yet`
+   have been using since the first card set
+   (`references/rendering.md`) — deliberately, so a reviewer is never asked
+   about a different set than the one they were shown:
+   - `decision_status` is not `approved` — `pending` or `rejected`. Every
+     candidate still classified `uncertain` is here already: the valid
+     combinations in extraction.md pair `uncertain` only with `pending`.
+   - `decision_status` is `approved` but `decision_approver` still carries
+     the awaited marker. An `approved` candidate whose approver was never
+     given is a contradiction, not a gap (§5), and it belongs here rather
+     than at gate 5: this gate has a way to resolve it and gate 5 only has a
+     way to fail.
+
+   Either way the candidate must be:
    - **Excluded from this publication.** No record changes. `finalized_revision`
      stays valid because nothing about the finalized state changed — this
      candidate simply isn't part of what gets committed *this time*; it
      remains in the finalized review for a possible later attempt. Proceed
      straight to gate 4 and carry the exclusion (with its reason) into the
      preview.
-   - **Corrected to `approved`.** This edits the finalized record, so it
+   - **Corrected.** Set to `approved`, or — for a candidate already
+     `approved` — the awaited approver resolved to who actually approved.
+     Either edits the finalized record, so it
      reopens review exactly like any other post-finalize edit (§7's
      "editing a finalized set"): gate 1 now fails by construction and must
      be earned again. `decision_approver` was already required and already
@@ -493,8 +507,8 @@ order, all required.
 4. **The reviewer has seen what is about to be written.** The save message
    §7 sends showed the full set, and gate 3's items were named in it. So
    this gate asks only whether anything has changed since — and exactly one
-   thing can have: a gate-3 resolution that corrected a candidate to
-   `approved`.
+   thing can have: a gate-3 resolution that corrected a candidate — set to
+   `approved`, or its awaited approver resolved to who actually approved.
 
    - **Nothing changed.** An exclusion changes no record, so what is about
      to be written is what was shown. Proceed to gate 5.
@@ -520,6 +534,13 @@ attached to a publishing Decision
 publishes regardless of which of its optional fields — owner, due date — are
 filled; nothing about an Action ever blocks this gate.
 
+This check should never be the thing that stops a publication: gate 3 covers
+both ways a candidate can fail it, and covers them where there is something
+the reviewer can do about it. Treat a failure here as a sign that gate 3 was
+skipped or mis-scoped — go back to it rather than reporting a blocked write,
+because this gate has no resolution branch and stopping at it leaves the
+reviewer with a refusal and no next step.
+
 ## 9. Publication record and post-publication editing
 
 At finalize, snapshot the publication-ready record internally: every
@@ -527,16 +548,20 @@ Decision field from `schema.md`'s shape plus `decision_status` and
 `evidence_type`, with internal-only bookkeeping dropped — classification,
 its reason and refs, completeness fields, and every variable from §1.
 `no_decision_topics` is kept; `source_limitations` has no field in the
-published schema, so surface it as accompanying visible text instead of
-folding it into the record.
+published schema, so it is not folded into the record. It is not re-sent to
+the user either: Review Notes carried it with the first card set and the
+save message deliberately does not repeat it
+(`references/rendering.md`), so there is nothing further to surface. What
+this line settles is only that the limitation does not silently become part
+of a published record that has no field for it.
 
-**Override schema.md on Actions.** Per extraction.md, an Action carries no
-required field at any tier. `schema.md`'s Action-required-fields list is
-stale and does not apply here — do not enforce it at finalize or at
-publication. An Action with no owner and no due date is captured and
-published exactly as the reviewer left it, attached to its Decision through
-the permanent ID the publisher derives from position at commit time (never a
-value authored or corrected during review).
+**Actions never block.** Per extraction.md and `schema.md`'s own
+"No Action field is required, at either tier", an Action carries no required
+field — do not enforce one at finalize or at publication. An Action with no
+owner and no due date is captured and published exactly as the reviewer left
+it, attached to its Decision through the permanent ID the publisher derives
+from position at commit time (never a value authored or corrected during
+review).
 
 **The run ends with a result, either way.** Once the write returns, say what
 happened — which Decisions were committed and where, or that nothing was
