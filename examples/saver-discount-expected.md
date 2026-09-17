@@ -22,37 +22,35 @@ handles, the reactions all come from the export. The **readings** are not.
 
 ### Seven readings awaiting the thread owner
 
-Answer these and this file becomes a gold set for this thread. Each states
-the message, the reading taken here, and what changes if the reading is
-wrong. No need to read the rest of the file to answer them.
+**Five of seven are now answered by the thread owner**, and the answers are
+folded into the file below. What remains open is marked. Two of the five
+reversed what this file previously asserted — those are the valuable ones,
+because a baseline derived from the rules could never have produced them.
 
-1. **Did `albert.lim`'s "ya that helps" (`2026-08-26 08:57`) approve the
-   commitment to document?** Taken as yes, which is the whole basis for D2
-   being `approved` rather than `pending`. *If no:* D2 becomes `uncertain`
-   with no approver, and this thread records no completed decision at all.
-   **Most load-bearing question here** — one run has already disagreed.
-2. **Whose decision is D2?** Taken as `@arpit.goel`'s: he raised the
-   documentation need (`2026-08-25 17:29`, `18:18`), `@sengkeong.ho` offered
-   the solution. *If it is sengkeong's instead:* the proposer changes, and
-   `albert.lim`'s acceptance still stands.
-3. **Is D2 "record these configs somewhere" or "make a wiki page"?** Taken
-   as the former, with the page as the agreed mechanism. *If the page is the
-   decision:* the title, the details and the Action all change, and the page
-   `@arpit.goel` already made reads as satisfying it.
+1. ~~**Did "ya that helps" approve the commitment to document?**~~
+   **Answered: yes.** D2 is `approved`, `@albert.lim` is the approver. The
+   run that read it as `pending` was wrong.
+2. ~~**Whose decision is D2?**~~ **Answered: `@arpit.goel`** — he raised
+   it. One thing left open inside this: whether the inline voicer marker
+   naming `@sengkeong.ho` comes back, since that marker is what Rule 3.3
+   uses to stop a voicer approving their own proposal.
+3. ~~**Is D2 "record these configs" or "make a wiki page"?**~~
+   **Answered: record the configs.** The title says document, and the page
+   is named as the agreed platform inside the details.
 4. ~~**Is `@arpit.goel` the "respective eng PIC"?**~~ **Answered: yes — he
    is the pricing eng PIC.** So the awaited party is one person, not two:
    Randy is on leave and Arpit covers that role, which makes `cui.ju 15:22`
    the answer to both questions on the table. This file previously read the
    two as separate and left the role unnamed. Gate 5 no longer finds an
    unendorsed redirection.
-5. **Is "the list will continue to be reviewed and maintained"
+5. **Still open — is "the list will continue to be reviewed and maintained"
    (`@moch.zulfa 17:11`) a condition on execution?** Taken as yes, so it
-   sits in `conditions`. *If it is just background:* `conditions` is empty
-   for D1.
-6. **Does `@arpit.goel`'s governance concern belong to D1's rationale or
-   D2's?** Taken as D2's: it is an argument *against* proceeding with D1 as
-   things stand, and the reason D2 exists. *If it belongs to D1:* a run that
-   puts it there is right and this file is wrong.
+   sits in D1's `conditions`. *If it is just background:* `conditions` is
+   empty for D1.
+6. ~~**Does `@arpit.goel`'s governance concern belong to D1 or D2?**~~
+   **Answered: D2.** It is the first strand of D2's rationale. A run that
+   folds it into D1's is recording an argument against something as an
+   argument for it.
 7. ~~**The wiki page `@arpit.goel` already made — D1 or D2?**~~
    **Answered: neither — it is not a separate Action.** It is the same piece
    of work as the page requested at `08:59`, so D1 carries only the
@@ -236,7 +234,7 @@ exists to say.
 
 ---
 
-# D2 — Documenting the pricing configs on the ExP variable
+# D2 — Document MEX-specific configs on ExP
 
 ## Gates
 
@@ -296,14 +294,20 @@ not the field** — `sengkeong.ho` is not the name in `decision_proposer`.
 
 ## Card
 
-- `decision_title`: describes documenting the configs, **not** creating a
-  wiki page.
-- `decision_details`: the commitment to document the pricing configs for
-  this ExP variable, with the wiki page as the agreed mechanism and the link
-  from variable to page so it becomes the central source of truth.
-- `pst`: `FF Ecommerce` — **inferred on a weaker chain than D1's.** The
-  thread never places this sub-discussion in a product area directly; the
-  basis is the surrounding thread. Flag it, and flag it as weaker.
+- `decision_title`: **Document MEX-specific configs on ExP**
+- `decision_details`: the need to document the tactical pricing configs for
+  the ExP variable, with the wiki page as the agreed platform, and the
+  variable linked to that page so the change is traceable.
+- `pst`: **`Pricing`** — *set by the owner, and not an active value in
+  `references/psts.json`, which offers `Pax Pricing` and nothing else
+  pricing-shaped.* Unresolved on purpose: either this is shorthand for
+  `Pax Pricing`, or the PST list is missing a value for pricing-config
+  governance as distinct from consumer-facing pricing. **Do not coerce it to
+  `Pax Pricing` to make it validate** — a baseline that quietly rounds an
+  owner's value to the nearest legal one stops being a standard.
+
+  Note that this is a different answer from D1's, which is `Pax Pricing`.
+  The two decisions in this thread do not share a PST.
 - `rationale`: **three strands, and the first is the one runs drop.**
   - Legacy configs carry no approvals, documentation or freshness check, so
     mistakes go undetected and nobody can later reconstruct which merchants
@@ -311,20 +315,24 @@ not the field** — `sengkeong.ho` is not the name in `decision_proposer`.
   - Handling mex-specific pricing configs on ExP is established practice, so
     what is missing is documentation rather than the mechanism
     (`@sengkeong.ho`).
-  - The team cannot today remove or trace configs ops set up long ago, which
-    is what documenting new ones prevents (`@albert.lim`).
+  - The team has had difficulty cleaning up legacy price configurations
+    because nobody knows the rationale or the owner of those setups; proper
+    documentation prevents this recurring (`@albert.lim`).
 
   The first strand is the need the proposal answers and sits *before* it in
   the thread. Rationale gathered only from the proposal message forward
   keeps the answer and discards the question.
 - `decision_status`: `approved`
-- `decision_proposer`: `@arpit.goel (raised the need; proposed by
-  @sengkeong.ho)`
+- `decision_proposer`: **`@arpit.goel`** — he raised this.
+
+  *Open:* earlier versions carried the voicer inline as
+  `@arpit.goel (raised the need; proposed by @sengkeong.ho)`. The owner's
+  value drops that marker. Whether it should come back is unsettled — the
+  marker is what records that `@sengkeong.ho` voiced the proposal, which is
+  what stops a voicer approving their own proposal under Rule 3.3.
 - `decision_approver`: `@albert.lim`
-- `conditions`: no future-execution condition is established, so the card
-  shows **`? - optional to fill`**. Never `null` — `references/rendering.md`
-  forbids rendering an empty value that way.
-- `refs`: available.
+- `conditions`: `? - optional to fill`
+- `refs`: available
 
 **Check which message came first before crediting a motivating concern.** It
 is tempting to read the accepter as the person whose concern prompted the
