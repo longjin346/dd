@@ -1,0 +1,48 @@
+# Presentation preferences — what the reviewer sees, never what the skill does.
+#
+# Nothing here changes extraction, classification, completeness, the finalize
+# gate, or the five publication gates. A hidden category is still computed and
+# still carries its workflow meaning: an uncertain Decision stays uncertain
+# with its entry hidden, and a candidate that cannot be published is still
+# named in the save message, which is not Review Notes and is not configurable.
+# `references/rendering.md` owns the exact semantics.
+#
+# Absence is the default, and the default is "show". List a category here only
+# to hide it. A category added to the skill later is visible without anyone
+# editing this file — which is why this is a hide-list rather than a switch per
+# category, since a list of every category goes stale the moment one is added.
+#
+# An unrecognized name is ignored and its category renders. Failing toward
+# showing too much is the safe direction: a reviewer who sees a note they did
+# not need has lost a few lines, and one who never sees a note they did need
+# has approved a record without it.
+
+review_notes:
+  hide: []
+    # Valid names, and what hiding each one costs:
+    #
+    # - complete_but_not_a_decision_yet
+    #     Which candidates cannot be saved as they stand. Cheapest to hide:
+    #     the save message names them again before anything is written.
+    #
+    # - inferred_values_to_confirm
+    #     Values the skill filled by inference rather than from the thread.
+    #     Hidden, they read as facts the thread stated.
+    #
+    # - uncertain_decisions
+    #     Why a candidate did not close, with its source link. The card still
+    #     shows decision_status; what is lost is the reason.
+    #
+    # - actions_that_may_overlap
+    #     Two Actions that may name the same artifact. Nothing else reports
+    #     this — hidden, it is not surfaced anywhere.
+    #
+    # - not_identified_as_decisions
+    #     Every topic Gate 1 excluded, with its reason. This is the only place
+    #     a reviewer can catch a decision the skill invented or missed, so
+    #     hiding it removes the check on the judgment that matters most.
+    #
+    # - source_limitations
+    #     What could not be read. Nothing else carries it: hidden, a record
+    #     built from a partial read does not say so anywhere the reviewer
+    #     looks.

@@ -691,10 +691,58 @@ and `refs` is optional besides.
 
 One `▸ **Review Notes**` section after all Decision cards, when it has
 content. Each category renders as a bold top-level bullet with its entries
-nested underneath, in this fixed order, and — replacing any config file —
-the whole visibility rule is exactly this: **render a category when it has
-at least one entry; omit a category with none; omit the entire section when
-every category is empty.** Nothing else gates it.
+nested underneath, in this fixed order. Two things gate what renders, in
+this order: **a category renders when it has at least one entry**, and
+**a category the reviewer has hidden does not render at all**. Omit the
+entire section when nothing survives both.
+
+### What the reviewer can hide
+
+`references/presentation.yaml` carries a hide-list for these categories.
+It is a display preference and nothing else — **read it when rendering
+Review Notes, and nowhere else in the skill.**
+
+- **A hidden category is still computed, and still means what it meant.**
+  An uncertain Decision is still uncertain with its entry hidden;
+  `decision_status` still reads `pending` on the card; a candidate that
+  cannot be published is still blocked at publication gate 3. Hiding
+  changes one thing: whether the reviewer is shown that block of text.
+- **The save message is not configurable and never consults this file.**
+  Its `Before saving` block names every candidate that cannot be saved as
+  it stands, whatever Review Notes was told to hide. That is deliberate:
+  the one message that precedes an irreversible write states its own
+  blockers rather than inheriting a display preference set weeks earlier.
+- **Absent means shown.** The file lists only what to hide, so a category
+  added to the skill later renders without anyone editing it. A file that
+  named every category would be wrong the moment the seventh was added,
+  and wrong silently — which is how four other enumerations in these
+  files went stale.
+- **An unrecognized name is ignored and its category renders.** Fail toward
+  showing too much: a reviewer who sees a note they did not need has lost
+  a few lines; one who never sees a note they did need has approved a
+  record without it. Never treat a name you do not recognize as a reason to
+  hide something, and never guess which category a misspelling meant.
+- **Never say that something was hidden.** No placeholder, no count, no
+  "1 category not shown". The reviewer set this; reporting it back is
+  noise, and a marker where a category used to be defeats the point of
+  hiding it. The file is the record of what was hidden.
+- **An empty hide-list is the default and the normal state.** Hiding is for
+  a reviewer who has decided a category is noise for their use; it is not
+  a tidy-up to reach for when output looks long.
+
+### Every block names what feeds it
+
+Each category below, and each prompt elsewhere in this file, says which
+internal value it renders. `references/extraction.md` hands off a bundle of
+workflow bookkeeping under names the reviewer never sees, and a run holding
+one of those has to know where it lands — otherwise the value is computed,
+correct, and quietly rendered nowhere.
+
+Stated here at each destination rather than as one table of name-to-block
+pairs. A table would have to be maintained every time a block is added, and
+would be wrong until someone remembered; a block that names its own source
+cannot drift from itself. **When you add a block to this file, say what it
+renders.**
 
 ```text
 ▸ **Review Notes**
@@ -756,9 +804,22 @@ every category is empty.** Nothing else gates it.
   stated, with a required role left open because nobody was named, is both
   of those and belongs in neither: the value came from the source, and the
   open role is what `Uncertain Decisions` already reports.
+- **`Uncertain Decisions` renders `classification_reason`, rewritten, and
+  `classification_refs` as its link.** That sentence arrives naming the gate
+  that decided the candidate; the `Why uncertain` line is its plain-language
+  form, and `[View source]` points at the message the refs cite. One entry
+  per candidate whose `decision_classification` is `uncertain`.
 - Never expose a Gate id, an enum name, `evidence_type`, or chain-of-thought
   in a `Why uncertain` line — rewrite it as one plain, source-grounded
   sentence.
+- **`Not Identified as Decisions` renders `no_decision_topics`, one entry
+  per element.** Every topic Gate 1 excluded arrives in that list already
+  written as one source-grounded line with its reason
+  (`references/extraction.md`), so this category is where it is shown — the
+  only place it is shown. A run that produced Gate 1 failures and rendered
+  no category has dropped them silently, which is the one thing extraction
+  says must never happen to them. An empty category means Gate 1 excluded
+  nothing, which on a real thread is rare enough to check before believing.
 - **`Actions That May Overlap` names the pair and stops.** One entry per
   pair, both IDs, the artifact they share, and what each one's state is —
   then both options in one clause, neither recommended. `extraction.md` owns
@@ -768,6 +829,9 @@ every category is empty.** Nothing else gates it.
   It is the only category about Actions, and it carries no `(*)` marker, no
   field key, and no suggestion that anything is missing: an Action has no
   required field and this is not a gap.
+- **`Source Limitations` renders the `source_limitations` entries carried
+  from acquisition** (`references/sources.md`), one per entry, never
+  reworded into a summary.
 - **Source Limitations follows the bundle status, and only a `partial`
   bundle has any** (`references/sources.md` owns the three states — and
   `inaccessible` never reaches Review Notes, because it halts the run before
@@ -951,6 +1015,11 @@ added from a blank template, which is the common case for an unresolved
 Please provide all known values in one reply. Anything else you want to change? Reply "show all" at any time to see every card.
 ```
 
+- **This prompt renders `missing_required_fields`**, the list extraction
+  fills whenever it sets `completeness_status: incomplete`
+  (`references/extraction.md`). That status is also what decides between
+  this prompt and the finalize prompt — `review.md` §4 owns the choice, and
+  the two never appear in one response.
 - List every missing `(*)` field once, grouped in Decision order, ID plus
   exact field key plus one short plain-language question.
 - **The `decision_approver` question states plainly what is wanted.** It
@@ -1041,7 +1110,9 @@ Look right? Reply "Yes, finalize" to lock this version, or send any remaining ch
   adds nothing. Stated as the one that repeats rather than as a list of the
   ones that do not — a list would need maintaining every time a category is
   added, and would be wrong until someone remembered. The heading renders
-  with that category alone, preceded by the standard separator.
+  with that category alone, preceded by the standard separator — or not at
+  all, when the reviewer has hidden that category or no candidate is
+  uncertain, since a heading with nothing under it is not a render.
 - When no Decision remains at all, render the heading followed by the empty
   state, with the same blank line the spacing rule always requires between
   a heading and its list:
