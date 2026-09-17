@@ -30,8 +30,8 @@ template in this file, and every message another file requires needs a row.
 | Message | Sent when | Timing owned by | Template |
 |---|---|---|---|
 | Opening line | Every invocation, opening whatever message goes out first | `SKILL.md` | The opening line |
-| Single-thread offer | A request to sweep a channel, refused | `sources.md` | **none yet** |
-| Target question | Invoked with nothing to point at | `sources.md` | **none yet** |
+| Single-thread offer | A request to sweep a channel, refused | `sources.md` | The single-thread offer |
+| Target question | Invoked with nothing to point at | `sources.md` | The target question |
 | Truncation confirmation | The fetch came back at the limit, before anything is extracted — carries the opening line above it | `sources.md` | The truncation confirmation |
 | Source-selection prompt | After the fetch, only if the discovery pass found a source | `sources.md` | The source-selection prompt |
 | Read Me | Once, heading the first card set | `SKILL.md` stage 3 | The required-field legend |
@@ -47,20 +47,18 @@ template in this file, and every message another file requires needs a row.
 | Correction re-render | A gate-3 reply corrected a candidate rather than excluding it | `review.md` §8 gate 4 | The save message → After a correction at the gate |
 | Publication result | Once the write returns, success or failure | `review.md` §9 | The publication result |
 
-Four of these were added after a walk through the flow found the rule
-requiring them and no text to send: the opening line, the `Not applied` and
-question blocks, what is now the save message, and the publication result.
-Each had
-been specified somewhere as something the skill does, and each left the
-model to invent the words.
+**Every row now points at a template.** Seven of them were written only
+because building this table found the rule requiring a message and no text
+to send: the opening line, the `Not applied` and question blocks, what is
+now the save message, the publication result, the truncation confirmation,
+and the two this table carried as `none yet` for three versions — the
+single-thread offer and the target question. Each had been specified
+somewhere as something the skill does, and each left the model to invent
+the words.
 
-**Two rows say `none yet`.** Building this table is what found them —
-`sources.md` requires both and no text for either exists. Until one is
-written, that row is a warning rather than a pointer: the message still has
-to be sent, the rule for it lives in `sources.md`, and the words are yours.
-The third of the three found that way, the truncation confirmation, is
-written below, since it decides whether a run proceeds on a thread it
-already knows is incomplete.
+A row with no template is the gap this table exists to make visible. Mark it
+`none yet` rather than deleting the row: the message still has to go out,
+and a row that says so is a warning, where a missing row is silence.
 
 ## Every fence in this file is an exhibit, not output
 
@@ -155,9 +153,9 @@ this file with no per-template variation:
 
 Two templates in the pre-rewrite skill put their first bullet directly under
 a heading with no blank line — that inconsistency does not survive here.
-Every template below — Read Me, a Decision card, the change receipt, the
-missing-fields prompt, Review Notes, the finalize prompt, the publication
-preview — opens its list the same way: heading line, one blank line, then
+Every template below that opens a list does it the same way — Read Me, a
+Decision card, the change receipt, the missing-fields prompt, Review Notes,
+the finalize prompt, the save message: heading line, one blank line, then
 `-` at column 0. The cost of the blank line when the Gateway would have
 tolerated its absence is nothing; the cost of omitting it when the Gateway
 needed it is a broken card. Given the uncertainty, always include it.
@@ -274,7 +272,14 @@ it.
 
 **It is never sent on its own account.** The line opens whichever message
 the run sends first, and what that message is depends on what the fetch and
-the discovery pass turned up. It cannot be sent before them: every form
+the discovery pass turned up.
+
+**The one exception is a run with no thread to read.** The target question
+and the single-thread offer below both replace this line rather than
+carrying it: it says "I'll read this thread", and in those two cases either
+there is no thread or the user asked for something else entirely. Each
+carries its own opening instead, doing the same job in its own first line.
+Everywhere else, the forms below apply. It cannot be sent before them: every form
 below needs something only the fetch knows, and a bare "I'll read this
 thread" followed moments later by a second message is two notifications
 where the skill promised one (`SKILL.md`, *keep the thread quiet*).
@@ -302,6 +307,100 @@ any stage name from this skill. Never narrate the step you are about to take
 internally — "let me first check whether there are any external sources"
 tells the reader nothing the prompt underneath it does not already show.
 Never promise a time. Never add a third sentence.
+
+## The target question
+
+Sent when the skill is invoked with nothing to point at — an @-mention in a
+channel rather than inside a thread, and no thread link in the request
+(`references/sources.md`). It blocks: there is nothing to read until it is
+answered.
+
+**This message replaces the opening line rather than carrying it.** That
+line says "I'll read this thread", and in this one case there is no thread,
+so sending it would claim a target the skill does not have. Everything the
+opening line exists for — saying plainly what the bot does, to someone who
+may never have seen it — this message does itself, in its first line.
+
+```text
+I read one thread and work out what was decided — but I need to know which one.
+
+Two ways to point me at it:
+
+- Go to the thread and mention me there. Usually quickest.
+- Or paste a link to it here.
+```
+
+- **Give both ways, in that order.** Mentioning the bot inside the thread is
+  how it is normally used and needs no copying or pasting; a link is the
+  fallback for someone who is already here and does not want to navigate
+  away.
+- **Never guess a target.** Not the most recent thread in the channel, not
+  the one the mention sits nearest to, not a thread named only by
+  description. Reading the wrong conversation produces a record that is
+  wrong in a way nobody can see from the output, and the whole point of this
+  message is that the skill does not know.
+- Never list candidate threads to pick from. That means scanning channel
+  history, which the standing rule in `SKILL.md` forbids on the skill's own
+  initiative — and this message is the skill's own initiative.
+- Nothing else goes out until an answer arrives. No re-ask, no nudge.
+
+## The single-thread offer
+
+Sent when the request asks for a whole channel — "capture everything in
+here", "what did we decide this month" — which `references/sources.md`
+refuses. It is a refusal, so it carries what the skill *will* do in the same
+message, and it replaces the opening line for the same reason the target
+question does: answering a channel request with "I'll read this thread"
+would read as having ignored what was asked.
+
+**Which form goes out depends on whether there is a thread to offer.**
+
+**Inside a thread** — the request arrived as a reply, so a target already
+exists and the offer can name it:
+
+```text
+I work one thread at a time, so I can't go through the whole channel — but I can do this one.
+
+Decisions get settled inside a thread, and reading one whole is how I can tell what actually closed rather than what was only discussed.
+
+Reply "go ahead" and I'll read this thread and work out what was decided.
+```
+
+**In a channel** — no target exists, so the refusal is followed by the
+target question's own body rather than a new invention:
+
+```text
+I work one thread at a time, so I can't go through the whole channel.
+
+Decisions get settled inside a thread, and reading one whole is how I can tell what actually closed rather than what was only discussed.
+
+Two ways to point me at a thread:
+
+- Go to the thread and mention me there. Usually quickest.
+- Or paste a link to it here.
+```
+
+- **The offer travels with the refusal, never after an apology.** In the
+  in-thread form the first line carries both in one sentence; in the channel
+  form the refusal stands alone only because what it can offer instead
+  depends on an answer, and the way to give that answer is two lines below.
+  A message that spends its opening explaining a limitation reads as a
+  policy recitation to someone who just wanted an answer.
+- **The in-thread form spends the opening line.** Its closing sentence is
+  that line, so once the go-ahead arrives the run continues from the fetch
+  with no further introduction — the next message out is whatever the fetch
+  produces.
+- **One sentence of reason, and it is about the work, not the rules.** Why a
+  thread rather than a channel is a fact about how decisions get made — not
+  a permission the skill lacks, and not a boundary the user is being warned
+  about. Never cite the standing rule, name the scope limit, or imply the
+  request was improper: it is an ordinary thing to ask for.
+- **Never offer a partial sweep** — not the last N threads, not the ones
+  since a date, not "the busiest ones". Each is a channel scan with a
+  smaller number on it, and the rule it would be working around exists
+  whatever the number.
+- **Never ask twice.** If the reply is another channel request, the answer
+  is the same and has already been given; wait for a thread.
 
 ## The truncation confirmation
 

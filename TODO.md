@@ -47,20 +47,6 @@ What is needed:
   contradicted itself on D1's approver in three places before that was
   caught.
 
-## Two messages with no template
-
-`references/rendering.md` opens with a table of every user-facing message and
-who decides when it is sent. Building that table found three that
-`references/sources.md` requires and nobody had written. One is now written —
-the truncation confirmation. Two remain, both marked `none yet` in that
-table so the gap is visible where someone would go looking for the words:
-
-- **Single-thread offer.** A request to sweep a whole channel is refused,
-  with an offer to run the single-thread version instead. A refusal plus an
-  offer is exactly where wording matters.
-- **Target question.** Invoked with nothing to point at, the run asks which
-  thread to read.
-
 ## `sources.md` offers the user something they cannot do
 
 The truncation rule says to ask "whether to continue with the truncated read
