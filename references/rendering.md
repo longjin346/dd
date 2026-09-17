@@ -364,6 +364,7 @@ URL host — never opened to get a better one), and link each to its own URL:
 1. [Link — <what the unfurl already shows>](URL)
 2. Jira — <issue key and title, as unfurled>
 3. [Confluence — <page title, as unfurled>](URL)
+4. Link — <the displayed address, ellipsis and all, as plain text>
 
 Reply with the ones you want me to read:
 
@@ -379,15 +380,34 @@ I only open the sources you pick, and nothing linked inside them.
   they are agreeing to.
 - **A source with no URL you can actually see renders as a plain label, with
   no link.** `(URL)` above is a placeholder for a real one the fetch
-  supplied; when the unfurl carries a title but no resolvable address —
-  a Jira card rendered as an attachment, a file preview, a truncated paste —
-  write `2. Jira — <issue key and title>` and nothing more. Never
+  supplied; when the unfurl carries a title but no address at all —
+  a Jira card rendered as an attachment, a file preview —
+  write `2. Jira — <issue key and title>` and nothing more. (An address
+  that is visible but incomplete is the next bullet, and renders
+  differently: the string, not the title.) Never
   invent an address, never guess at one from the host or the title, and
   never park explanatory text in the link target (`[label](URL not visible)`
   renders as a broken link, which is worse than no link at all). The user is
   being asked which sources to open; a fabricated address sends them
   somewhere that does not exist, and a source they cannot identify from its
   label they simply will not pick.
+- **A link target comes from the fetch, never from the message text.** What
+  a message displays and what it links to are two different things: Slack
+  draws a long address with its middle collapsed —
+  `<host>/<section>/…/<final-segment>` — while carrying the real one
+  separately. Use what the fetch supplied and the ellipsis never reaches
+  your output. When it supplied none — a pasted or exported thread, an
+  attachment Slack never resolved — the displayed string is all there is,
+  and a string with a piece missing is a label, not an address. It renders
+  as entry 4 above: the string in full, no link.
+
+  Every visibly incomplete address is this same case — an elided path
+  segment, a missing scheme, a half-pasted URL. **Never put one in a link
+  target.** It looks real and fails at the click, which is worse than a
+  plain label, because the reader trusted it enough to try. **Never
+  complete one either**: not by guessing the missing segment, and not by
+  deleting the ellipsis, which yields a well-formed URL that points
+  somewhere else with nothing left to show that anything was lost.
 - A source linked from several messages is one numbered entry, not several.
 - An ordinary permalink to another message in the same thread is not an
   external source and never appears in this list.
@@ -560,6 +580,13 @@ Never touch the URL inside `(…)` — only the visible label text is ever
 sanitized. When `excerpt` is null, use the source title or key in its place,
 per the same rule. Never show bare `ref`/`excerpt`/`ref_type` sub-bullets or
 a naked URL.
+
+The link target itself follows the same rule as the source-selection prompt
+above: it comes from the fetch, never from the message text. Nothing in this
+list ever needs a bullet without one, because a visibly incomplete address
+never becomes a `ref` in the first place (`references/schema.md`) — the
+source still reaches the user, unlinked, in the source-selection prompt,
+and `refs` is optional besides.
 
 ## Review Notes
 

@@ -109,11 +109,6 @@ decision out planning to come back for it.
 
 ## Known gaps, roughly by cost of being wrong
 
-- **A truncated URL has no rule.** The rules cover "no address at all"
-  (render a plain label) but not "an address that is visibly incomplete" —
-  a link with an elided path segment, a missing scheme, a half-pasted URL.
-  The second case is worse: it looks real and fails on click. Seen in the
-  reference thread, where both source links carry an elided path.
 - **Nothing checks Actions against each other.** In the reference thread,
   `A1` (a Confluence page already created) and `A3` (a wiki page someone was
   asked to create) may be the same artifact or two competing ones, and the
