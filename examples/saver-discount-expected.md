@@ -149,10 +149,19 @@ could not have closed this candidate even had he said "approved".
   **`MEX` stays `MEX` wherever it appears** (`references/glossary.md`): it
   means merchant here, and a record that renders this as applying "in
   Mexico" reads perfectly, cites real messages, and is false.
-- `pst`: `FF Ecommerce` — **inferred, not established.** Basis:
+- `pst`: **`Pax Pricing`** — confirmed by the thread owner, and **not** what
+  the thread's own language suggests. A Saver discount is a discount on pax
+  pricing; that is what the decision acts on.
+
   `jomil.villareal 2026-08-25 15:21` ("Product is from under Fulfillment")
-  plus `albert.lim 2026-08-26 09:02` calling this "this eComm decision".
-  Flagged under `Inferred Values to Confirm`.
+  and `albert.lim 2026-08-26 09:02` ("this eComm decision") describe where
+  the conversation sits and which team raised it — not what is being
+  decided. Reading either as the PST is the specific error this value exists
+  to correct, and earlier versions of this file made it.
+
+  Still flagged under `Inferred Values to Confirm`: the thread never states
+  the PST, so any run reaching `Pax Pricing` reaches it by knowing what a
+  Saver discount is — domain knowledge the thread does not supply.
 - `rationale`: **two contributors, three strands.**
   - Brand visibility is strong but demand is constrained by pickup-point
     accessibility; many PAX are far from the pickup points, and delivery
