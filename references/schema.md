@@ -150,6 +150,12 @@ review or publication.
 When a Reference is included:
 
 - Use an exact message link and verbatim excerpt for Slack evidence.
+- **A `ref` address comes from the fetch, never from the message text**
+  (`references/rendering.md` owns the rule and the reasoning). A visibly
+  incomplete address — an elided path segment, a missing scheme, a
+  half-pasted URL — is not one: omit the `ref` rather than storing a
+  string that fails on click. Review can drop a broken link from the
+  conversation; a published record keeps it.
 - Use only sources directly linked from the thread and selected by the user
   during acquisition (`references/sources.md`).
 - Keep unread or inaccessible sources in the internal review
