@@ -710,6 +710,10 @@ every category is empty.** Nothing else gates it.
   - `D1` — Why uncertain: <one plain sentence saying what stopped this from
     closing> (`alias 3:20 PM`), <and, where it applies, that the review went
     to someone the thread never entitled>. [View source](slack-permalink)
+- **Actions That May Overlap**
+  - `A1` and `A4` — both name <the thing both of them produce>. `A1` is
+    recorded as done inside the thread; `A4` is still outstanding with
+    @alias. Drop one if they are the same piece of work; leave both if not.
 - **Not Identified as Decisions**
   - <the topic, named briefly> — <why it is not a decision object>.
     [View source](slack-permalink)
@@ -755,6 +759,15 @@ every category is empty.** Nothing else gates it.
 - Never expose a Gate id, an enum name, `evidence_type`, or chain-of-thought
   in a `Why uncertain` line — rewrite it as one plain, source-grounded
   sentence.
+- **`Actions That May Overlap` names the pair and stops.** One entry per
+  pair, both IDs, the artifact they share, and what each one's state is —
+  then both options in one clause, neither recommended. `extraction.md` owns
+  when a pair qualifies; it is narrow, so this category is usually empty and
+  omitted. The entry never says the two *are* the same work, because the
+  thread did not say so either — that is exactly why it is being asked.
+  It is the only category about Actions, and it carries no `(*)` marker, no
+  field key, and no suggestion that anything is missing: an Action has no
+  required field and this is not a gap.
 - **Source Limitations follows the bundle status, and only a `partial`
   bundle has any** (`references/sources.md` owns the three states — and
   `inaccessible` never reaches Review Notes, because it halts the run before
@@ -1022,12 +1035,13 @@ own:
 Look right? Reply "Yes, finalize" to lock this version, or send any remaining changes.
 ```
 
-- A re-render never repeats `Inferred Values to Confirm`, `Complete, but not
-  a decision yet`, `Not Identified as Decisions`, or `Source Limitations` —
-  those have not changed since the first card set showed them. It carries the
-  `▸ **Review Notes**` heading with the `Uncertain Decisions` category alone,
-  preceded by the standard separator, and nothing else from Review Notes
-  accompanies it.
+- **A re-render carries exactly one Review Notes category: `Uncertain
+  Decisions`.** Every other category reports something settled at extraction
+  that has not changed since the first card set showed it, so repeating it
+  adds nothing. Stated as the one that repeats rather than as a list of the
+  ones that do not — a list would need maintaining every time a category is
+  added, and would be wrong until someone remembered. The heading renders
+  with that category alone, preceded by the standard separator.
 - When no Decision remains at all, render the heading followed by the empty
   state, with the same blank line the spacing rule always requires between
   a heading and its list:

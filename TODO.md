@@ -95,10 +95,6 @@ decision out planning to come back for it.
 
 ## Known gaps, roughly by cost of being wrong
 
-- **Nothing checks Actions against each other.** In the reference thread,
-  `A1` (a Confluence page already created) and `A3` (a wiki page someone was
-  asked to create) may be the same artifact or two competing ones, and the
-  skill has no way to notice.
 - **A published record carries no provenance for its own edits.** A
   reviewer-corrected `decision_approver` inherits the credibility of `refs`
   that support the extracted value, not the typed one. Considered and
