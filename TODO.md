@@ -93,6 +93,37 @@ acquisition, which is a different repository's problem.
 Until either exists, the honest advice to a reviewer is: do not leave a
 decision out planning to come back for it.
 
+## From the first run on a corrected fixture
+
+Three findings, kept apart because they need different things.
+
+**`presentation.yaml` is never opened.** The 3.6.0 display switch shipped and
+no run has touched the file. The run that was asked to list every file it
+opened named seven, and that was not among them. Nothing in the flow makes a
+run look for it: `rendering.md` says to read it when rendering Review Notes,
+and that instruction sits inside the section a run reaches after it has
+already decided what to render. Until this is settled the switch is
+decorative — a reviewer who sets it will see no effect and have no way to
+tell.
+
+**Permalinks are built wrong.** A run rendered
+`.../archives/C04KSAY0K/p1787642328.064969`. The real form has no dot —
+`p1787642328064969` — and the export's own header shows it. The run took the
+`ts` field and prefixed `p` rather than using the address it was given. Same
+family as the URL problems: an address that looks right and fails on click.
+Nothing tells a run how a permalink is constructed, and it should not be
+constructing one at all when the source supplies it.
+
+**D2's classification is not stable.** Two runs on the old fixture and the
+first on the export all closed D2 as `approved` on `albert.lim`'s "ya that
+helps". The run on the corrected fixture called it `pending`, missed that
+closure signal entirely, put `decision_proposer` on rung 3, and named the
+person who raised the need as the awaited approver — which Rule 3.3 exists
+to prevent. **It got worse as the input got cleaner**, which no theory here
+explains. This needs repeated runs under identical conditions before any
+rule is touched: if it fails repeatedly the rules are wrong, and if it
+alternates the judgment was never stable and the earlier passes were luck.
+
 ## Known gaps, roughly by cost of being wrong
 
 - **A published record carries no provenance for its own edits.** A
