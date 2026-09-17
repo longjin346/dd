@@ -114,11 +114,6 @@ decision out planning to come back for it.
   a link with an elided path segment, a missing scheme, a half-pasted URL.
   The second case is worse: it looks real and fails on click. Seen in the
   reference thread, where both source links carry an elided path.
-- **`Source Limitations` rendered when the user declined every source.**
-  A run produced an entry after the user answered "just the thread", which
-  the rules treat as `none` — and `none` is a `complete` bundle with nothing
-  missing that anyone wanted. Possibly introduced by the "choice never
-  settled" rule added for the no-answer path; worth diffing that change.
 - **Nothing checks Actions against each other.** In the reference thread,
   `A1` (a Confluence page already created) and `A3` (a wiki page someone was
   asked to create) may be the same artifact or two competing ones, and the
@@ -154,6 +149,15 @@ decision out planning to come back for it.
 
 ## Things learned worth not relearning
 
+- **Two correct rules in two files do not meet on their own.** Five runs
+  got the same reply declining every source; all of them set the bundle
+  `complete`, correctly and for the right reason; two then rendered a
+  `Source Limitations` entry anyway. Neither file was wrong — `sources.md`
+  said `none` is `complete`, `rendering.md` said what an entry looks like —
+  and nothing said the second depends on the first. A run holding both
+  facts has no rule that makes it use them together, and the result is a
+  coin flip. When a defect reproduces about half the time, look for the
+  missing link between two files rather than for a wrong rule in one.
 - **An exhibit beats prose, and beats a prompt-level instruction.** Three
   runs fabricated a URL for a source that had none, twice after the rule
   forbidding it was written and once after being told not to in the prompt
