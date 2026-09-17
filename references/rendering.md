@@ -691,10 +691,44 @@ and `refs` is optional besides.
 
 One `▸ **Review Notes**` section after all Decision cards, when it has
 content. Each category renders as a bold top-level bullet with its entries
-nested underneath, in this fixed order, and — replacing any config file —
-the whole visibility rule is exactly this: **render a category when it has
-at least one entry; omit a category with none; omit the entire section when
-every category is empty.** Nothing else gates it.
+nested underneath, in this fixed order. Two things gate what renders, in
+this order: **a category renders when it has at least one entry**, and
+**a category the reviewer has hidden does not render at all**. Omit the
+entire section when nothing survives both.
+
+### What the reviewer can hide
+
+`references/presentation.yaml` carries a hide-list for these categories.
+It is a display preference and nothing else — **read it when rendering
+Review Notes, and nowhere else in the skill.**
+
+- **A hidden category is still computed, and still means what it meant.**
+  An uncertain Decision is still uncertain with its entry hidden;
+  `decision_status` still reads `pending` on the card; a candidate that
+  cannot be published is still blocked at publication gate 3. Hiding
+  changes one thing: whether the reviewer is shown that block of text.
+- **The save message is not configurable and never consults this file.**
+  Its `Before saving` block names every candidate that cannot be saved as
+  it stands, whatever Review Notes was told to hide. That is deliberate:
+  the one message that precedes an irreversible write states its own
+  blockers rather than inheriting a display preference set weeks earlier.
+- **Absent means shown.** The file lists only what to hide, so a category
+  added to the skill later renders without anyone editing it. A file that
+  named every category would be wrong the moment the seventh was added,
+  and wrong silently — which is how four other enumerations in these
+  files went stale.
+- **An unrecognized name is ignored and its category renders.** Fail toward
+  showing too much: a reviewer who sees a note they did not need has lost
+  a few lines; one who never sees a note they did need has approved a
+  record without it. Never treat a name you do not recognize as a reason to
+  hide something, and never guess which category a misspelling meant.
+- **Never say that something was hidden.** No placeholder, no count, no
+  "1 category not shown". The reviewer set this; reporting it back is
+  noise, and a marker where a category used to be defeats the point of
+  hiding it. The file is the record of what was hidden.
+- **An empty hide-list is the default and the normal state.** Hiding is for
+  a reviewer who has decided a category is noise for their use; it is not
+  a tidy-up to reach for when output looks long.
 
 ```text
 ▸ **Review Notes**
@@ -1041,7 +1075,9 @@ Look right? Reply "Yes, finalize" to lock this version, or send any remaining ch
   adds nothing. Stated as the one that repeats rather than as a list of the
   ones that do not — a list would need maintaining every time a category is
   added, and would be wrong until someone remembered. The heading renders
-  with that category alone, preceded by the standard separator.
+  with that category alone, preceded by the standard separator — or not at
+  all, when the reviewer has hidden that category or no candidate is
+  uncertain, since a heading with nothing under it is not a render.
 - When no Decision remains at all, render the heading followed by the empty
   state, with the same blank line the spacing rule always requires between
   a heading and its list:
