@@ -1,7 +1,7 @@
 ---
 name: slack-decisions
 description: Capture the decisions in a Slack thread — each with its own attached action items — into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
-version: 3.3.0
+version: 3.4.0
 metadata:
   hermes:
     tags: [slack, decisions, knowledge-management, gitlab]
@@ -34,8 +34,10 @@ confirms an exact preview of what is about to be written.
    → `references/extraction.md`
 3. **Present** — render a Read Me, one card per Decision (its Actions nested
    inside), and one Review Notes section, then stop and wait. Exactly two
-   things pause for the user before this point, both in Acquire: the
-   truncation confirmation and the source-selection choice. Nothing else
+   things pause for the user before this point, both in Acquire and both
+   once there is a thread in hand: the truncation confirmation and the
+   source-selection choice. (Asking which thread to read at all comes
+   before any of this and is not one of them.) Nothing else
    does — every judgment call in between is drafted with the skill's own
    rules and surfaced here for the reviewer to confirm or correct in one
    pass, rather than asked about beforehand.
