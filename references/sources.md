@@ -165,8 +165,8 @@ means, and it is bounded so the bot can never nag.
 
 ## Permalinks travel with the material
 
-No message or source gets a hand-numbered id — that scheme is gone and
-isn't coming back under another name. What each message and each piece of
+No message or source gets a hand-numbered id, under that name or any other.
+What each message and each piece of
 selected external content keeps, as it's carried forward, is its own
 natural address: the Slack permalink for a message, the document/issue URL
 for external content. That's what lets a message become citable evidence

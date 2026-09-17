@@ -30,7 +30,7 @@ Action pointing at a Decision that does not exist is not a case to handle.
   "candidate_id": "D1",
   "pst": "DCA",
   "decision_title": "short and specific",
-  "decision_details": "one-to-three sentences describing the outcome",
+  "decision_details": "what was decided and its final scope; see extraction.md for what it must carry",
   "rationale": "why, based on the available sources, or null",
   "decision_proposer": "@username (Slack profile alias, e.g. @long.jin), the party whose need the decision serves rather than whoever typed the proposal; carries an inline voicer marker (e.g. \"@name (raised the need; proposed by @other)\") when those are two different people, or null",
   "decision_approver": "@username (Slack profile alias, e.g. @long.jin), a non-person forum's plain name, or either of those with an inline awaited marker (e.g. \"@name (awaiting approval)\") when the thread establishes who is supposed to approve but nobody has yet",
@@ -150,7 +150,8 @@ review or publication.
 When a Reference is included:
 
 - Use an exact message link and verbatim excerpt for Slack evidence.
-- Use only sources directly linked from the thread and selected in Step 0.
+- Use only sources directly linked from the thread and selected by the user
+  during acquisition (`references/sources.md`).
 - Keep unread or inaccessible sources in the internal review
   `source_limitations`, not `refs`. Report them outside the final JSON; this
   schema does not publish that review-time array.
