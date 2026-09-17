@@ -691,10 +691,19 @@ Alongside the candidates sit the Actions attached to each, plus
 Two of the workflow fields are not purely internal: `decision_status` is
 shown on the card as a reviewable field, and `evidence_type` travels into
 the published record with it. Everything else in that list is dropped at
-publication — `references/review.md` §9 owns that step. Never expose a
-workflow field name, a gate id, or `classification_reason` in its raw form
-to the user; Review Notes shows a rewritten, plain-language version
-(`references/rendering.md`).
+publication — `references/review.md` §9 owns that step.
+
+**Dropped at publication is not the same as never shown.** Several of these
+reach the reviewer during review, rewritten: `classification_reason` and
+`classification_refs` become a `Uncertain Decisions` entry,
+`missing_required_fields` becomes the missing-fields prompt,
+`no_decision_topics` becomes `Not Identified as Decisions`, and
+`source_limitations` becomes `Source Limitations`. Each of those blocks
+names what it renders, at the block, in `references/rendering.md` — look
+there for the shape, and do not treat a value as internal just because its
+name never reaches the user. **Never expose a workflow field name, a gate
+id, or `classification_reason` in its raw form**; what the reviewer sees is
+always the plain-language rewrite.
 
 Assign `candidate_id` (`D1`, `D2`, …) and Action labels (`A1`, `A2`, …) in
 thread chronology. Once issued, an identifier is never reused, including

@@ -730,6 +730,20 @@ Review Notes, and nowhere else in the skill.**
   a reviewer who has decided a category is noise for their use; it is not
   a tidy-up to reach for when output looks long.
 
+### Every block names what feeds it
+
+Each category below, and each prompt elsewhere in this file, says which
+internal value it renders. `references/extraction.md` hands off a bundle of
+workflow bookkeeping under names the reviewer never sees, and a run holding
+one of those has to know where it lands — otherwise the value is computed,
+correct, and quietly rendered nowhere.
+
+Stated here at each destination rather than as one table of name-to-block
+pairs. A table would have to be maintained every time a block is added, and
+would be wrong until someone remembered; a block that names its own source
+cannot drift from itself. **When you add a block to this file, say what it
+renders.**
+
 ```text
 ▸ **Review Notes**
 
@@ -790,9 +804,22 @@ Review Notes, and nowhere else in the skill.**
   stated, with a required role left open because nobody was named, is both
   of those and belongs in neither: the value came from the source, and the
   open role is what `Uncertain Decisions` already reports.
+- **`Uncertain Decisions` renders `classification_reason`, rewritten, and
+  `classification_refs` as its link.** That sentence arrives naming the gate
+  that decided the candidate; the `Why uncertain` line is its plain-language
+  form, and `[View source]` points at the message the refs cite. One entry
+  per candidate whose `decision_classification` is `uncertain`.
 - Never expose a Gate id, an enum name, `evidence_type`, or chain-of-thought
   in a `Why uncertain` line — rewrite it as one plain, source-grounded
   sentence.
+- **`Not Identified as Decisions` renders `no_decision_topics`, one entry
+  per element.** Every topic Gate 1 excluded arrives in that list already
+  written as one source-grounded line with its reason
+  (`references/extraction.md`), so this category is where it is shown — the
+  only place it is shown. A run that produced Gate 1 failures and rendered
+  no category has dropped them silently, which is the one thing extraction
+  says must never happen to them. An empty category means Gate 1 excluded
+  nothing, which on a real thread is rare enough to check before believing.
 - **`Actions That May Overlap` names the pair and stops.** One entry per
   pair, both IDs, the artifact they share, and what each one's state is —
   then both options in one clause, neither recommended. `extraction.md` owns
@@ -802,6 +829,9 @@ Review Notes, and nowhere else in the skill.**
   It is the only category about Actions, and it carries no `(*)` marker, no
   field key, and no suggestion that anything is missing: an Action has no
   required field and this is not a gap.
+- **`Source Limitations` renders the `source_limitations` entries carried
+  from acquisition** (`references/sources.md`), one per entry, never
+  reworded into a summary.
 - **Source Limitations follows the bundle status, and only a `partial`
   bundle has any** (`references/sources.md` owns the three states — and
   `inaccessible` never reaches Review Notes, because it halts the run before
@@ -985,6 +1015,11 @@ added from a blank template, which is the common case for an unresolved
 Please provide all known values in one reply. Anything else you want to change? Reply "show all" at any time to see every card.
 ```
 
+- **This prompt renders `missing_required_fields`**, the list extraction
+  fills whenever it sets `completeness_status: incomplete`
+  (`references/extraction.md`). That status is also what decides between
+  this prompt and the finalize prompt — `review.md` §4 owns the choice, and
+  the two never appear in one response.
 - List every missing `(*)` field once, grouped in Decision order, ID plus
   exact field key plus one short plain-language question.
 - **The `decision_approver` question states plainly what is wanted.** It
