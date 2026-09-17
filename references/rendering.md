@@ -629,13 +629,28 @@ every category is empty.** Nothing else gates it.
 - Never expose a Gate id, an enum name, `evidence_type`, or chain-of-thought
   in a `Why uncertain` line — rewrite it as one plain, source-grounded
   sentence.
-- Source Limitations, when present, is always last, one entry per unread or
-  inaccessible selected source, stated once — never repeated per Candidate.
-  A run where the source-selection choice was never settled
-  (`references/sources.md`) contributes **one** entry covering all of them
-  together, not one per link: the sources went unread because the question
-  went unanswered, which is a single fact about the run. State it flatly —
-  it is never a complaint that nobody replied.
+- **Source Limitations follows the bundle status, and only a `partial`
+  bundle has any** (`references/sources.md` owns the three states — and
+  `inaccessible` never reaches Review Notes, because it halts the run before
+  extraction starts). On a `complete` bundle this category has no entries
+  and is omitted. Check the status before writing an entry: every fact this
+  category can state is already one of the reasons the bundle is `partial`,
+  so an entry on a `complete` bundle is reporting something that did not
+  happen.
+- **A source the user declined is never an entry.** Answering `none` — and
+  "just the thread", "don't bother" and "go ahead" all mean `none` — makes
+  the bundle `complete`: they saw what was on offer and chose not to open
+  it. Links left unopened on request are the instruction being followed,
+  not a limitation on the record. Saying otherwise reads as the bot
+  registering an objection to a decision the user was invited to make.
+- When there are entries, Source Limitations is always last, one per unread
+  or inaccessible **selected** source, stated once — never repeated per
+  Candidate. A run where the source-selection choice was never settled
+  (`partial`, because nobody chose — not `none`, where somebody did)
+  contributes **one** entry covering all of them together, not one per
+  link: the sources went unread because the question went unanswered, which
+  is a single fact about the run. State it flatly — it is never a complaint
+  that nobody replied.
 
 ## The change receipt
 
