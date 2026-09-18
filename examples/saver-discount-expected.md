@@ -1,510 +1,478 @@
-# Expected extraction — saver-discount thread (regression baseline)
+# Expected output — `examples/saver-discount-thread.md`
 
-This file is a **baseline to diff against, not documentation of how the
-skill works.** It records what `references/extraction.md`'s judgment layer
-is expected to produce when it reads `examples/saver-discount-thread.txt` —
-every Decision Candidate's classification, its five-gate trace with the
-deciding message, every populated field (including ones deliberately left
-unresolved), every Action, and every topic routed to `no_decision_topics`.
+What a correct run produces from that thread. Derived from the export, gate
+by gate, not carried over from any earlier version of this file.
 
-**How to use it:** when the gate model or a field rule in `extraction.md`
-changes, re-run this thread through the changed rules and diff the new
-output against this file.
+**This is the regression fixture, not a blind test.** The same thread is
+worked through in `references/extraction.md`, so a run that loads the rules
+has already been shown these answers. Use this to diff after a rule change.
+Measuring whether the rules can be applied at all takes a thread whose
+answers appear nowhere in `references/`.
 
-**What it is not:** a blind test. This thread is worked through in
-`references/extraction.md`, so any run that loads the rules has already been
-shown its answers — a clean-looking result proves the run can follow a
-worked example, not that it can read a thread. Keep this file for
-regression, and test judgment on a thread whose answers live nowhere in
-`references/`. If a value moved, one of two things is true: the
-rule change was wrong, or this baseline needs a deliberate, reviewed update.
-Either way the diff makes the change visible instead of letting it surface
-later as a bad record in the Decision Bank. This file is not the place to
-learn *why* a gate works a certain way — that's `extraction.md` — or what a
-rendered card looks like — that's `rendering.md`, which already renders D1
-and D2 from this same thread as worked examples.
+## Status: baseline, not a gold set
 
-Citations use `references/extraction.md`'s format: `author + displayed
-time`, with a same-minute fragment when one author has two messages in the
-same displayed minute. See "On dates," directly below, for why no citation
-here carries a calendar date. That format is for internal reasoning and gate
-traces — a Decision record field that would actually appear on a rendered
-card (`decision_details`, `rationale`, `conditions`) cites a person by alias
-only, with no timestamp, per the same file's card-field citation rule; those
-fields are marked below where it applies.
+Every judgment below is derived from the rules in `references/`, by one
+reader, and **no one who was in the thread has confirmed any of it.** That
+matters more than it sounds: a baseline derived from the rules cannot detect
+a wrong rule, because it will be wrong in the same direction and the diff
+comes back clean. It checks consistency, not correctness.
 
-## On dates — read before trusting any timestamp below
+The **facts** are solid — who said what and when, the addresses, the
+handles, the reactions all come from the export. The **readings** are not.
 
-`saver-discount-thread.txt` carries **clock times only, no calendar dates,
-anywhere in the export.** The thread also crosses midnight: it runs evening
-messages (3:18 PM–6:18 PM, ascending) into morning messages (8:50 AM–9:06
-AM, ascending) with no time-of-day overlap, which is only possible if the
-second block is the next calendar day; a final message (11:23 PM) then falls
-later the same day as that morning block, since 11:23 PM > 9:06 AM.
+### Seven readings awaiting the thread owner
 
-So this baseline labels the two spans **Day 1** (3:18 PM–6:18 PM) and **Day
-2** (8:50 AM–11:23 PM) — relative labels inferred from time-of-day ordering,
-not calendar dates.
+**Six of seven are now answered by the thread owner**, and the answers are
+folded into the file below. What remains open is marked. Two of the six
+reversed what this file previously asserted — those are the valuable ones,
+because a baseline derived from the rules could never have produced them.
 
-An earlier draft of `extraction.md` cited a specific ISO date for the final
-message in its own worked examples. No such date exists anywhere in this
-export; it was a placeholder that read as an established fact. Writing this
-baseline is what surfaced it, and `extraction.md` now uses these same
-relative labels and states the rule directly: when a source carries clock
-times but no dates, never synthesize one. If a future export of this thread
-carries real dates, or someone confirms them out of band, update this
-baseline deliberately rather than by inference.
+1. ~~**Did "ya that helps" approve the commitment to document?**~~
+   **Answered: yes.** D2 is `approved`, `@albert.lim` is the approver. The
+   run that read it as `pending` was wrong.
+2. ~~**Whose decision is D2?**~~ **Answered: `@arpit.goel`** — he raised
+   it, and the field carries that one name. The voicer marker the owner
+   dropped is not coming back: it decides Gate 3 during classification and
+   is not a stored value.
+3. ~~**Is D2 "record these configs" or "make a wiki page"?**~~
+   **Answered: record the configs.** The title says document, and the page
+   is named as the agreed platform inside the details.
+4. ~~**Is `@arpit.goel` the "respective eng PIC"?**~~ **Answered: yes — he
+   is the pricing eng PIC.** So the awaited party is one person, not two:
+   Randy is on leave and Arpit covers that role, which makes `cui.ju 15:22`
+   the answer to both questions on the table. This file previously read the
+   two as separate and left the role unnamed. Gate 5 no longer finds an
+   unendorsed redirection.
+5. **Still open — is "the list will continue to be reviewed and maintained"
+   (`@moch.zulfa 17:11`) a condition on execution?** Taken as yes, so it
+   sits in D1's `conditions`. *If it is just background:* `conditions` is
+   empty for D1.
+6. ~~**Does `@arpit.goel`'s governance concern belong to D1 or D2?**~~
+   **Answered: D2.** It is the first strand of D2's rationale. A run that
+   folds it into D1's is recording an argument against something as an
+   argument for it.
+7. ~~**The wiki page `@arpit.goel` already made — D1 or D2?**~~
+   **Answered: neither — it is not a separate Action.** It is the same piece
+   of work as the page requested at `08:59`, so D1 carries only the
+   merchant-list change. The `Actions That May Overlap` check raised exactly
+   this pair; the question was right and this file's answer was wrong.
 
-Same-minute disambiguation needed once: `jomil.villareal` posts twice at
-3:21 PM (Day 1) — `jomil.villareal 3:21 PM ("if randy.tedjakusuma is on
-leave...")` and `jomil.villareal 3:21 PM ("Product is from under
-Fulfillment")`.
+Until these are answered, treat a clean diff against this file as evidence
+that behaviour has not **changed**, never that it is **right**.
 
-## Decision Candidates
+## About the source
 
-### D1 — Saver-fare discount for Kalbe & Wardah (tactical)
+`saver-discount-thread.md` is an export prepared by hand from the real
+thread: full URLs, real timestamps with calendar dates, message `ts` values,
+and reactions. **It is authoritative about the thread's content and not a
+specimen of what a fetch returns** — its markdown layout is the exporter's
+choice, so nothing here should be read as describing the shape the Slack
+tooling hands the skill. What that shape is remains unverified.
 
-**Classification:** `uncertain`
-**Status:** `pending`
-**Evidence type:** `none`
+It replaced a browser copy-paste that disagreed with it on four points of
+content, each of which this file previously encoded as correct:
 
-**Gate 1 — Object exists:** PASS. `jomil.villareal 3:18 PM (Day 1)` —
-"may we proceed with this approval request from rahadiyan.wisesa" —
-justification: "applying saver discount for selected MEX (Kalbe & Wardah)
-for tactical purpose." An approval request, explicitly relayed. Attribution
-rule applies: the object belongs to `rahadiyan.wisesa`, the named source,
-not to `jomil.villareal`, who is only transmitting it.
+| | The paste said | The export says |
+|---|---|---|
+| ExP link | `experiments.grab.com/t/variables/…/455492?env=prd` | the full URL, no ellipsis |
+| Jira link | unfurl title only, no address | `https://grabtaxi.atlassian.net/browse/TECHOPS-117402` |
+| Addressed to | `@oncall-lead` | **`@pricing-team`** |
+| Reactions | none | three |
 
-**Gate 2 — Final state:** PASS (no revision). The object's scope — a Saver
-discount for Kalbe & Wardah — is never narrowed or widened anywhere in the
-thread. The extended merchant-list-governance discussion (`arpit.goel
-5:06 PM`–`6:18 PM (Day 1)`, `moch.zulfa 5:11 PM (Day 1)`) is related context
-that produces conditions and an Action, not a scope change to this object.
+**Citations carry the date**, since the thread spans two days and the source
+states them: `cui.ju 2026-08-25 15:20`. The relative `Day 1` / `Day 2`
+labelling in `references/extraction.md` applies only to a source that gives
+clock times without dates, which this one does not.
 
-**Gate 3 — Closure signal:** FAIL. `cui.ju 3:20 PM (Day 1)` responds with a
-condition, not a disposition. `arpit.goel` probes repeatedly (`3:23 PM`,
-`5:06 PM`, `5:29 PM`, `6:18 PM`, all Day 1) but never says approved,
-rejected, or equivalent. The thread closes with `arpit.goel 11:23 PM
-(Day 2)` — "I have documented the thread here" — which is a wrap-up, not a
-disposition. No closure signal exists anywhere in the available source.
+---
 
-**Gate 4 — Unmet condition:** UNMET, blocking. `cui.ju 3:20 PM (Day 1)` —
-"please inform the respective eng PIC and get approval from them first." No
-eng PIC signs off, or appears at all, anywhere in the available source.
+# D1 — Saver discount for Kalbe & Wardah
 
-**Gate 5 — Scope/authority fit:** Evaluated hypothetically only, since Gate
-3 already fails outright. `cui.ju 3:22 PM (Day 1)` — "arpit.goel could you
-help to check?" — redirects review to `arpit.goel`. The approval was
-addressed to `randy.tedjakusuma` / `@oncall-lead` at `3:18 PM`; nothing in
-the thread establishes `cui.ju` as that party, and `randy.tedjakusuma` never
-reappears to endorse the redirect. Under Rule 5.2 this redirection does not
-transfer closing authority to `arpit.goel` — moot in practice since Gate 3
-already found no disposition from him, but it is why his extensive
-engagement could never have closed this candidate even had he said
-"approved."
+## Gates
 
-**Fields:**
+**Gate 1 — Object exists:** PASS. `jomil.villareal 2026-08-25 15:18` asks
+"may we proceed with this approval request from @rahadiyan.wisesa" — an
+approval request, explicitly relayed. The object belongs to the named
+source, not the relayer: rung 1 of `decision_proposer`, which settles it
+before rung 2 is reached. The proposing side has one member.
+
+**Gate 2 — Final state:** PASS. The scope — a Saver discount for the named
+merchant group — is never narrowed or widened. The surrounding discussion
+about merchant-list governance is related context that produces Actions and
+feeds `conditions`; it is not a scope change to this object.
+
+**Gate 3 — Closure signal:** FAIL. No disposition from any entitled party.
+
+- `cui.ju 2026-08-25 15:20` sets a condition, not a disposition.
+- `cui.ju 2026-08-25 16:01` asks "is the above clarification ok to
+  approve?" — asking for one, not giving one.
+- `arpit.goel` probes at `15:23`, `17:06`, `17:29`, `18:18` and never says
+  approved, rejected or equivalent.
+- `arpit.goel 2026-08-26 23:23` closes with "I have documented the thread
+  here" — a wrap-up, not a disposition.
+
+**The three reactions are not closure signals**, and a run should say why
+rather than ignoring them. Rule 3.1(b) admits a reaction only where its
+meaning as approval or rejection is unambiguous in context. None of these
+sits on the proposal or on any disposition of it:
+
+| Reaction | On | Reads as |
+|---|---|---|
+| `+1` ×2 | `arpit.goel 2026-08-25 18:18`, the governance concern | agreement with a concern |
+| `ack` ×1 | `albert.lim 2026-08-26 09:02`, FR-lever commentary | receipt of a point |
+| `+1` ×2 | `sengkeong.ho 2026-08-26 09:06`, the stopgap explanation | agreement with an explanation |
+
+`evidence_type: none`.
+
+**Gate 4 — Unmet condition:** UNMET, blocking. `cui.ju 2026-08-25 15:20` —
+"please inform the respective eng PIC and get approval from them first" —
+sets an in-thread gate. The PIC is `@arpit.goel`, and he never signs off
+anywhere in the source: he asks questions and the thread ends. The gate is
+unmet because the approval never came, not because nobody could be found to
+give it.
+
+**Gate 5 — Scope/authority fit:** PASS, and moot in practice since Gate 3
+found no signal. `cui.ju 2026-08-25 15:22` — "@arpit.goel could you help to
+check?" — is **routing to the eng PIC the gate at 15:20 called for**, not a
+third party redirecting review on its own initiative. `@arpit.goel` is that
+PIC (confirmed by the thread owner), so nothing needs transferring and Rule
+5.2 does not bite. Had he said "approved", it would have closed this
+candidate.
+
+**Result:** `uncertain` · `pending` · `none`.
+
+## Card
+
 - `decision_title`: Saver-fare discount for Kalbe & Wardah (tactical)
-- `decision_details`: Apply a Saver-fare discount to a selected merchant
-  group — Kalbe and Wardah — as a tactical measure, configured on the ExP
-  variable behind Mart's Saver option rather than as a change to standard
-  fares. In effect it gives these two merchants free delivery, aimed
-  specifically at the pickup-point catchment problem rather than at their
-  pricing generally. States substance and final scope only — nothing about
-  approval state, per `extraction.md`'s rule that this must stay true even
-  if `decision_status` later changes.
-- `pst`: `FF Ecommerce` — **inferred, not established.** Basis:
-  `jomil.villareal 3:21 PM (Day 1)` ("Product is from under Fulfillment")
-  plus `albert.lim 9:02 AM (Day 2)` calling the surrounding thread "this
-  eComm decision." Neither statement names a PST directly; this is the
-  best-supported active value from `references/psts.json`, flagged for the
-  reviewer to confirm or change, per the rule to never stop and ask before
-  drafting.
-- `decision_proposer`: `@rahadiyan.wisesa`
-- `rationale`: Many PAX sit far from Kalbe & Wardah pickup points, and the
-  delivery cost that creates is what caps demand; free delivery removes the
-  barrier and unlocks volume beyond the existing catchment
-  (`@rahadiyan.wisesa`). Commercially, these merchants carry Grab's
-  e-commerce partnerships with FMCG principals, and a competitive Saver fare
-  is one of the requirements for those partnerships to drive enough sales
-  volume to stay sustainable (`@moch.zulfa`). **Both strands are required**
-  — the thread justifies this decision from two directions, and keeping only
-  the proposer's operational argument would discard the commercial case
-  entirely. Cited by alias only, no timestamp, per `extraction.md`'s
-  card-field citation rule — the full `author + time` form for this same
-  evidence is above, in the Gate 3
-  trace.
+- `decision_details`: a Saver discount applied to a named merchant group
+  (Kalbe & Wardah) as a tactical measure, with the group maintained by the
+  ID business team. Must preserve the merchant names, the tactical framing,
+  and the fact that the group is a maintained list rather than a fixed set.
+  **`MEX` stays `MEX` wherever it appears** (`references/glossary.md`): it
+  means merchant here, and a record that renders this as applying "in
+  Mexico" reads perfectly, cites real messages, and is false.
+- `pst`: **`Pax Pricing`** — confirmed by the thread owner, and **not** what
+  the thread's own language suggests. A Saver discount is a discount on pax
+  pricing; that is what the decision acts on.
+
+  `jomil.villareal 2026-08-25 15:21` ("Product is from under Fulfillment")
+  and `albert.lim 2026-08-26 09:02` ("this eComm decision") describe where
+  the conversation sits and which team raised it — not what is being
+  decided. Reading either as the PST is the specific error this value exists
+  to correct, and earlier versions of this file made it.
+
+  Still flagged under `Inferred Values to Confirm`: the thread never states
+  the PST, so any run reaching `Pax Pricing` reaches it by knowing what a
+  Saver discount is — domain knowledge the thread does not supply.
+- `rationale`: **two contributors, three strands.**
+  - Brand visibility is strong but demand is constrained by pickup-point
+    accessibility; many PAX are far from the pickup points, and delivery
+    friction is too expensive (`@rahadiyan.wisesa`).
+  - Free delivery removes that barrier and unlocks incremental demand beyond
+    the existing catchment (`@rahadiyan.wisesa`).
+  - The merchants enable and sustain e-commerce partnerships with FMCG
+    principals, and a competitive Saver fare is a key requirement to drive
+    the sales volume that makes those partnerships sustainable
+    (`@moch.zulfa`).
+
+  **`arpit.goel`'s governance concern does not belong here.** It is an
+  objection raised *about* this decision and the reason D2 exists; it is not
+  a reason for the discount. A run that folds it into D1's rationale has
+  recorded an argument against something as an argument for it.
 - `decision_status`: `pending`
-- `decision_approver`: **`@randy.tedjakusuma / @oncall-lead (awaiting
-  approval); eng-PIC sign-off also required, person not named in thread`.** No
-  party entitled to close this gave a signal (Gate 3 fails outright), so
-  extraction drops to rung 2 of the fallback ladder: who is supposed to
-  approve, when nobody has yet. The thread names that twice — the original
-  approval request (`jomil.villareal 3:18 PM, Day 1`) addressed to
-  `randy.tedjakusuma` / `@oncall-lead` directly, and `cui.ju 3:20 PM (Day 1)`
-  additionally requiring sign-off from "the respective eng PIC," a role with
-  no name given.
+- `decision_proposer`: `@rahadiyan.wisesa`
+- `decision_approver`: **`@arpit.goel (awaiting approval)`** — the pricing
+  eng PIC, confirmed by the thread owner.
 
-  **The role stays unresolved, and this is the part most likely to be got
-  wrong on a re-run.** `cui.ju 3:22 PM (Day 1)` names `@arpit.goel`, and it
-  is tempting to read that as identifying the eng PIC. Read in sequence it
-  does not: `jomil.villareal 3:21 PM (Day 1)` asks who to contact while
-  `randy.tedjakusuma` is on leave, and `3:22 PM` answers *that*. Being asked
-  to "help to check" is not holding the role whose sign-off was required two
-  messages earlier, and the thread never says `@arpit.goel` holds it. A name
-  here would send a reviewer chasing the wrong person, or let his later
-  agreement read as the approval. If a future run resolves this role to a
-  person, that is a regression unless the thread text changed.
+  Rung 1 fails outright, since Gate 3 found no closure signal, so extraction
+  drops to rung 2 and records who is supposed to approve. One party, not
+  two: the request goes to `@randy.tedjakusuma / @pricing-team`
+  (`2026-08-25 15:18`), `cui.ju 15:20` requires the respective eng PIC's
+  sign-off, and `cui.ju 15:22` routes it — "@arpit.goel could you help to
+  check?"
 
-  The awaited party is marked `(awaiting approval)` inline so it cannot read
-  as a disposition that happened — the same safety the skill applies to
-  `action_owner`'s `(requested, not yet acknowledged)`. Recording who is
-  awaited is independent of Gate 5: `@arpit.goel`'s standing came only from
-  `cui.ju`'s unendorsed redirection, so his signal could not have closed this
-  candidate even had he given one.
-- `conditions`: The merchant group is a business-team priority list reviewed
-  against partnership needs and merchant performance, not a fixed setup —
-  membership is expected to change as relevance does (`@moch.zulfa`). This
-  is a genuine condition on future execution and belongs here. The eng-PIC
-  gate and the unendorsed redirection do **not**: they are approval-process
-  facts, so they live in `classification_reason` (the Gate 3/4/5 traces
-  above) and reach the reviewer through Review Notes' `Uncertain Decisions`
-  category instead. The same message supplies both, which is exactly why the
-  distinction has to be drawn on what the statement is about, not on who
-  said it or when.
-- `refs`: available (approval-request message, the eng-PIC condition
-  message, the governance-concern message, the wiki-documentation message)
-  — not enumerated here; see `rendering.md`'s D1 references block for the
-  rendered form.
+  **Those look like two separate awaited parties and are one.** Randy is on
+  leave (`jomil.villareal 15:21`), and Arpit is the pricing eng PIC, so
+  `15:22` answers the cover-for-Randy question *and* names the eng PIC —
+  the two questions have the same answer.
 
-**Completeness:**
-- All seven required fields present, `decision_approver` included via rung 2
-  of the fallback ladder → `completeness_status: complete`. No
-  `missing_required_fields` entry, and no finalize-prompt round-trip needed
-  for this candidate.
-- **The awaited value is a filled, honest field, not a gap.**
-  `decision_approver` names both parties the thread shows are owed a
-  disposition — `@randy.tedjakusuma` / `@oncall-lead`, the original
-  addressee, marked `(awaiting approval)` so it cannot be misread as a
-  signal that was actually given, and the eng-PIC sign-off `cui.ju` asked
-  for, which stays an unnamed role for the reasons given under the field
-  above. **Not `@arpit.goel`** — resolving that role to a person is the
-  regression this baseline exists to catch, and naming him here would
-  contradict the field's own rule three paragraphs up. The distinction that matters,
-  and the one this whole design turns on: a reviewer may be asked to
-  *confirm what the thread shows*, never to *supply what it does not* — and
-  rung 2 is exactly that confirmation, drawn straight from the thread.
-- Not publishable as `approved` — and not because anything is missing:
-  `decision_status` is `pending`, and even once `decision_approver` is
-  corrected to name who actually approved, `decision_status` would still
-  need correcting to `approved` in the same reply for
-  `references/review.md`'s publication gate 3 to resolve.
+  This is worth stating because the wording invites a wrong turn. Earlier
+  versions of this file argued that `15:22` answers only the cover question
+  and therefore leaves the eng-PIC role unnamed. The sequence does read that
+  way; it is still wrong, because the premise that the two questions have
+  different answers is false.
 
-**Actions attaching to D1:**
-- **A1** — "Documented the thread in the Confluence wiki (completed within
-  the thread)." Owner: `@arpit.goel`. No date. Source:
-  `arpit.goel 11:23 PM (Day 2)` — "I have documented the thread here."
-- **A2** — "Add the logic that recreates the merchant list." Owners (list):
-  `@sengkeong.ho`, `@moch.zulfa`, `@rangga.pratama` — requested, not yet
-  acknowledged in the available source. No date. Source:
-  `arpit.goel 11:23 PM (Day 2)`.
+  The value is reached by inference — the thread never says Arpit holds the
+  role — so it is flagged under `Inferred Values to Confirm`. A run that
+  leaves the role unnamed has been too literal, not disobedient.
 
-### D2 — Documenting the mex-specific pricing configs on the ExP variable
+- `conditions`: the merchant group is a business-team priority list,
+  reviewed and maintained against partnership needs and merchant
+  performance rather than fixed, and adjustable as relevance changes
+  (`@moch.zulfa`).
 
-**Classification:** `decision`
-**Status:** `approved`
-**Evidence type:** `explicitly_stated`
+  **This field is not empty.** The eng-PIC gate and the unendorsed
+  redirection are approval-process facts, not conditions on execution — they
+  belong in `classification_reason`, and a run that files either here has
+  put process into a field about the decision.
+- `refs`: available — the approval-request message, the eng-PIC condition,
+  the routing to `@arpit.goel`, the rationale messages.
 
-**Gate 1 — Object exists:** PASS. `sengkeong.ho 8:55 AM (Day 2)` — "If it
-helps, can we set up an wiki page to document this for all markets?" — a
-proposal.
+**`classification_reason`** should name the deciding gate and nothing else:
+approval requested in `jomil.villareal 2026-08-25 15:18`; eng-PIC sign-off
+required by `cui.ju 15:20` and routed to `@arpit.goel` at `15:22`; he
+questions the request through to the end of the thread and never disposes of
+it. **One gate decides this candidate now, not three** — the earlier reading
+also cited an unendorsed redirection and a missing entitled party, and
+neither survives the eng-PIC correction.
 
-**The object is the commitment to document, not the wiki page.** Both of
-Gate 1's signals point that way: the proposal names its own purpose ("to
-document this") and offers the page conditionally ("if it helps"), and the
-acceptance restates the commitment with no instrument in it —
-`albert.lim 8:57 AM (Day 2)`, "part of solving that problem is to properly
-document the incoming new ones." Substitution confirms it: move the
-documentation off a wiki and the agreement still stands.
+**Completeness:** all seven required fields present, `decision_approver`
+included. An awaited value, marked as awaited, is a filled and honest value,
+not a gap. D1 is finalizable exactly as drafted — and not publishable,
+which is a different thing and is what `Complete, but not a decision yet`
+exists to say.
 
-The thread supplies its own proof. The wiki page that actually got created
-came from `arpit.goel 11:23 PM (Day 2)` — not `@rahadiyan.wisesa`, who was
-the one asked, and documenting the thread rather than the variable's
-configs. Read as "`@rahadiyan.wisesa` creates a wiki page", the record is
-already unfulfilled inside its own thread; read as the commitment, that
-message is partial progress toward it. **A run that titles this candidate
-after the wiki page has failed the substitution test**, even though every
-other field may be right.
+---
 
+# D2 — Document MEX-specific configs on ExP
 
-`decision_proposer` resolves on **rung 2** of `extraction.md`'s ladder, not
-to the author of that message. The same message opens "Can I understand the
-concern about documentation further?", making it explicitly responsive to
-the documentation gap `arpit.goel` stated the day before (`5:29 PM`,
-`6:18 PM`, Day 1). `albert.lim 8:57 AM (Day 2)` voices the same need again,
-but rung 2's tiebreak keeps it with whoever stated it first, so a later
-restatement does not move it. Value:
-`@arpit.goel (raised the need; proposed by @sengkeong.ho)`. The **proposing
-side** — the pair that Rules 3.2, 3.3 and 5.1 are read against — is
-`arpit.goel` + `sengkeong.ho`.
+## Gates
 
-**This is the value most likely to regress, in either direction.** A run
-that reports `@sengkeong.ho` has read only who typed the proposal and lost
-the stakeholder the record exists for. A run that reports `@albert.lim` has
-let a restatement carry the need, which additionally breaks Gate 3 below.
+**Gate 1 — Object exists:** PASS, **and the wiki page is not the object.**
+`sengkeong.ho 2026-08-26 08:55` — "If it helps, can we set up an wiki page
+to document this for all markets?" Both signals point the same way: the
+proposal states its own purpose ("to document this") and offers the page
+conditionally ("if it helps"), and the acceptance restates the commitment
+without the instrument — `albert.lim 08:57`, "part of solving that problem
+is to properly document the incoming new ones". Substitution confirms it:
+put the documentation somewhere other than a wiki and what was agreed still
+stands.
 
-**Gate 2 — Final state:** Narrowed. `sengkeong.ho 8:59 AM (Day 2)` —
-"rahadiyan.wisesa lets set up a wiki page for this variable and document all
-the configs here" — narrows the object from "all markets" to the single
-variable, and adds linking the variable to the wiki as the central source of
-truth. Final scope is the narrowed one; nobody explicitly re-confirms the
-narrowed version, which matters for Gate 5, not Gate 2.
+So the object is the commitment to document these configs; the page is
+recorded in `decision_details` as the agreed mechanism and executed as the
+Action. Titling this after the wiki page records the tool and loses the
+commitment — and makes the record read as unfulfilled, since the page that
+actually got made came from a different person documenting something else.
 
-**The accepter's scope was wider than what the record keeps.**
-`albert.lim 8:57 AM (Day 2)` accepts in terms of "the incoming new ones" —
-all new pricing configs — while `8:59 AM` narrows to this one variable.
-Rule 5.1 carries the acceptance forward, so the record keeps the narrow
-scope and D2 stays a `decision`. Noted here because a run that reacts to the
-gap by demoting D2 to `uncertain` has misread Rule 5.1, which exists
-precisely to stop that.
+**`decision_proposer` resolves on rung 2.** The proposal message opens "Can
+I understand the concern about documentation further?", which makes it
+explicitly responsive to the documentation gap `arpit.goel` stated the
+previous day (`2026-08-25 17:29` and `18:18`). `albert.lim 2026-08-26 08:57`
+voices the same need again, but a later restatement does not transfer it.
+Value: `@arpit.goel` — one name, which is all this field ever holds. The
+**proposing side** is `arpit.goel` + `sengkeong.ho`, used to decide Gates 3
+and 5 below and stored nowhere.
 
-**The linking clause splits across two fields.** The committed property —
-the documentation is reachable from the config, making it the source of
-truth — survives a change of tool and belongs in `decision_details`. "Find
-a way to" names no mechanism and is unresolved work, so it belongs to the
-Action.
+**Gate 2 — Final state:** Narrowed, one candidate. `sengkeong.ho 2026-08-26
+08:59` narrows from "all markets" to this single variable and adds the
+linking requirement. The linking clause splits across two fields on the
+substitution test: the committed property — the documentation is reachable
+from the config, making it the source of truth — survives any change of tool
+and belongs in `decision_details`; "find a way to" is unresolved work with
+no mechanism chosen, so it is part of the Action.
 
-**Gate 3 — Closure signal:** PASS. `albert.lim 8:57 AM (Day 2)` —
-"sengkeong.ho ya that helps" — explicit, unambiguous acceptance (Rule 3.1).
-The thread names no specific approver for this proposal, so under Rule 3.2 a
-disposition from any participant **outside the proposing side** can close
-it; `albert.lim` is neither `arpit.goel` nor `sengkeong.ho`, so he
-qualifies.
+**Gate 3 — Closure signal:** PASS. `albert.lim 2026-08-26 08:57` — "ya that
+helps" — explicit acceptance, unambiguous in form. The thread names no
+specific approver for this proposal, so under Rule 3.2 a disposition from
+any participant outside the proposing side can close it. `albert.lim` is
+neither `arpit.goel` nor `sengkeong.ho`.
 
-The rung-2 tiebreak carries a load here. Had `albert.lim`'s `8:57 AM`
-restatement of the documentation need moved the need to him, he would sit on
-the proposing side, his own "ya that helps" would be disqualified by Rule
-3.3, and D2 would come out `uncertain` with no approver — from a thread that
-plainly settled the question. Reading Rule 3.2 against only the
-`decision_proposer` name rather than the side is the mirror-image failure:
-it would let `sengkeong.ho` close the proposal he himself voiced.
+**This is where rung 2's "whoever stated it first" tiebreak earns its
+keep.** Had `albert.lim`'s restatement carried the need to him, he would be
+on the proposing side, his own acceptance would fall to Rule 3.3, and D2
+would close as `uncertain` with no approver — from a thread that plainly
+settled the question.
 
-**Gate 4 — Unmet condition:** None found. No party attaches an in-thread
-gate to this proposal.
+**Gate 4:** No unmet gate.
 
-**Gate 5 — Scope/authority fit:** PASS. The narrowing at `8:59 AM (Day 2)`
-comes from `sengkeong.ho`, who voiced the object and is therefore on the
-proposing side, and happens *after* `albert.lim`'s acceptance at `8:57 AM
-(Day 2)`. Per Rule 5.1, a narrowing from that side after acceptance does not
-reopen the candidate — the acceptance carries forward to the narrowed scope.
-Rule 5.1 has to be read against the side here too: `sengkeong.ho` is not the
-name in `decision_proposer`. Authority conferral
-(Rule 5.2) is not in question here since `albert.lim`'s standing to close
-comes from Rule 3.2 directly, not from a transfer.
+**Gate 5 — Scope fit:** PASS. The narrowing at `08:59` comes from
+`sengkeong.ho`, who voiced the object and is therefore on the proposing
+side, and lands after the acceptance at `08:57`. Under Rule 5.1 a narrowing
+from that side does not reopen the candidate. **Read this against the side,
+not the field** — `sengkeong.ho` is not the name in `decision_proposer`.
 
-**Attribution check (the known misreading):** this is now read
-deliberately, by rung 2 of `decision_proposer`, rather than left to whoever
-the reader happens to notice — but the message order it depends on is the
-same, and is recorded here because a rule change that got it backwards would
-still produce a plausible-looking card. The accepter is `albert.lim`, not
-"the person whose cleanup concern prompted the proposal." The governance
-concern that motivated the whole exchange — "no governance on the grabx
-group... no documentation on knowing what the right set of merchants are" —
-was raised earlier, on **Day 1**, by a different person, `arpit.goel`, at
-`5:29 PM` and `6:18 PM`. `albert.lim`'s own remark about cleaning up legacy
-pricing configs arrives at `8:57 AM (Day 2)`, in the same message block as,
-and immediately *after*, his acceptance ("ya that helps") — it is supporting
-context he adds afterward, not the concern that prompted `sengkeong.ho`'s
-proposal. Verified against message order in the source thread; this
-baseline records the corrected attribution.
+**Result:** `decision` · `approved` · `explicitly_stated`.
 
-**Fields:**
-- `decision_title`: Documenting the mex-specific pricing configs on this ExP
-  variable — **the commitment, not the wiki page.** A title naming the
-  vehicle is the regression to watch for here; see the Gate 1 trace above.
-- `decision_details`: The mex-specific pricing configs carried on this ExP
-  variable will be documented, and the variable will link to that
-  documentation so it becomes the central source of truth for what each
-  config is and why it exists. The agreed mechanism is a wiki page. Scope is
-  this one variable, not pricing configs across all markets. The wiki
-  survives here as the mechanism clause and nowhere above it — dropping it
-  entirely would lose a material specific, and promoting it to the title
-  would record the tool instead of the commitment. The final, narrowed scope
-  is stated as the decision; who narrowed it and when is conversation shape
-  and belongs to the Gate 2 trace above, not to this field.
-- `pst`: `FF Ecommerce` — **inferred, weaker basis than D1.** The thread
-  gives no phrase tying D2 itself to a PST the way `3:21 PM`/`9:02 AM` do
-  for D1; this value is carried over on the basis that D2 is the same
-  thread, same product context, and same participants as D1, immediately
-  adjacent to `albert.lim`'s "this eComm decision" remark
-  (`9:02 AM, Day 2`) about the surrounding conversation. Flag for reviewer
-  confirmation at least as strongly as D1's.
-- `decision_proposer`: `@arpit.goel (raised the need; proposed by
-  @sengkeong.ho)` — see the Gate 1 trace above for the rung-2 derivation.
-- `rationale`: The grabx merchant group carries no approvals, documentation,
-  or freshness check, so mistakes go undetected and nobody can later
-  reconstruct which merchants belong in a group or how they were derived
-  (`@arpit.goel`). Handling mex-specific pricing configs on ExP is
-  established practice, so what is missing is documentation rather than the
-  mechanism itself (`@sengkeong.ho`). The team currently cannot remove or
-  trace legacy configs set up by ops long ago, because nothing records what
-  they were for or who asked for them; documenting new configs as they are
-  created is what stops that recurring (`@albert.lim`). **Three
-  contributors, all kept** — and the first strand is the one a run has
-  actually dropped: a rationale gathered from the proposal message forward
-  keeps the answer and discards the question that prompted it. Cited by
-  alias only, no timestamp, per `extraction.md`'s card-field citation rule.
+## Card
+
+- `decision_title`: **Document MEX-specific configs on ExP**
+- `decision_details`: the need to document the tactical pricing configs for
+  the ExP variable, with the wiki page as the agreed platform, and the
+  variable linked to that page so the change is traceable.
+- `pst`: **`Pax Pricing`** — the same as D1's, and for a reason worth
+  stating: **D2 documents the behaviour of D1**, so it takes the PST of the
+  decision it is about. A decision that records, governs or tracks another
+  one does not get its own subject area; it inherits.
+
+  This is not something the thread says, and it is not something the current
+  rules derive. A run reaching it has to notice that D2's subject is D1.
+
+- `rationale`: **three strands, and the first is the one runs drop.**
+  - Legacy configs carry no approvals, documentation or freshness check, so
+    mistakes go undetected and nobody can later reconstruct which merchants
+    belong in a group or how they were derived (`@arpit.goel`).
+  - Handling mex-specific pricing configs on ExP is established practice, so
+    what is missing is documentation rather than the mechanism
+    (`@sengkeong.ho`).
+  - The team has had difficulty cleaning up legacy price configurations
+    because nobody knows the rationale or the owner of those setups; proper
+    documentation prevents this recurring (`@albert.lim`).
+
+  The first strand is the need the proposal answers and sits *before* it in
+  the thread. Rationale gathered only from the proposal message forward
+  keeps the answer and discards the question.
 - `decision_status`: `approved`
+- `decision_proposer`: **`@arpit.goel`** — he raised this.
+
+  **One name, no marker.** Earlier versions carried the voicer inline as
+  `@arpit.goel (raised the need; proposed by @sengkeong.ho)`; the owner's
+  value dropped it and the rules now agree. That `@sengkeong.ho` voiced the
+  proposal still decides Gate 3 — it is why `albert.lim` can close it — but
+  that question is settled during classification, with the thread in hand,
+  and the answer is not part of the record. A run that renders the marker
+  is wrong.
 - `decision_approver`: `@albert.lim`
-- `conditions`: none established — `null`.
-- `refs`: available (the "all markets" proposal, the narrowing message, the
-  acceptance message) — not enumerated here; see `rendering.md`'s D2
-  references block.
+- `conditions`: `? - optional to fill`
+- `refs`: available
 
-**Completeness:**
-- Required: all seven fields present, including `decision_approver:
-  @albert.lim` → `complete`, and — because `decision_status` is `approved`
-  and the approver is a real name, not one still marked `(awaiting
-  approval)` — also clear of the one extra check publication gate 3
-  (`references/review.md`) applies to `approved` candidates. D2 is the one
-  candidate in this thread eligible to actually
-  publish as `approved`.
+**Check which message came first before crediting a motivating concern.** It
+is tempting to read the accepter as the person whose concern prompted the
+proposal — `albert.lim` accepts at `08:57` and, in the same message, talks
+about cleaning up legacy configs. But that remark arrives *after* his
+acceptance, as supporting context. The concern that actually motivated the
+exchange was raised by `arpit.goel` the day before.
 
-**Actions attaching to D2:**
-- **A3** — "Set up the wiki page for this variable, document the pricing
-  configs there, and link the variable to it." Owner: `@rahadiyan.wisesa` —
-  requested, not yet acknowledged; he does not speak again anywhere in the
-  available source. No date given, none guessed. Source:
-  `sengkeong.ho 8:59 AM (Day 2)`.
+---
 
-  **One Action, not two.** `8:59 AM` asks one person, in one message, to
-  stand up the page and wire the variable to it; they are steps of a single
-  piece of work. A run that emits a separate `A4` for the linking has put an
-  artificial handoff in the record — three Actions total across this thread,
-  not four.
+# Actions
 
-## Actions that may overlap
+**Two Actions, not three.** Labels follow thread chronology across the whole
+thread, never grouped by Decision.
 
-One entry expected, naming `A1` and `A3`:
+| | Task | Source | Attaches to |
+|---|---|---|---|
+| **A1** | Set up the wiki page for this variable, document the configs there, and link the variable to it | `sengkeong.ho 2026-08-26 08:59` | D2 |
+| **A2** | Add the logic that recreates the merchant list | `arpit.goel 2026-08-26 23:23` | D1 |
 
-- Both produce a wiki page, and they sit on different Decisions, so nothing
-  in the card set ever shows them together.
-- `A1` is done — `@arpit.goel` made it inside the thread, documenting **the
-  thread**. `A3` is outstanding with `@rahadiyan.wisesa`, documenting **the
-  variable's pricing configs**.
-- Read carefully they are two different pages. The thread never says so, and
-  it is the same tool, the same area, one message apart.
+- **A1 is one Action, not two.** One message asks one person to stand up the
+  page and wire the variable to it; they are steps of a single piece of
+  work. A run that splits the linking into its own Action has put an
+  artificial handoff in the record. `action_owner`:
+  `@rahadiyan.wisesa (requested, not yet acknowledged)`.
+- **A2** has three named owners, stored as a list, requested and not
+  acknowledged. No date given, none guessed. This is the only Action D1
+  carries — the change someone has to make.
 
-This is the flagged shape exactly: one completed in-thread, one outstanding,
-a shared artifact the thread never connected. A run that renders this entry
-is right; a run that renders none has missed it.
+## The page arpit.goel made is not a third Action
 
-**A run is wrong to merge them, drop either, or rewrite `A3` to reference
-`A1`.** The entry names the pair, says what each one's state is, and leaves
-the call to the reviewer, who was in the thread. Nothing about it reaches
-the Bank.
+`arpit.goel 2026-08-26 23:23` says "I have documented the thread here", and
+earlier versions of this file recorded that as its own completed Action on
+D1, reasoning that it documents *the thread* while A1 documents *the
+variable's configs* — two different pages.
 
-## Topics routed to `no_decision_topics` (Gate 1 failures)
+**They are the same piece of work** (confirmed by the thread owner). So it
+is not a second Action; it is work against A1.
 
-- **FR-balancing principle during crunch.** `albert.lim 8:51 AM (Day 2)`
-  asks "what is our principle here in terms of balancing FR during crunch?"
-  and `sengkeong.ho 8:54 AM (Day 2)` answers with the fare-certainty /
-  longer-SLA-batching strategy. A question and a background-reasoning
-  answer — no proposed course of action.
-- **Interim ZFF/EAR stopgap.** `sengkeong.ho 9:06 AM (Day 2)` — "our interim
-  stopgap is to use mex ZFF and correct for dax EAR by overpaying for these
-  jobs" — reported as the team's existing approach, not put forward for
-  disposition. The thread never reopens or challenges it.
-- **FR capacity vs. pricing-lever discussion.** `albert.lim 9:02 AM
-  (Day 2)` — batching limits on large Mart orders, pricing/visibility as
-  the only real FR lever, folding both levers under DMS-Go+ — background
-  reasoning and observation, no proposed course of action.
-- **Merchant-list governance explanation.** `moch.zulfa 5:11 PM (Day 1)` —
-  explains how the merchant group is currently prioritized and maintained,
-  in response to `arpit.goel`'s question. Describes existing practice, not
-  a proposal to adopt anything new. (This context feeds D1's Gate 2 scope
-  check and motivates Action A2; it is not itself a decision object.)
-- **Capture-process messages.** `albert.lim 8:50 AM (Day 2)` asking
-  `long.jin` to use the decision-capture tool, and `long.jin 8:55 AM
-  (Day 2)` asking whether all information sources are in this thread —
-  messages about the capture process itself, excluded by Gate 1's explicit
-  carve-out.
-- **Automated bot message.** `Grab 8:51 AM (Day 2)` — "Heart, Hunger,
-  Honour, Humility" — an automated values-bot response, no proposal
-  content.
+This is the single most useful thing the `Actions That May Overlap` check
+does, and this thread is its case: the two sat on different Decisions, so
+nothing in the card set ever showed them together, and only a flag brings
+them into the same view. The check was right to raise the pair. What this
+file got wrong was the answer, not the question.
 
-## Source limitations
+---
 
-Three external links appear in the thread text and were not opened for this
-extraction, consistent with the skill asking the user before reading any
-external source:
+# Topics routed to `no_decision_topics`
 
-- `experiments.grab.com/t/variables/…/455492?env=prd` — the ExP variable
-  the approval request links to (`jomil.villareal 3:18 PM, Day 1`).
-- The JIRA ticket embedded as "Approval_Request - ID for Mart"
-  (`jomil.villareal 3:18 PM, Day 1`).
-- `grabtaxi.atlassian.net/wiki/…/foodSaverOptionDiscount` — the Confluence
-  page `arpit.goel` created to document the thread
-  (`arpit.goel 11:23 PM, Day 2`).
+**Six entries.** This is the only place a reviewer can catch a decision the
+skill invented or missed, so a run that renders `Not Identified as
+Decisions` empty, or omits the category while having produced Gate 1
+failures, has dropped them silently.
 
-This baseline assumes none of the three were opened. Nothing in any field
-above relies on their content; every value is grounded in the Slack thread
-text alone. If a future run of this thread opens one of these sources, the
-resulting diff against this file is expected to change and does not by
-itself indicate a regression.
+1. **FR-balancing principle during crunch.** `albert.lim 2026-08-26 08:51`
+   asks what the principle is; `sengkeong.ho 08:54` answers with the
+   fare-certainty / longer-SLA batching strategy. A question and a
+   background-reasoning answer, no proposed course of action.
+2. **Interim ZFF/EAR stopgap.** `sengkeong.ho 2026-08-26 09:06` — "our
+   interim stopgap is to use mex ZFF and correct for dax EAR" — reported as
+   the existing approach, not put forward for disposition. `ZFF` and `EAR`
+   stay unexpanded; neither has a confirmed glossary entry.
+3. **FR capacity vs. pricing-lever discussion.** `albert.lim 2026-08-26
+   09:02` — batching limits on large Mart orders, pricing and visibility as
+   the real FR levers, `DMS-Go+`. Background reasoning.
+4. **Merchant-list governance explanation.** `moch.zulfa 2026-08-25 17:11`
+   describes how the group is currently prioritized and maintained,
+   answering a question. It feeds D1's `conditions` and motivates A2, but
+   proposes nothing new.
+5. **Capture-process messages.** `albert.lim 2026-08-26 08:50` asking
+   `long.jin` to use the decision-capture tool, `long.jin 08:55` asking what
+   sources are available, and `albert.lim 08:59` replying about extracting
+   more context. Excluded by Gate 1's own carve-out.
+6. **Automated bot message.** `Slackbot 2026-08-26 08:51` — "Heart, Hunger,
+   Honour, Humility" — no proposal content.
 
-## Judgment calls and disagreements worth flagging
+---
 
-- **A fallback ladder, not a value that reports emptiness.** This field has
-  now been through four designs, and the reasoning is worth keeping in full
-  because a future change is likely to be tempted by the same wrong turns.
-  (1) It was once unconditionally required with no honest way to satisfy it,
-  which made D1 unfinalizable without inventing a name — the original bug.
-  (2) It was then split into two tiers, marked `(*)` and `(**)` on the card,
-  which fixed that but made the reader decode a notation whose intuitive
-  reading ("two stars = even more required") is backwards. (3) It was then
-  auto-filled with the literal `none` when nothing closed the candidate,
-  which removed the notation but read as an answered field, got skipped, and
-  quietly undercut the marker that says the field is required. The immediate
-  fix to that — leaving it unresolved on the card and asking the reviewer to
-  type `none` at the finalize prompt — solved the "reads as answered"
-  problem, but it was still asking the reviewer to confirm an absence in a
-  thread that, more often than not, already says who the approval was
-  addressed to or who was supposed to sign off. That signal was sitting
-  right there in the source, and every one of the first three designs threw
-  it away. (4) The field now works down a ladder instead: who approved it;
-  failing that, who is supposed to, marked inline as `(awaiting approval)` so
-  an outstanding request can never be misread as a disposition that
-  happened; only failing both is it left unresolved. `none` is removed
-  entirely — it is not a value, not an accepted reply, not an option named in
-  any prompt anywhere in this skill. D1 is the worked case: nobody ever
-  approved it, but the thread names an addressee
-  (`@randy.tedjakusuma` / `@oncall-lead`) and, separately, the eng-PIC
-  sign-off `cui.ju` asked for, which stays an unnamed role — both recorded,
-  the addressee marked awaiting, neither confused with D2's real approver
-  `@albert.lim`. The invariant across all four
-  designs, and the thing any future change must preserve: a reviewer may be
-  asked to confirm what the thread shows, never to supply what it does not —
-  and an awaited approver must never render as a bare name, because that is
-  indistinguishable from one who actually signed off.
-- **`decision_details` and `conditions` no longer carry approval-process
-  content**: an earlier draft's D1 `decision_details` stated that no
-  approval was ever given, and its `conditions` repeated the unmet eng-PIC
-  gate and the redirection that Review Notes already carries. Both are
-  trimmed here — `decision_details` states substance and scope only, and
-  the approval-process facts live solely in `classification_reason` and
-  Review Notes' `Uncertain Decisions` category.
-- **Dates**: no citation here carries a calendar date, because the export
-  has none — see "On dates" above. Establishing that corrected an invented
-  date in `extraction.md`'s own worked examples.
-- **D2's `pst`** is inferred on a visibly weaker chain of evidence than
-  D1's; `extraction.md`'s own D2 worked example does not walk through a
-  `pst` justification at all (only `rendering.md`'s rendered card assigns
-  it). This baseline supplies the reasoning explicitly so a future diff can
-  tell whether a rule change affects D1's inference, D2's, or both.
-- **Everything else** — D1's classification (`uncertain`/`pending`/`none`),
-  D2's classification (`decision`/`approved`/`explicitly_stated`), the
-  gate-by-gate outcomes, the three Actions, and the corrected attribution
-  of D2's accepter versus the governance concern's originator — matches the
-  orientation given for this task and `extraction.md`'s own worked examples
-  after independent verification against the thread's message order.
+# Review Notes, expected
+
+Five of the six categories have content; `Source Limitations` does not.
+
+- **Complete, but not a decision yet** — `D1`. What the reviewer can do
+  about it. Does not repeat `Uncertain Decisions`' evidence.
+- **Inferred Values to Confirm** — three entries.
+  - `D1 pst`: `Pax Pricing`, reached from knowing what a Saver discount is
+    rather than from anything the thread states.
+  - `D2 pst`: `Pax Pricing`, inherited because D2 documents D1.
+  - `D1 decision_approver`: `@arpit.goel`, reached from his conduct through
+    the thread. Nothing says he holds the eng-PIC role.
+
+  **This reverses what earlier versions of this file expected.** They said
+  the approver carried no entry, on the reasoning that it came from direct
+  evidence. It does not: naming him is an inference, and one a reviewer
+  should be asked to confirm.
+- **Uncertain Decisions** — `D1`, with the unmet eng-PIC gate, in plain
+  language, with a source link. Never a gate id or an enum name. **The
+  unendorsed redirection is not a second reason** — it did not survive the
+  eng-PIC correction, and a run still citing it is reading the old file.
+- **Actions That May Overlap** — **absent.** With the duplicate resolved
+  there is one wiki Action, so no pair remains to flag. A run that has not
+  resolved it will raise the pair, and raising it is correct behaviour on
+  the evidence the thread gives; the entry disappears only once someone
+  answers.
+- **Not Identified as Decisions** — the six above.
+- **Source Limitations** — **absent.** The user answered `none`, which makes
+  the bundle `complete`: they saw what was on offer and declined it, so
+  nothing is missing that anyone wanted. An entry here on this run is wrong.
+
+# External sources, expected
+
+Three, all with real addresses, all rendered as links. The user declines
+them, so none is read and none reaches `refs`.
+
+| | Label from | Address |
+|---|---|---|
+| 1 | the ExP variable link | `https://experiments.grab.com/t/variables/foodSaverOptionDiscount/rollout/approve-request/455492?env=prd` |
+| 2 | Jira `TECHOPS-117402` | `https://grabtaxi.atlassian.net/browse/TECHOPS-117402` |
+| 3 | Confluence `foodSaverOptionDiscount` | `https://grabtaxi.atlassian.net/wiki/spaces/FSTF/pages/2341437752/foodSaverOptionDiscount` |
+
+**None of these is the "no address" case.** The rule for a source Slack
+shows without a resolvable address exists for other threads; this one does
+not exercise it, and an earlier copy of this fixture made it look as though
+it did.
+
+---
+
+# What runs get wrong on this thread
+
+Kept short on purpose. Each of these has actually happened.
+
+- **`MEX` read as Mexico.** The sentence reads perfectly and is false.
+- **D2 titled after the wiki page** rather than the commitment.
+- **D2's first rationale strand dropped** — the governance gap that
+  motivated the proposal sits before it in the thread.
+- **The eng-PIC role left unnamed**, or recorded as a second awaited party
+  alongside `@randy.tedjakusuma`. Reading `cui.ju 15:22` as answering only
+  the cover-for-Randy question is defensible from the wording and still
+  wrong: Arpit is the pricing eng PIC, so both questions resolve to him.
+- **`Not Identified as Decisions` omitted entirely** while the run's own
+  reasoning listed the Gate 1 failures correctly.
+- **Action labels grouped by Decision** instead of thread chronology.

@@ -508,6 +508,11 @@ I only open the sources you pick, and nothing linked inside them.
   deleting the ellipsis, which yields a well-formed URL that points
   somewhere else with nothing left to show that anything was lost.
 - A source linked from several messages is one numbered entry, not several.
+- **`slack-permalink` is a placeholder, not a value to invent.**
+  `references/extraction.md` owns where a Slack address comes from: copy the
+  one the source gave byte for byte, or, where it gave none, build it by the
+  formula there — `p` plus the `ts` **with its dot removed**. A run that
+  rebuilt an address it already had shipped a dead link that looked correct.
 - An ordinary permalink to another message in the same thread is not an
   external source and never appears in this list.
 
@@ -567,13 +572,14 @@ contract above and applied identically to every card:
 - Field labels are the exact JSON key in inline code, with `(*)` appended
   inside the code span where it applies — `` `decision_details(*)` ``, never
   a renamed label like "Decision".
-- `decision_proposer` names the party whose need the decision serves, which
-  is not always whoever typed the proposal
-  (`references/extraction.md` owns which). When the thread splits those two
-  roles, the value carries the voicer inline — `@alias (raised the need;
-  proposed by @second-alias)` — one field, both people, no second field on
-  the card. Render it as one value; never split it across two
-  bullets, and never drop the parenthetical to shorten the card.
+- `decision_proposer` names the party the proposal belongs to, which is not
+  always whoever typed it (`references/extraction.md` owns which). **It is
+  one alias and nothing else** — no parenthetical, no second name, no note
+  about who voiced it. Where the thread splits those roles, extraction uses
+  the distinction to decide the gates and discards it; it never reaches the
+  card. Contrast `decision_approver`, whose `(awaiting approval)` marker
+  does render, because that one states the record's current state rather
+  than how it was classified.
 - `decision_status` always shows the full compact label
   `` `decision_status(*)(options:approved|rejected|pending)` `` followed by
   its plain-text value — never wrap `approved`/`rejected`/`pending` in code,
@@ -691,16 +697,28 @@ and `refs` is optional besides.
 
 One `▸ **Review Notes**` section after all Decision cards, when it has
 content. Each category renders as a bold top-level bullet with its entries
-nested underneath, in this fixed order. Two things gate what renders, in
-this order: **a category renders when it has at least one entry**, and
-**a category the reviewer has hidden does not render at all**. Omit the
-entire section when nothing survives both.
+nested underneath, in this fixed order.
+
+**Open `references/presentation.yaml` before rendering this section.** It
+carries the reviewer's hide-list, and reading it is the first step of
+rendering Review Notes, not a detail to check afterwards — by the time you
+have decided what to render, the decision has already been made without it.
+Read it the same way `psts.json` is read: at render time, every time.
+
+**This read has no symptom when it is skipped.** An empty hide-list and an
+unread file produce identical output, and the list is usually empty, so a
+run that never opens the file looks correct on every thread until the one
+where somebody set a preference — and then it silently overrides them.
+Nothing downstream will catch it. The only defence is opening the file.
+
+Two things then gate what renders, in this order: **a category renders when
+it has at least one entry**, and **a category on the hide-list does not
+render at all**. Omit the entire section when nothing survives both.
 
 ### What the reviewer can hide
 
-`references/presentation.yaml` carries a hide-list for these categories.
-It is a display preference and nothing else — **read it when rendering
-Review Notes, and nowhere else in the skill.**
+The hide-list read above is a display preference and nothing else — it is
+read when rendering Review Notes, and nowhere else in the skill.
 
 - **A hidden category is still computed, and still means what it meant.**
   An uncertain Decision is still uncertain with its entry hidden;
@@ -986,14 +1004,20 @@ either tier.
 
 A candidate extracted from a thread that named a PST, an approver and a
 rationale reaches finalize with nothing outstanding, so this prompt never
-fires for it. The example below therefore shows the shape using a Decision
-added from a blank template, which is the common case for an unresolved
-`pst`:
+fires for it. The example below therefore shows a Decision added from a
+blank template, where the reviewer is filling every field themselves — the
+one case where all seven can be outstanding at once:
 
 ```text
 ▸ **Still needed before finalizing**
 
-- `D5 pst(*)` — Which PST does this belong to?
+- `D5 decision_title(*)` — What should this decision be called?
+- `D5 decision_details(*)` — What was decided, and what does it cover?
+- `D5 rationale(*)` — Why was this decided?
+- `D5 decision_status(*)` — Where does this stand now: approved, rejected, or pending?
+- `D5 decision_proposer(*)` — Whose need does this decision serve?
+- `D5 decision_approver(*)` — Who approved this? If nobody has yet, who is it waiting on?
+- `D5 pst(*)` — Which team is this decision about?
   1. DCA
   2. Dispatch
   3. FFI
@@ -1021,16 +1045,28 @@ Please provide all known values in one reply. Anything else you want to change? 
   this prompt and the finalize prompt — `review.md` §4 owns the choice, and
   the two never appear in one response.
 - List every missing `(*)` field once, grouped in Decision order, ID plus
-  exact field key plus one short plain-language question.
+  exact field key plus its question.
+- **The questions are not written here.** Each field's question is a
+  property of the field, defined in `references/schema.md`; read them from
+  there at render time and use them verbatim, exactly as the PST values are
+  read from `psts.json`. The block above is a copy, kept so the shape is
+  unambiguous — if the two disagree, this copy is out of date. Put `pst`
+  last so its numbered list ends the block rather than interrupting it.
+- **Never improvise a question for a field that has none.** A run left to
+  write its own has produced noun phrases — `Product/Stream/Team`,
+  `Current decision status` — that name the field back at the reviewer
+  instead of asking them anything, and, for `decision_proposer`, `Who
+  initiated this decision?`, which points at whoever spoke rather than
+  whose need is served and so contradicts two of that field's three rungs
+  (`references/extraction.md`). A field reaching this prompt with no
+  question in `schema.md` is a gap to report, never one to fill in.
 - **The `decision_approver` question states plainly what is wanted.** It
   reaches this prompt only when extraction's fallback ladder
   (`references/extraction.md`) found neither an approver nor an awaited
   party in the thread — the reviewer is being asked to supply real
   knowledge the transcript didn't capture, the same as `pst`,
   `decision_proposer`, and `rationale` already are, never to invent a
-  person:
-  `` - `D5 decision_approver(*)` — Who approved this? If nobody has yet, who
-  is it waiting on? `` In practice this rarely fires for an extracted
+  person. In practice this rarely fires for an extracted
   candidate — rung 2 of the ladder already fills the field with an awaited
   party whenever the thread names one — so it is the common case only for a
   Decision added from a blank template, where the reviewer is filling every
@@ -1083,7 +1119,7 @@ own:
 - `pst(*)`: <PST>
 - `rationale(*)`: <the need this decision answers, from whoever raised it> (@alias). <a second reason> (@second-alias). <a third> (@third-alias).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
-- `decision_proposer(*)`: @alias (raised the need; proposed by @second-alias)
+- `decision_proposer(*)`: @alias
 - `decision_approver(*)`: @third-alias
 - `conditions`: ? - optional to fill
 - `refs`: []
@@ -1221,8 +1257,8 @@ that anything was written. Sent once, immediately after the write returns.
 Not saved: `D1: <title>` — left out at your request; still here if you want to save it later.
 ```
 
-- One bullet per committed Decision, with the record address the publisher
-  returned for it. Its Actions were committed inside it and are not listed
+- One bullet per published Decision, with the record address the publisher
+  returned for it. Its Actions were written inside it and are not listed
   again. When the publisher returns no address for a record, say so on that
   bullet in plain words rather than linking to something invented — the
   rule for a source with no URL, above, applies here for the same reason.
@@ -1234,7 +1270,9 @@ Not saved: `D1: <title>` — left out at your request; still here if you want to
 
 **When the write fails**, the run still ends with a message — a silent
 failure after an explicit "Yes, save" is the worst possible outcome, because
-the user has every reason to believe it worked:
+the user has every reason to believe it worked. A missing publisher, a
+non-zero exit and an unusable result are all this same case
+(`references/publishing.md`):
 
 ```text
 ▸ **Not saved**
@@ -1246,5 +1284,10 @@ The write to the Decision Bank didn't go through, so nothing was written. The ve
   in plain language and what the user can do next.
 - Say explicitly that nothing was written. After a confirmation, the default
   assumption is that it was.
+- **This message, not the success one, is what a write to anywhere else
+  gets.** If the Bank could not be reached, nothing was published, however
+  successfully something was written somewhere reachable. Never render
+  `Saved to the Decision Bank` over a file, a branch or a scratch copy — a
+  run has done exactly that, and the reviewer had no way to tell.
 - Never leave the locked version in doubt: it is unchanged, and retrying
-  commits exactly what was previewed.
+  publishes exactly what was previewed.

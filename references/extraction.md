@@ -4,7 +4,7 @@ This file governs one thing: reading a Slack thread and deciding what is a
 decision, what its status is, who decided it, and what follow-up work
 attaches to it. It does not cover how results are rendered as cards, how
 conversational corrections are applied, or how an approved record is
-committed — those live in other reference files and are only named here
+published — those live in other reference files and are only named here
 where a handoff matters.
 
 ## Input to this layer
@@ -29,12 +29,15 @@ leaves the reasoning pass anyway — citing it bought no traceability. Instead:
 **Citing evidence.** Cite by author and displayed time, copied from the
 thread — never computed or re-numbered:
 
-- Default: `cui.ju 3:20 PM`
+- Default: `alias 3:20 PM` — the displayed time, whatever form the source
+  displays it in. An export that shows `15:20` is cited as `alias 15:20`;
+  never convert between clock forms.
 - Same author, more than one message in the same displayed minute: add a
-  short verbatim fragment to disambiguate — `jomil.villareal 3:21 PM
-  ("Product is from under Fulfillment")`.
+  short verbatim fragment to disambiguate —
+  `alias 3:21 PM ("a few words, verbatim")`.
 - Thread spans more than one day: include the date —
-  `jane.doe 2026-08-29 11:23 PM`.
+  `alias 2026-08-29 11:23 PM`. A source that carries dates is always cited
+  with them.
 - When the source carries clock times but no calendar dates, as some thread
   exports do, never synthesize one. Where the ordering is unambiguous —
   times ascend, then restart lower, which can only be the next day — label
@@ -49,7 +52,7 @@ This author + time format governs internal reasoning, `classification_refs`,
 locate the exact message to verify a judgment. It is not used inside a
 Decision record field that appears on the card (`rationale`,
 `decision_details`, `conditions`): there, cite the person only, with no
-timestamp — `(@rahadiyan.wisesa)`, never `(rahadiyan.wisesa 3:26 PM)`. The
+timestamp — `(@rahadiyan.wisesa)`, never `(rahadiyan.wisesa 2026-08-25 15:26)`. The
 timestamp does little work on the card itself — `refs` sits two lines below
 with exact permalinks — and on a thread whose export carries clock times but
 no dates, a bare time on the card is actively ambiguous. The published `refs`
@@ -64,7 +67,7 @@ never a display name. This is a general rule, not one limited to
 `decision_proposer`, `decision_approver`, and `action_owner` — those fields
 simply happen to be entirely a person value. A non-person approver (a
 declared no-objection forum) stays a plain name with no `@`. An author+time
-citation itself — `cui.ju 3:20 PM` — is a distinct notation, not a mention,
+citation itself — `cui.ju 2026-08-25 15:20` — is a distinct notation, not a mention,
 and keeps the form this section already defines.
 
 **Never expand an abbreviation the source did not expand.** Write `MEX` as
@@ -409,21 +412,69 @@ carry, and restating it here only duplicates them while risking a record
 that goes stale the moment `decision_status` is corrected. Test: the
 sentence must stay true even if `decision_status` changes later.
 
-**`pst`** — select only an active value from `references/psts.json`. Use
-explicit source evidence or clearly established project context; never infer
-it from a channel name alone. When the sources support a reasonable but not
-certain value — for example, a decision the thread explicitly calls "this
-eComm decision" — fill the best-supported active value and flag it as
-inferred so the reviewer confirms or changes it. Never stop to ask before
-drafting. Leave it unresolved only when no source gives any basis at all.
+**`pst`** — select only an active value from `references/psts.json`.
 
-**`decision_proposer`** — the party the decision exists to serve: whoever
-raised the need it answers, not whoever happened to type the proposal. This
-is the Gate 1 attribution rule generalized. That rule already separates
-these two roles for a relayed request; a thread separates them a second way,
-when one person states a gap and a different person offers the thing that
-closes it. One field covers both — work down this ladder and stop at the
-first rung the source supports:
+**The PST is what the decision acts on, not where the conversation sits.**
+Everything else in this rule follows from that one sentence. A thread lives
+in some channel, is raised by some team, and sits under some org — none of
+those is the subject of the decision, and all three read like evidence.
+
+The failure has a shape worth recognising, because every run so far has
+walked into it. A thread discusses a Saver-fare discount for a merchant
+group. Someone calls it *"this eComm decision"*; someone else notes the
+product sits under Fulfillment. Both are true, both are explicit, and both
+describe the *conversation*. The decision acts on the fare a passenger
+pays, so the PST is `Pax Pricing` — which nobody in the thread ever says.
+**The most quotable evidence in the thread was the wrong evidence**, and a
+value reached by quoting it is confidently, checkably wrong.
+
+So before taking any phrase as evidence, ask what it is about:
+
+| Phrase | What it describes |
+|---|---|
+| *"this eComm decision"* | who is talking |
+| *"product is from under Fulfillment"* | where the product reports |
+| the channel's name | where the thread happens |
+| what the decision changes | **the PST** |
+
+**A decision about another decision inherits the PST of the decision it is
+about.** Documenting, governing, tracking or auditing another decision does
+not give the work its own subject area — what it acts on is that decision.
+In the same thread, the commitment to document the pricing configs is
+`Pax Pricing` because the discount it documents is, not because anything
+places documentation work in a product area.
+
+Reaching the right value often needs domain knowledge the thread never
+supplies — that a Saver discount is a discount on pax pricing is not
+deducible from the transcript. That is expected, and it is why this value
+goes to the reviewer flagged: **fill the best-supported active value, flag
+it as inferred** so they confirm or change it (`references/rendering.md`'s
+`Inferred Values to Confirm`), and never stop to ask before drafting. Check
+`references/glossary.md` for any in-house term the thread leans on; an
+unconfirmed term is a reason to flag, never to guess.
+
+Never infer it from a channel name alone. Leave it unresolved only when no
+source gives any basis at all.
+
+**`decision_proposer`** — **the party the proposal belongs to: whose need
+it serves, and who is accountable for it.** Not whoever happened to type it.
+**One name, always** — this field never carries two.
+
+The word is `proposer`, not `requester`, and the difference is load-bearing.
+A request is addressed to someone with the authority to grant it; a proposal
+is put forward for the thread to take up, and may never petition anyone. The
+reference thread holds one of each — an approval request relayed on
+`rahadiyan.wisesa`'s behalf, and `sengkeong.ho` offering a wiki page nobody
+was asked to approve. Proposal covers both; request does not, and would make
+the field a lie on the second. Nothing in this skill is called a requester or
+an initiator, and neither word is a synonym for this field: both point at
+whoever spoke, which is the wrong party at two of the three rungs below.
+
+This is the Gate 1 attribution rule generalized. That rule already separates
+proposer from typist for a relayed request; a thread separates them a second
+way, when one person states a gap and a different person offers the thing
+that closes it. Work down this ladder and stop at the first rung the source
+supports:
 
 1. **A relayed request** — the named source, not the relayer.
    `jomil.villareal` relaying `rahadiyan.wisesa`'s approval request gives
@@ -432,9 +483,7 @@ first rung the source supports:
    raised the need, when the message introducing the object is explicitly
    responsive to it: it answers, quotes, or is addressed to that need. Where
    several people voiced the same need, it belongs to whoever stated it
-   first; a later restatement by someone else does not transfer it. Record
-   the person who voiced the proposal inline, as `@needraiser (raised the
-   need; proposed by @voicer)`, so one field keeps both facts.
+   first; a later restatement by someone else does not transfer it.
 3. **Otherwise** — whoever introduced the object.
 
 Rung 2 is deliberately narrow. A need is a stated gap, requirement, or
@@ -444,13 +493,25 @@ the responsive link is not explicit, drop to rung 3. Guessing here writes a
 name into the record that the thread does not support, and puts the wrong
 person at the top of the card six months later.
 
-**The proposing side.** Rung 2 splits one role across two people, so the
-gate rules that turn on "the proposer" need both: the **proposing side** is
-the `decision_proposer` together with whoever voiced the object. At rungs 1
-and 3 the side has exactly one member and nothing changes. Rules 3.2, 3.3
-and 5.1 are stated against the side, not the field — read them that way, and
-never narrow them back to the field's single name. Getting this backwards
-lets the person who proposed something approve it themselves.
+**The proposing side is a classification term, and never a stored value.**
+Rung 2 splits one role across two people: the field takes the person whose
+need is served, and the **proposing side** is that person together with
+whoever voiced the object. At rungs 1 and 3 the side has exactly one member
+and nothing changes. Rules 3.2, 3.3 and 5.1 are stated against the side, not
+the field — read them that way, and never narrow them back to the field's
+single name. Getting this backwards lets the person who proposed something
+approve it themselves.
+
+**The voicer is used and then discarded.** It decides whether a closure
+signal counts, and that question is settled here, during classification,
+with the thread in hand. Once the gates have run it has no further job, so
+it is never written into `decision_proposer`, never rendered on a card, and
+never published. An earlier version recorded it inline as `@needraiser
+(raised the need; proposed by @voicer)`; that put a one-time intermediate
+into a permanent record and made a field that should read as one name read
+as a sentence. Where the voicer's contribution is worth keeping, the thread
+already keeps it: the need that motivated a proposal belongs in `rationale`,
+which is where D2's first strand already sits.
 
 Use only a source-established identity; never infer it from who triggered
 the capture. Leave unresolved when the source does not establish it.
@@ -542,6 +603,52 @@ established. Do not convert ordinary discussion detail into a condition.
 available Slack evidence because it makes the record easier to verify: exact
 message link, verbatim excerpt, `ref_type`. For a manually added candidate,
 `refs: []` is fine and never blocks review or publication.
+
+### Where a Slack address comes from
+
+Every `[View source]` link and every `refs` entry needs an address. There are
+exactly two ways to get one, in this order.
+
+**1. The source gave one — copy it, byte for byte.** An export header, a
+message's own permalink field, anything the source states. Never rebuild an
+address you were handed, never normalize it, never "fix" it. A run that
+reconstructed a thread address it had already been given produced
+`p1787642328.064969` where the export's own header said
+`p1787642328064969` — one character apart, and a dead link.
+
+**2. The source gave none — construct it, by this formula and no other.**
+Slack exports commonly carry a per-message `ts` and no per-message link,
+so a message-level citation usually has to be built:
+
+```text
+https://<workspace>.slack.com/archives/<channel-id>/p<ts with the dot removed>
+```
+
+Worked, from the reference export — channel `C04KSAY0K`, and the message
+at `ts 1787642410.610609`:
+
+```text
+ts             1787642410.610609
+dot removed    1787642410610609
+address        https://grab.slack.com/archives/C04KSAY0K/p1787642410610609
+```
+
+**The dot is removed, not kept and not replaced.** This is the single step
+every wrong version of this has missed.
+
+Take `<workspace>` and `<channel-id>` from what the source states — the
+export header carries both, and a thread permalink contains them. Never
+guess either. Where the source establishes neither, there is no address:
+cite the message in author + time form and omit the link, exactly as a
+source with no resolvable URL is handled elsewhere in this file. An address
+that looks right and 404s is worse than none, because nobody checks a link
+that looks fine.
+
+**The stored `ref` is not this address.** `schema.md` stores
+`slack://<channel>/<thread-ts>/<message-ts>`, which keeps the timestamps
+whole, dots included. The https permalink above is what gets *rendered*.
+Building one from the other means removing the dot; they are two notations
+for the same message and neither is a source for the other's formatting.
 
 ## Actions are attributes of Decisions, not peers
 
@@ -680,8 +787,8 @@ to drive review and never reaches the Bank.
 Workflow carries: `decision_classification` (`decision` or `uncertain`),
 `decision_status`, `evidence_type`, `classification_reason` (one concise,
 source-verifiable sentence naming the gate that decided it — "Approval
-requested in `jomil.villareal 3:18 PM`; eng-PIC gate set in
-`cui.ju 3:20 PM`; no signal from that party through the end of the thread",
+requested in `jomil.villareal 2026-08-25 15:18`; eng-PIC gate set in
+`cui.ju 2026-08-25 15:20`; no signal from that party through the end of the thread",
 never "seems approved"), `classification_refs`, `completeness_status`, and
 `missing_required_fields`.
 
@@ -720,7 +827,7 @@ can act on.
 
 ## Worked examples
 
-These trace the reference thread (`examples/saver-discount-thread.txt`) line
+These trace the reference thread (`examples/saver-discount-thread.md`) line
 by line. Its full expected output is recorded in
 `examples/saver-discount-expected.md` — when any rule in this file changes,
 re-run that thread and diff against it.
@@ -739,7 +846,7 @@ examples below turn on reading the order rather than the resemblance.
 
 ### D1 — the Saver-discount approval request
 
-- **Gate 1:** `jomil.villareal 3:18 PM` asks "may we proceed with this
+- **Gate 1:** `jomil.villareal 2026-08-25 15:18` asks "may we proceed with this
   approval request from rahadiyan.wisesa" — an approval request, explicitly
   relayed. Object exists. Attribution: the object belongs to
   `rahadiyan.wisesa`, the named source, not to `jomil.villareal`, who is only
@@ -750,18 +857,18 @@ examples below turn on reading the order rather than the resemblance.
   group (Kalbe & Wardah) — is never itself narrowed or widened. The
   surrounding discussion about merchant-list governance is related context
   and produces Actions, not a scope change to this object.
-- **Gate 3:** `cui.ju 3:20 PM` responds with a condition, not a disposition.
-  `arpit.goel` probes repeatedly (`3:23 PM`, `5:06 PM`, `5:29 PM`, `6:18 PM`)
+- **Gate 3:** `cui.ju 2026-08-25 15:20` responds with a condition, not a disposition.
+  `arpit.goel` probes repeatedly (`2026-08-25 15:23`, `2026-08-25 17:06`, `2026-08-25 17:29`, `2026-08-25 18:18`)
   but never says approved, rejected, or equivalent, and closes by saying "I
-  have documented the thread here" (`arpit.goel 11:23 PM (Day 2)`) —
+  have documented the thread here" (`arpit.goel 2026-08-26 23:23`) —
   documentation is a wrap-up, not a disposition. No closure signal exists.
   `evidence_type: none`.
-- **Gate 4:** `cui.ju 3:20 PM` sets an unmet in-thread gate — "please inform
+- **Gate 4:** `cui.ju 2026-08-25 15:20` sets an unmet in-thread gate — "please inform
   the respective eng PIC and get approval from them first." No eng PIC signs
   off anywhere in the available source. Unmet.
-- **Gate 5:** `cui.ju 3:22 PM` — "arpit.goel could you help to check?" —
+- **Gate 5:** `cui.ju 2026-08-25 15:22` — "arpit.goel could you help to check?" —
   redirects review to `arpit.goel`. The approval was addressed to
-  `randy.tedjakusuma` / `@oncall-lead` at `3:18 PM`; `cui.ju` is not shown to
+  `randy.tedjakusuma` / `@pricing-team` at `2026-08-25 15:18`; `cui.ju` is not shown to
   be that party, and `randy.tedjakusuma` never reappears to endorse the
   redirect. Under Rule 5.2 the redirection does not transfer closing
   authority to `arpit.goel` — moot in practice here since Gate 3 already
@@ -770,23 +877,23 @@ examples below turn on reading the order rather than the resemblance.
 - **Result:** `uncertain`, `decision_status: pending`, `evidence_type: none`.
   `decision_approver`: rung 1 fails outright — Gate 3 found no closure
   signal — so extraction drops to rung 2. The thread names an awaited party
-  twice: the original approval request at `jomil.villareal 3:18 PM` is
-  addressed to `randy.tedjakusuma` / `@oncall-lead` directly, and
-  `cui.ju 3:20 PM` additionally requires sign-off from "the respective eng
+  twice: the original approval request at `jomil.villareal 2026-08-25 15:18` is
+  addressed to `randy.tedjakusuma` / `@pricing-team` directly, and
+  `cui.ju 2026-08-25 15:20` additionally requires sign-off from "the respective eng
   PIC" — a role, not a name. **That role stays unresolved**, and why is the
-  part of this example worth learning. `cui.ju 3:22 PM` names `@arpit.goel`,
+  part of this example worth learning. `cui.ju 2026-08-25 15:22` names `@arpit.goel`,
   who then engages substantively on exactly the engineering-side concerns
   (merchant-group maintenance, governance, documentation freshness) an eng
   PIC would own, through to the end of the available source — which makes
   resolving the role to him look well-supported. Read in sequence it is not:
-  that message answers `jomil.villareal 3:21 PM` asking who to contact while
+  that message answers `jomil.villareal 2026-08-25 15:21` asking who to contact while
   `randy.tedjakusuma` is on leave, not the eng-PIC requirement two messages
   earlier. Nothing in the thread says `@arpit.goel` holds that role, and
   putting him in this field would send a reviewer chasing the wrong person —
   or turn a later "ok" from him into an approval the thread never gave. This
   is the sequence check rung 2 of the ladder calls for, on the case it was
   written for. Value:
-  `@randy.tedjakusuma / @oncall-lead (awaiting approval); eng-PIC sign-off
+  `@randy.tedjakusuma / @pricing-team (awaiting approval); eng-PIC sign-off
   also required, person not named in thread`.
 
   Nothing in that value was filled by inference, so it gets **no**
@@ -804,9 +911,9 @@ examples below turn on reading the order rather than the resemblance.
   The eng-PIC gate and the unendorsed redirection remain what
   `classification_reason` cites as
   the deciding gates — recording who is awaited does not remove either from
-  that reasoning: "Approval requested in `jomil.villareal 3:18 PM`; eng-PIC
-  gate set in `cui.ju 3:20 PM`; review redirected to `arpit.goel` by `cui.ju`
-  at `3:22 PM`, unendorsed by the originally addressed `randy.tedjakusuma`;
+  that reasoning: "Approval requested in `jomil.villareal 2026-08-25 15:18`; eng-PIC
+  gate set in `cui.ju 2026-08-25 15:20`; review redirected to `arpit.goel` by `cui.ju`
+  at `2026-08-25 15:22`, unendorsed by the originally addressed `randy.tedjakusuma`;
   no signal from any entitled party through the end of the thread." Neither
   fact populates `conditions` — both are approval-process facts, not a
   condition on execution. That leaves `conditions` carrying only what is a
@@ -814,21 +921,27 @@ examples below turn on reading the order rather than the resemblance.
   business-team priority list, reviewed against partnership needs and
   merchant performance rather than fixed (`@moch.zulfa`). **`conditions` is
   not empty for this candidate** — the two approval-process facts are
-  excluded from it, not the field as a whole. `pst`: `FF Ecommerce` (inferred — the
-  thread later calls this "this eComm decision" and ties the product to
-  Fulfillment; flagged for reviewer confirmation).
+  excluded from it, not the field as a whole. `pst`: **`Pax Pricing`**
+  (inferred, flagged for reviewer confirmation). The decision acts on the
+  fare a passenger pays, which is what the field records. The thread's two
+  quotable phrases — `albert.lim 2026-08-26 09:02` calling it "this eComm
+  decision", `jomil.villareal 2026-08-25 15:21` placing the product under
+  Fulfillment — describe who is talking and where the product reports, and
+  taking either is the specific error this example exists to prevent. The
+  thread never states the PST; reaching it needs to know what a Saver
+  discount is, which is why it is flagged.
 - This candidate is finalizable exactly as drafted: every required field is
   present, `decision_approver` included — an awaited value, clearly marked
   as such, is a filled, honest value, not a gap — per Completeness above.
 
 ### D2 — documenting the pricing configs on the ExP variable
 
-- **Gate 1:** `sengkeong.ho 8:55 AM` — "If it helps, can we set up an wiki
+- **Gate 1:** `sengkeong.ho 2026-08-26 08:55` — "If it helps, can we set up an wiki
   page to document this for all markets?" — a proposal. Object exists, but
   **the wiki page is not it.** Both signals point the same way: the proposal
   states its own purpose ("to document this") and offers the page
   conditionally ("if it helps"), and the acceptance restates the commitment
-  without it — `albert.lim 8:57 AM`, "part of solving that problem is to
+  without it — `albert.lim 2026-08-26 08:57`, "part of solving that problem is to
   properly document the incoming new ones." Substitution confirms it: put
   the documentation somewhere other than a wiki and what was agreed still
   stands. The object is the commitment to document these configs, with the
@@ -836,7 +949,7 @@ examples below turn on reading the order rather than the resemblance.
   as the Action.
 
   The thread itself demonstrates why this matters. The wiki page that
-  actually got made came from `arpit.goel 11:23 PM` — a different person
+  actually got made came from `arpit.goel 2026-08-26 23:23` — a different person
   from the one asked, documenting the thread rather than the variable's
   configs. Framed as "`@rahadiyan.wisesa` creates a wiki page", the record
   reads as unfulfilled; framed as the commitment, that message is partial
@@ -844,12 +957,13 @@ examples below turn on reading the order rather than the resemblance.
   `decision_proposer` resolves on **rung 2**, not to the person who typed
   the proposal: the same message opens "Can I understand the concern about
   documentation further?", which makes it explicitly responsive to the
-  documentation gap `arpit.goel` stated the day before (`5:29 PM`,
-  `6:18 PM`). `albert.lim 8:57 AM` voices the same need again, but a later
-  restatement does not transfer it. So `decision_proposer`:
-  `@arpit.goel (raised the need; proposed by @sengkeong.ho)`, and the
-  **proposing side** is `arpit.goel` + `sengkeong.ho`.
-- **Gate 2:** `sengkeong.ho 8:59 AM` — "rahadiyan.wisesa lets set up a wiki
+  documentation gap `arpit.goel` stated the day before (`2026-08-25 17:29`,
+  `2026-08-25 18:18`). `albert.lim 2026-08-26 08:57` voices the same need again, but a later
+  restatement does not transfer it. So `decision_proposer` is
+  `@arpit.goel` — one name, and the only thing this field records. The
+  **proposing side**, used below and stored nowhere, is `arpit.goel` +
+  `sengkeong.ho`.
+- **Gate 2:** `sengkeong.ho 2026-08-26 08:59` — "rahadiyan.wisesa lets set up a wiki
   page for this variable and document all the configs here? and then find a
   way to link this variable to this wiki so this becomes the central source
   of truth" — narrows the object from "all markets" to the single variable,
@@ -861,27 +975,27 @@ examples below turn on reading the order rather than the resemblance.
   change of tool and belongs in `decision_details`. "Find a way to" is
   unresolved work with no mechanism chosen, so it is part of the Action.
 
-  Note also that `albert.lim`'s acceptance at `8:57 AM` speaks of "the
+  Note also that `albert.lim`'s acceptance at `2026-08-26 08:57` speaks of "the
   incoming new ones" — all new pricing configs, wider than the single
   variable this narrows to. Rule 5.1 carries the acceptance forward to the
   narrower scope; the gap between the two is what that rule's Review Notes
   entry exists to surface.
-- **Gate 3:** `albert.lim 8:57 AM` — "sengkeong.ho ya that helps" — explicit
+- **Gate 3:** `albert.lim 2026-08-26 08:57` — "sengkeong.ho ya that helps" — explicit
   acceptance. The thread names no specific approver for this proposal, so
   under Rule 3.2 a disposition from any participant outside the proposing
   side can close it. `albert.lim` is neither `arpit.goel` nor
   `sengkeong.ho`, so he qualifies. Valid, unambiguous form.
 
   This is where rung 2's "whoever stated it first" tiebreak earns its
-  keep. `albert.lim` restates the same documentation need at `8:57 AM`; had
+  keep. `albert.lim` restates the same documentation need at `2026-08-26 08:57`; had
   the restatement carried the need to him, he would be on the proposing
   side, his own "ya that helps" would fall to Rule 3.3, and D2 would close
   as `uncertain` with no approver — from a thread that plainly settled the
   question. The need stays with `arpit.goel`, who stated it first and never
   responded to the proposal, and the acceptance stands.
-- **Gate 5 (scope fit):** the narrowing at `8:59 AM` comes from
+- **Gate 5 (scope fit):** the narrowing at `2026-08-26 08:59` comes from
   `sengkeong.ho`, who voiced the object and is therefore on the proposing
-  side, and happens after `albert.lim`'s acceptance at `8:57 AM`. A
+  side, and happens after `albert.lim`'s acceptance at `2026-08-26 08:57`. A
   narrowing from that side after acceptance does not reopen the candidate,
   so the acceptance carries forward to the narrowed scope. Note that Rule
   5.1 has to be read against the side here: `sengkeong.ho` is not the name
@@ -902,12 +1016,12 @@ examples below turn on reading the order rather than the resemblance.
 
   **Check which message came first before crediting a motivating concern.**
   It is tempting to read the accepter as the person whose concern prompted
-  the proposal — `albert.lim` accepts at `8:57 AM` and, in the same message,
+  the proposal — `albert.lim` accepts at `2026-08-26 08:57` and, in the same message,
   talks about cleaning up legacy pricing configs. But that remark arrives
   *after* his acceptance, as supporting context he adds. The governance
   concern that actually motivated the exchange — "no governance on the grabx
   group... no documentation on knowing what the right set of merchants
-  are" — was raised by `arpit.goel` at `5:29 PM` and `6:18 PM` the day
+  are" — was raised by `arpit.goel` at `2026-08-25 17:29` and `2026-08-25 18:18` the day
   before. Attribute a motivating concern to whoever raised it, not to
   whoever happens to accept a later proposal that answers it.
 
@@ -916,7 +1030,15 @@ examples below turn on reading the order rather than the resemblance.
   `albert.lim` restated it and then accepted, so he closes it. One reading
   of the thread, two fields.
 
-- **Action (attaches to D2):** `sengkeong.ho 8:59 AM` asks
+- **`pst`: `Pax Pricing`** (inferred, flagged) — **the same value as D1, and
+  for the reason the rule above gives.** This decision's subject is D1: it
+  commits to documenting the configs that carry that discount. A decision
+  about another decision takes the PST of the decision it is about, so
+  nothing here needs to place documentation work in a product area, and
+  nothing in the thread does. Reaching this value means noticing what D2 is
+  about, which is a step above reading the thread for evidence.
+
+- **A1 (attaches to D2):** `sengkeong.ho 2026-08-26 08:59` asks
   `@rahadiyan.wisesa` to set up the wiki page, document the configs there,
   and link the variable to it. **One Action, not two** — the same person is
   asked, in one message, to stand up a page and wire it to the config; they
@@ -927,50 +1049,57 @@ examples below turn on reading the order rather than the resemblance.
 
 ### Actions attaching to D1
 
-- `arpit.goel 11:23 PM (Day 2)` asks `@sengkeong.ho`, `@moch.zulfa`, and
+Both come from `arpit.goel 2026-08-26 23:23`, and both are later than D2's
+Action, so they take the later labels: **labels run in thread chronology
+across the whole thread, never grouped by Decision.** Within one message,
+textual order is the only ordering there is.
+
+- **A2** — "I have documented the thread here" is a completed action:
+  `action`: "Documented the thread in the Confluence wiki (completed within
+  the thread)", owner `@arpit.goel`, no date needed. It appears first in the
+  message.
+- **A3** — the same message asks `@sengkeong.ho`, `@moch.zulfa`, and
   `@rangga.pratama` to add the logic that recreates the merchant list. Three
   named owners, store as a list; requested, not yet acknowledged in the
   available source; no date given.
-- The same message — "I have documented the thread here" — is a completed
-  action: `action`: "Documented the thread in the Confluence wiki (completed
-  within the thread)", owner `@arpit.goel`, no date needed.
 
 ### The overlap in this thread
 
-`A1` and `A3` both produce a wiki page, and they sit on different Decisions,
-so nothing in the flow ever shows them together. `A1` is `@arpit.goel`'s,
-already made inside the thread, documenting **the thread**. `A3` is
+`A1` and `A2` both produce a wiki page, and they sit on different Decisions,
+so nothing in the flow ever shows them together. `A1` is
 `@rahadiyan.wisesa`'s, still outstanding, documenting **the variable's
-pricing configs**. Read carefully they are two different pages — but the
-thread never says so, and it is the same person's area, the same tool, and
-one message apart.
+pricing configs** (`sengkeong.ho 2026-08-26 08:59`). `A2` is
+`@arpit.goel`'s, already made inside the thread, documenting **the thread**
+(`arpit.goel 2026-08-26 23:23`). Read carefully they are two different
+pages — but the thread never says so, and it is the same tool, the same
+area, and the same day.
 
-So this is the flagged case exactly: one done, one outstanding, a shared
+So this is the flagged case exactly: one outstanding, one done, a shared
 artifact the thread never connected. Left alone, the record sends someone
 after `@rahadiyan.wisesa` for a page that may already exist, or lets
 `@arpit.goel`'s finished one stand in for work nobody did.
 
-What does **not** happen: they are not merged, neither is dropped, and `A3`
-is not rewritten to point at `A1`. The entry names both, says what each is,
-and gives the reviewer — who was in the thread — the two options. D2's Gate 1
-note above reaches the same pair from the other direction, and for the same
-reason: framing the decision as "make a wiki page" is what makes `A1` look
-like it already satisfied `A3`.
+What does **not** happen: they are not merged, neither is dropped, and
+neither is rewritten to point at the other. The entry names both, says what
+each is, and gives the reviewer — who was in the thread — the two options.
+D2's Gate 1 note above reaches the same pair from the other direction, and
+for the same reason: framing the decision as "make a wiki page" is what
+makes `A2` look as though it already satisfied `A1`.
 
 ### Not decisions
 
 - "Our interim stopgap is to use mex ZFF and correct for dax EAR by
-  overpaying for these jobs" (`sengkeong.ho 9:06 AM`) — reported as the
+  overpaying for these jobs" (`sengkeong.ho 2026-08-26 09:06`) — reported as the
   existing approach, not put forward for disposition. Fails Gate 1.
-- The fare-certainty/batching principle (`sengkeong.ho 8:54 AM`) and the FR
-  capacity/pricing-lever discussion (`albert.lim 9:02 AM`) — background
+- The fare-certainty/batching principle (`sengkeong.ho 2026-08-26 08:54`) and the FR
+  capacity/pricing-lever discussion (`albert.lim 2026-08-26 09:02`) — background
   reasoning, no proposed course of action. Fails Gate 1.
-- `moch.zulfa 5:11 PM` explaining how the merchant group is currently
+- `moch.zulfa 2026-08-25 17:11` explaining how the merchant group is currently
   prioritized and maintained, answering a question — describes existing
   practice, proposes nothing new. It feeds D1's conditions and motivates an
   Action, but is not itself an object.
-- `albert.lim 8:50 AM` asking `long.jin` to use the capture tool, and
-  `long.jin 8:55 AM` asking what sources are available — messages about the
+- `albert.lim 2026-08-26 08:50` asking `long.jin` to use the capture tool, and
+  `long.jin 2026-08-26 08:55` asking what sources are available — messages about the
   capture process itself. Excluded by Gate 1's explicit carve-out.
-- `Grab 8:51 AM` — "Heart, Hunger, Honour, Humility" — an automated values-bot
+- `Grab 2026-08-26 08:51` — "Heart, Hunger, Honour, Humility" — an automated values-bot
   message with no proposal content.

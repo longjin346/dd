@@ -1,9 +1,9 @@
-# Review and publication — state, corrections, and the commit gate
+# Review and publication — state, corrections, and the publication gate
 
 This file governs everything after the first set of Decision and Action
 cards is posted: how the reviewer's corrections are applied, what gets
 reported back after each change, when a version is locked, and the gates in
-front of committing it. It builds on `references/extraction.md` — read that
+front of publishing it. It builds on `references/extraction.md` — read that
 first — and does not redefine any judgment call that belongs there
 (classification, field values, completeness field lists, what an Action is).
 
@@ -468,7 +468,7 @@ order, all required.
    Either way the candidate must be:
    - **Excluded from this publication.** No record changes. `finalized_revision`
      stays valid because nothing about the finalized state changed — this
-     candidate simply isn't part of what gets committed *this time*; it
+     candidate simply isn't part of what gets published *this time*; it
      remains in the finalized review for a possible later attempt. Proceed
      straight to gate 4 and carry the exclusion (with its reason) into the
      preview.
@@ -523,7 +523,7 @@ order, all required.
    applies only to the set and `finalized_revision` the reviewer most
    recently saw — the save message, or the re-render from gate 4 where there
    was one. Never alter a field or re-run reasoning silently between that
-   and the commit; a reply that changes something restarts from the gate it
+   and the write; a reply that changes something restarts from the gate it
    affects instead of proceeding.
 
 **Field check before gate 5 can be satisfied:** every candidate in the
@@ -560,20 +560,21 @@ of a published record that has no field for it.
 field — do not enforce one at finalize or at publication. An Action with no
 owner and no due date is captured and published exactly as the reviewer left
 it, attached to its Decision through the permanent ID the publisher derives
-from position at commit time (never a value authored or corrected during
+from position at publication time (never a value authored or corrected during
 review).
 
 **The run ends with a result, either way.** Once the write returns, say what
-happened — which Decisions were committed and where, or that nothing was
+happened — which Decisions were written and where, or that nothing was
 written and the locked version is still here to retry. The text belongs to
 `references/rendering.md`; what matters here is that neither outcome is
 allowed to end in silence. A user who replied "Yes, save" and then heard
 nothing has every reason to assume it worked.
 
-**Mechanics kept at policy level:** only the whitelisted publisher may ever
-write to the Bank — never the GitLab API or `git` directly, and never a
-substituted script or destination. The publishing credential is passed only
-to that publisher and never printed or logged. The write is non-overwriting.
-An edited Decision or Action is not automatically reflected in a prior
-commit; re-publishing after any post-commit edit requires all five gates
-again, from gate 1.
+**The write itself is not described here.** `references/publishing.md` owns
+the boundary — the payload, how `publisher/publish.sh` is invoked, what it
+returns, and what to do when it fails. Two things from it that this section
+depends on: the write is non-overwriting, so an edited Decision or Action is
+not reflected in a record already written and re-publishing after any
+post-publication edit requires all five gates again from gate 1; and a
+failed write leaves `finalized_revision` untouched, so the locked version is
+still there to retry.

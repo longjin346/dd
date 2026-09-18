@@ -101,13 +101,19 @@ attachments, other URLs. Do this before reading any of them.
 - An ordinary permalink to another message inside the target thread is not
   an external source.
 
-Checked against `examples/saver-discount-thread.txt`: the discovery pass
-over that thread finds exactly three items, each identifiable without
-opening anything — the `experiments.grab.com` variable link and the linked
-Jira issue (both in `jomil.villareal`'s first message; the Jira identified
-by its unfurled "Approval_Request" key and "Jira Cloud" label), and the
-Confluence page `arpit.goel` links late in the thread (identified by its
-unfurled title "foodSaverOptionDiscount" and "Confluence Cloud" label).
+Checked against `examples/saver-discount-thread.md`: the discovery pass over
+that thread finds exactly three items, each identifiable without opening
+anything — the `experiments.grab.com` variable link and the linked Jira
+issue (both in `jomil.villareal`'s first message, the Jira identified by its
+key and title), and the Confluence page `arpit.goel` links at the end
+(identified by its title). All three carry a full address, so that thread
+does not exercise the no-resolvable-address case at all.
+
+That file is a hand-prepared export, so it settles what the thread
+*contains* and says nothing about the shape the Slack tooling returns —
+which identifying fields arrive, and whether an unfurl comes as structured
+data or as text. Treat the rule above as written against what Slack shows,
+and the example as a check on the count, not on the format.
 
 ## Selecting which sources to read
 
