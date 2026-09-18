@@ -33,6 +33,11 @@ review_notes:
     #     Why a candidate did not close, with its source link. The card still
     #     shows decision_status; what is lost is the reason.
     #
+    # - unresolved_identities
+    #     Raw Slack ids the tooling could not turn into names, and the
+    #     fields they occupy. Hidden, a record publishes with an approver
+    #     nobody reading it later can identify.
+    #
     # - actions_that_may_overlap
     #     Two Actions that may name the same artifact. Nothing else reports
     #     this — hidden, it is not surfaced anywhere.

@@ -51,20 +51,56 @@ read — `get_message_context_from_url`, `read_channel_history`,
 Fetch the whole thread in one call: `get_message_context_from_url` with
 `include_thread: true` and an explicit, high `thread_limit` (200; the
 default is 50), or `read_channel_history` scoped to the thread timestamp
-when given a channel + `thread_ts` instead of a permalink. **This tool has a
-hard limit and no pagination — whatever comes back on that one call is all
-you get.** So:
+when given a channel + `thread_ts` instead of a permalink.
 
-- Always request the high limit explicitly.
-- If the number of messages returned equals the limit requested, the thread
-  is probably cut off — and the tail is exactly where approvals and
-  objections tend to live. Stop before extracting anything and ask the user
-  whether to continue with the truncated read or split the thread and
-  retry. Proceed only on an explicit yes.
-- A confirmed truncated read stays a `partial` bundle (below) all the way
-  through — mark it, and never let it reach the user as a complete
-  extraction. A truncated read with no confirmation makes the bundle
-  `inaccessible` (below) instead.
+### Always check the count against the thread's own reply count
+
+**A short read does not announce itself.** Take `reply_count` from the
+thread's metadata and compare it against what actually came back. Root plus
+`reply_count` is how many messages the thread has; anything fewer is a short
+read, whatever the fetch reported and however plausible the messages look.
+
+**Run this check on every fetch, before anything else.** It is the only
+reliable detector, and a short read that slips past it is the most damaging
+outcome in this skill: extraction produces confident, well-formed cards from
+part of a thread, the bundle says `complete`, and neither the reviewer nor
+anything downstream has a way to tell. Approvals and objections cluster at
+the end, which is the part a short read drops.
+
+**Never infer completeness from the limit.** An earlier version of this rule
+said a read is suspect when the number returned *equals the limit
+requested*. That test has a false negative on the failure that actually
+happens: a live run received **6 messages against a limit of 200** on a
+thread whose `reply_count` was 25. Six is nowhere near two hundred, so that
+test passed the read as complete.
+
+**Raising the limit does not help.** The same run tried `thread_limit` of 5,
+25, 26, 30, 50, 200 and 500 and received the same six messages every time.
+`get_message_context_from_url` can return a stale or partial snapshot
+independent of the limit, so a short read is not a sign the limit was too
+low and retrying with a bigger number wastes turns. Ask for 200 once and
+judge the result by the count check.
+
+### When the count comes up short
+
+1. **Re-fetch with `read_channel_history`**, scoped to a narrow window
+   around the thread's timestamp, with `include_threads: true`. This is a
+   different path to the same messages and has recovered a full thread that
+   `get_message_context_from_url` truncated to six. Not a retry of the same
+   call — a different tool.
+2. **Run the count check again on what it returns.** A fallback that also
+   comes up short is still a short read; the point of the fallback is the
+   messages, not the reassurance.
+3. **Only when the fallback also falls short**, stop before extracting
+   anything and ask the user whether to continue with the partial read.
+   Proceed only on an explicit yes. Asking before trying the fallback spends
+   the reviewer's attention on something usually recoverable without them.
+
+A confirmed short read stays a `partial` bundle (below) all the way
+through — mark it, and never let it reach the user as a complete extraction.
+A short read with no confirmation makes the bundle `inaccessible` (below)
+instead. A read the fallback completed is an ordinary `complete` bundle:
+nothing was missing in the end, so there is nothing to report.
 
 If the fetch fails outright or the permalink doesn't resolve, the thread is
 `inaccessible`: stop, don't extract.
@@ -79,13 +115,58 @@ not a gap this layer failed to fill.
 
 ## Identity
 
-Resolve every user id to that person's Slack profile alias with
-`find_user` — the dotted handle shown in their profile (`@long.jin`), never
-their human display name ("Long Jin"). This is the one identity form the
-bundle carries; nothing downstream re-resolves it into another form. When an
-id cannot be resolved, keep the raw id rather than guessing, in the same
-`@<id>` shape. A non-person approver (a declared no-objection forum or
-mechanism) is carried as its plain name, no `@`.
+The bundle carries one identity form: the dotted Slack profile alias,
+`@long.jin` — never a human display name ("Long Jin"). Nothing downstream
+re-resolves it into another form.
+
+**`find_user` does not do this.** It searches *by* name or alias and returns
+an id; there is no reverse direction from a raw id to a name. Do not plan a
+run around resolving ids with it, and do not read a failure to resolve as
+something to retry — a live run found this the hard way, with four names
+resolved and five not.
+
+Where names actually come from, in order:
+
+1. **The fetch's own participants list**, when it includes one — names
+   attached to ids, already resolved. This is where every name that
+   resolved in that live run came from.
+2. **The message itself**, where a mention renders as a readable handle
+   rather than an id.
+3. **Somebody in the thread saying who it is.** A reviewer supplying a name
+   is an ordinary correction, applied like any other.
+
+**An id that none of those resolves stays a raw id, in the same `@<id>`
+shape.** Never guess, never infer one from a neighbouring message, and never
+leave the field empty to avoid the ugliness — an honest `@U06VBBZ50RG` is a
+value a reviewer can fix, and a wrong name is one nobody will ever catch.
+
+**Carry every unresolved id through to Review Notes' `Unresolved
+Identities`** (`references/rendering.md`), which names each one and the
+fields it appears in so the reviewer can supply what the tooling could not.
+
+**It is not a source limitation, and it does not make the bundle
+`partial`.** The thread was read in full; a lookup failed. A live run read
+all 26 messages of a thread and still could not name five of its
+participants — a `complete` bundle with unresolved ids in it. Filing this
+under source limitations would suppress it, because that category only has
+entries on a `partial` bundle.
+
+Left unflagged an unresolved id reaches the Decision Bank as a record whose
+proposer or approver nobody reading it later can identify, which defeats the
+point of keeping the record.
+
+**Not every `@` id is a person.** Read the first character before treating
+one as an unresolved name:
+
+| | |
+|---|---|
+| `U…` | a person. Unresolved means their name is unknown. |
+| `S…` | a **usergroup**, the live form of `@pricing-team`. Not a person, and never a `decision_proposer`. |
+| `B…` | a bot. Gate 1 already excludes automated messages (`references/extraction.md`). |
+
+A usergroup is the addressee-or-gatekeeper case extraction already handles,
+not a name to hunt for. A non-person approver (a declared no-objection forum
+or mechanism) is carried as its plain name, no `@`.
 
 ## Discovering external sources
 

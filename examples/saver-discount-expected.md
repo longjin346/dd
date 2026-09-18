@@ -414,7 +414,8 @@ failures, has dropped them silently.
 
 # Review Notes, expected
 
-Five of the six categories have content; `Source Limitations` does not.
+Five of the seven categories have content. `Unresolved Identities` and
+`Source Limitations` do not.
 
 - **Complete, but not a decision yet** — `D1`. What the reviewer can do
   about it. Does not repeat `Uncertain Decisions`' evidence.
@@ -439,6 +440,12 @@ Five of the six categories have content; `Source Limitations` does not.
   the evidence the thread gives; the entry disappears only once someone
   answers.
 - **Not Identified as Decisions** — the six above.
+- **Unresolved Identities** — **absent.** Every participant in this export
+  appears as a dotted alias, so nothing is left as a raw id. Live threads
+  are not always like this: a deployment run read a thread in full and still
+  could not name five of its participants, because `find_user` resolves name
+  to id and has no reverse direction. This fixture does not exercise that
+  path.
 - **Source Limitations** — **absent.** The user answered `none`, which makes
   the bundle `complete`: they saw what was on offer and declined it, so
   nothing is missing that anyone wanted. An entry here on this run is wrong.

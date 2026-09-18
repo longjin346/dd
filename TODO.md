@@ -253,6 +253,50 @@ parent Decision, took a fresh identifier rather than reusing a dropped one,
 and resolved a bare first name to a handle. A vague acknowledgement did not
 satisfy the explicit-save gate.
 
+## From the first live Hermes run
+
+The first run against real Slack tooling, and the first evidence about
+Acquire — the one stage every earlier test had to simulate. Both findings
+are fixed in 5.4.0; they are recorded because the operational facts behind
+them are durable and will outlive the fixes.
+
+**`get_message_context_from_url` returns a short read that announces
+nothing.** It returned the root plus 5 replies on a thread whose
+`reply_count` was 25, and returned the same six messages at
+`thread_limit` 5, 25, 26, 30, 50, 200 and 500. The limit parameter has no
+effect on it.
+
+The dangerous part was not the tool. **The skill's own truncation test had a
+false negative on exactly this shape** — it said a read is suspect when the
+number returned *equals the limit requested*, and six against two hundred
+passes that test. Extraction would have produced confident cards from a
+quarter of a thread with the bundle marked `complete`, which is the worst
+failure this skill can have: nothing downstream can detect it and the
+reviewer sees nothing wrong. The live agent caught it only by independently
+comparing against `reply_count`, a check that was nowhere in the skill.
+
+`read_channel_history`, scoped to a narrow window with
+`include_threads: true`, recovered the full thread. The skill had named that
+tool only as an alternative *input shape*, never as a fallback.
+
+**`find_user` has no reverse lookup.** It searches name to id; there is no
+id to name direction, so the instruction to "resolve every user id with
+`find_user`" was unexecutable. The four names that resolved came from a
+participants list the fetch happened to include. Five ids had no path to a
+name and stayed raw — correct behaviour under "never guess an identity", and
+invisible to the reviewer until the agent stopped and asked by hand.
+
+One of those five, `@S7B6M197H`, was not an unresolved person at all: `S…`
+is a usergroup id, the live form of `@pricing-team`. Reading it as a person
+would have put a group in `decision_proposer`.
+
+**What this says about the fixture.** `examples/saver-discount-thread.md` is
+an export in which every participant already appears as a dotted alias and
+every message is present. Both of these failures are invisible to it, and
+would have stayed invisible to any number of runs against it. Reading is
+exhausted long before the skill is correct, and simulating a tool is
+exhausted long before the tool is understood.
+
 ## Known gaps, roughly by cost of being wrong
 
 - **A published record carries no provenance for its own edits.** A
@@ -324,6 +368,16 @@ satisfy the explicit-save gate.
   familiar convention is where one gets overridden. First counter-example
   to the rule above, and the reason it is stated as a limit rather than a
   law.
+- **Simulating a tool is exhausted long before the tool is understood.**
+  Every run before deployment was handed a hand-made export: complete, and
+  with every participant already a dotted alias. Two of the tooling's real
+  behaviours — a fetch that returns a short read silently, and an identity
+  lookup with no reverse direction — are invisible to that fixture and would
+  have stayed invisible to any number of runs against it. Worse, the skill's
+  truncation *detector* was wrong in a way only live data could expose,
+  because the fixture never truncated. The sibling of the rule above: running
+  finds what reading cannot, and running against the real thing finds what
+  running against a stand-in cannot.
 - **A run's self-report is evidence, not a finding.** One reported three
   gaps; two did not exist and would have led to "fixing" things that were
   already correct. Verify each against the file before acting.

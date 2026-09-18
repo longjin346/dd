@@ -404,14 +404,18 @@ Two ways to point me at a thread:
 
 ## The truncation confirmation
 
-`references/sources.md` fetches a thread in one call against a hard limit
-with no pagination. When the number of messages returned equals the limit
-requested, the thread is probably cut off — and the end of a thread is where
-approvals and objections land, so what is missing is disproportionately the
-part that decides things.
+`references/sources.md` detects a short read by comparing what came back
+against the thread's own `reply_count`, then re-fetches with a different
+tool. **This message is only for a short read the fallback could not fix** —
+a read the fallback completed is an ordinary complete run with nothing to
+report. The end of a thread is where approvals and objections land, so what
+is still missing is disproportionately the part that decides things.
 
 This is the first of the skill's two pauses and it is a real stop: the run
-extracts nothing until an explicit go-ahead arrives.
+extracts nothing until an explicit go-ahead arrives. Two things have already
+been tried before it is sent, and saying so is what makes the ask
+answerable — a reviewer told only "I can't read it all" has no way to judge
+whether to continue.
 
 It is also, on a truncated thread, the first message the run sends, so it
 carries the opening line above it — otherwise a stranger's introduction to
@@ -422,14 +426,19 @@ I'll read this thread and work out what was decided.
 
 ▸ **This thread is longer than I can read in one go**
 
-I read <number> messages, which is as many as I can fetch at once, so there may be more after that — and the end of a thread is usually where the approvals and objections land.
+I could read <number> of the <total> messages in it, and I've already tried a second way of fetching it without getting the rest. The end of a thread is usually where the approvals and objections land, so what's missing is likely the part that decides things.
 
 Reply "go ahead" and I'll work from what I have. Anything I produce will say it came from a partial read, so nobody later mistakes it for the whole thread. Without that, I'll stop here rather than guess at what I'm missing.
 ```
 
-- **Give the number.** "Some messages may be missing" cannot be judged;
-  `I read 200 messages` can — the reader knows their own thread and can tell
-  at a glance whether that is most of it or half of it.
+- **Give both numbers.** "Some messages may be missing" cannot be judged;
+  `6 of the 26 messages` can, and the total is available — it is the
+  `reply_count` the short read was detected against. One number alone leaves
+  the reader doing arithmetic on a thread they would have to scroll to
+  count.
+- **Say the fallback was already tried.** Otherwise the obvious reply is to
+  suggest trying again, and the run has to spend another turn saying it
+  did.
 - **Say what continuing costs, in plain words.** Not `partial`, not
   `inaccessible`, not "the bundle" — those are internal states. What the
   reader needs to know is that the result will carry the limitation with it.
@@ -788,6 +797,9 @@ renders.**
   - <a message about the capture process itself> — excluded by Gate 1's own
     carve-out.
   - <an automated or bot message, quoted> — no proposal content.
+- **Unresolved Identities**
+  - `@U06VBBZ50RG` — the tooling could not turn this id into a name. Tell me
+    who it is and I'll swap it in. Appears as `D1 decision_proposer`.
 - **Source Limitations**
   - [Jira — ABC-123](URL) could not be read because access was denied.
 ```
@@ -847,6 +859,28 @@ renders.**
   It is the only category about Actions, and it carries no `(*)` marker, no
   field key, and no suggestion that anything is missing: an Action has no
   required field and this is not a gap.
+- **`Unresolved Identities` names every raw Slack id the bundle still
+  carries**, one entry each, with the fields it appears in
+  (`references/sources.md` owns how names are resolved and why some are
+  not). `find_user` searches name to id and has no reverse direction, so on
+  a thread whose fetch carried no participants entry for someone, their id
+  is all there is.
+
+  **This category is independent of the bundle status.** An unresolved id is
+  not a source that could not be read — the thread was read in full — so it
+  appears on a `complete` bundle like any other, and `Source Limitations`
+  below is the wrong home for it. A live run read all 26 messages of a
+  thread and still could not name five of its participants.
+
+  **Ask for the name, plainly.** A reviewer supplying one is an ordinary
+  correction and anyone in the thread can give it. Name the fields the id
+  occupies, because that is what tells the reviewer whether it matters: an
+  id in `decision_approver` makes a published record nobody can audit, and
+  an id in a rationale attribution is a smaller loss.
+
+  Never guess, never offer a candidate name, and never drop the entry
+  because the id looks unimportant. A usergroup id (`S…`) is not an
+  unresolved person and never appears here (`references/sources.md`).
 - **`Source Limitations` renders the `source_limitations` entries carried
   from acquisition** (`references/sources.md`), one per entry, never
   reworded into a summary.
