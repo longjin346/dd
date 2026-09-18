@@ -7,7 +7,7 @@ request descriptions, where they sink out of sight.
 
 ## Glossary terms to confirm
 
-`references/glossary.md` holds ten confirmed terms. These appear in captured
+`references/glossary.md` holds eleven confirmed terms. These appear in captured
 threads with no confirmed meaning, so the skill currently leaves them exactly
 as written — which is correct behaviour, not a bug. Confirm one with someone
 who uses it and it can be added.
@@ -21,7 +21,6 @@ who uses it and it can be added.
 | `grabx` | "no governance on the grabx group" |
 | `DMS-Go+` | "combining both levers under DMS-Go+" |
 | `FF` | the `FF Ecommerce` PST value |
-| `Saver` | a Mart service tier |
 
 Do not fill these in from a plausible guess. A wrong entry is trusted by
 everything downstream — that is the whole reason the glossary exists, after
@@ -34,15 +33,17 @@ is worked through gate by gate in `references/extraction.md`, so any run that
 loads the rules has already been shown its answers. It is the teaching
 example and the regression fixture; it cannot measure judgment.
 
-**The nearest step is not a new thread.** `examples/saver-discount-expected.md`
-now carries seven readings awaiting the thread's owner — the judgment calls
-the rest of the file rests on. Answered, that file stops being one reader's
-derivation and becomes a gold set for this thread, which is what makes a
-clean diff mean anything. Until then a clean diff says behaviour has not
-changed, never that it is right.
+**The nearest step was not a new thread, and it has now happened.** The
+thread's owner has answered **six of the seven readings**
+`examples/saver-discount-expected.md` rests on, and two of the six reversed
+what that file previously asserted — which is exactly what a rules-derived
+baseline can never produce, since it goes wrong in the same direction as the
+rules and the diff comes back clean. One question is still open and marked
+in the file.
 
-New threads are still needed, but for a different job: the seven answers make
-*this* thread's standard trustworthy, and only an unseen thread measures
+That makes this thread's standard trustworthy. It does not make it an eval:
+the thread is worked through in `references/extraction.md`, so it is
+permanently spent as a measure of judgment. Only an unseen thread measures
 whether the rules generalise.
 
 What is needed:
@@ -138,14 +139,17 @@ wrong.
 
 Three findings, kept apart because they need different things.
 
-**`presentation.yaml` is never opened.** The 3.6.0 display switch shipped and
-no run has touched the file. The run that was asked to list every file it
-opened named seven, and that was not among them. Nothing in the flow makes a
-run look for it: `rendering.md` says to read it when rendering Review Notes,
-and that instruction sits inside the section a run reaches after it has
-already decided what to render. Until this is settled the switch is
-decorative — a reviewer who sets it will see no effect and have no way to
-tell.
+~~**`presentation.yaml` is never opened.**~~ **Fixed and verified in
+3.11.0.** The instruction sat in a `###` subsection *after* the rule saying
+how Review Notes renders, so a run that read the rule and started rendering
+had already passed it. Worse, skipping the read has no symptom: an empty
+hide-list and an unread file produce identical output, and the list is
+almost always empty. The read is now the section's opening sentence, and the
+symptomless-failure diagnosis is stated in the rule itself, because nothing
+downstream catches a run that ignored a reviewer's preference.
+
+Verified with a non-empty hide-list for the first time since the switch
+shipped: two categories hidden, both still computed, no trace rendered.
 
 ~~**Permalinks are built wrong.**~~ **Fixed in 4.1.0.**
 `references/extraction.md` now states where a Slack address comes from:
