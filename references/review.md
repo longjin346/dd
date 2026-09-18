@@ -571,7 +571,7 @@ allowed to end in silence. A user who replied "Yes, save" and then heard
 nothing has every reason to assume it worked.
 
 **The write itself is not described here.** `references/publishing.md` owns
-the boundary — the payload, how `publisher/publish.sh` is invoked, what it
+the boundary — the payload, how `publisher/publish.py` is invoked, what it
 returns, and what to do when it fails. Two things from it that this section
 depends on: the write is non-overwriting, so an edited Decision or Action is
 not reflected in a record already written and re-publishing after any

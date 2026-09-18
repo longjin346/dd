@@ -1,7 +1,7 @@
 ---
 name: dd
 description: Capture the decisions in a Slack thread — each with its own attached action items — into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
-version: 5.0.0
+version: 5.1.0
 metadata:
   hermes:
     tags: [slack, decisions, knowledge-management, gitlab]
@@ -111,10 +111,11 @@ regardless of which stage is running or what has been loaded so far:
 - **Never call a Slack write tool.** Every prompt, card, and result goes
   out through the normal Hermes reply path — not a message-posting or
   message-editing MCP call.
-- **The Decision Bank is written only by `publisher/publish.sh`, and only
+- **The Decision Bank is written only by `publisher/publish.py`, and only
   after all five publication gates pass**, for candidates confirmed
   `approved`. There is no second path and no fallback: if it cannot be run
-  or does not exit 0, nothing was written and that is what the reviewer is
+  or does not exit 0, nothing was written — the write is one atomic commit,
+  so that is a promise, not a guess — and that is what the reviewer is
   told — never a file, a branch, a scratch copy, or any other destination
   that happens to be reachable. The publishing credential lives in that
   script's environment; the skill never reads, passes, prints or logs it.
