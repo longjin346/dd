@@ -420,13 +420,25 @@ eComm decision" — fill the best-supported active value and flag it as
 inferred so the reviewer confirms or changes it. Never stop to ask before
 drafting. Leave it unresolved only when no source gives any basis at all.
 
-**`decision_proposer`** — the party the decision exists to serve: whoever
-raised the need it answers, not whoever happened to type the proposal. This
-is the Gate 1 attribution rule generalized. That rule already separates
-these two roles for a relayed request; a thread separates them a second way,
-when one person states a gap and a different person offers the thing that
-closes it. One field covers both — work down this ladder and stop at the
-first rung the source supports:
+**`decision_proposer`** — **the party the proposal belongs to: whose need
+it serves, and who is accountable for it.** Not whoever happened to type it.
+**One name, always** — this field never carries two.
+
+The word is `proposer`, not `requester`, and the difference is load-bearing.
+A request is addressed to someone with the authority to grant it; a proposal
+is put forward for the thread to take up, and may never petition anyone. The
+reference thread holds one of each — an approval request relayed on
+`rahadiyan.wisesa`'s behalf, and `sengkeong.ho` offering a wiki page nobody
+was asked to approve. Proposal covers both; request does not, and would make
+the field a lie on the second. Nothing in this skill is called a requester or
+an initiator, and neither word is a synonym for this field: both point at
+whoever spoke, which is the wrong party at two of the three rungs below.
+
+This is the Gate 1 attribution rule generalized. That rule already separates
+proposer from typist for a relayed request; a thread separates them a second
+way, when one person states a gap and a different person offers the thing
+that closes it. Work down this ladder and stop at the first rung the source
+supports:
 
 1. **A relayed request** — the named source, not the relayer.
    `jomil.villareal` relaying `rahadiyan.wisesa`'s approval request gives
@@ -435,9 +447,7 @@ first rung the source supports:
    raised the need, when the message introducing the object is explicitly
    responsive to it: it answers, quotes, or is addressed to that need. Where
    several people voiced the same need, it belongs to whoever stated it
-   first; a later restatement by someone else does not transfer it. Record
-   the person who voiced the proposal inline, as `@needraiser (raised the
-   need; proposed by @voicer)`, so one field keeps both facts.
+   first; a later restatement by someone else does not transfer it.
 3. **Otherwise** — whoever introduced the object.
 
 Rung 2 is deliberately narrow. A need is a stated gap, requirement, or
@@ -447,13 +457,25 @@ the responsive link is not explicit, drop to rung 3. Guessing here writes a
 name into the record that the thread does not support, and puts the wrong
 person at the top of the card six months later.
 
-**The proposing side.** Rung 2 splits one role across two people, so the
-gate rules that turn on "the proposer" need both: the **proposing side** is
-the `decision_proposer` together with whoever voiced the object. At rungs 1
-and 3 the side has exactly one member and nothing changes. Rules 3.2, 3.3
-and 5.1 are stated against the side, not the field — read them that way, and
-never narrow them back to the field's single name. Getting this backwards
-lets the person who proposed something approve it themselves.
+**The proposing side is a classification term, and never a stored value.**
+Rung 2 splits one role across two people: the field takes the person whose
+need is served, and the **proposing side** is that person together with
+whoever voiced the object. At rungs 1 and 3 the side has exactly one member
+and nothing changes. Rules 3.2, 3.3 and 5.1 are stated against the side, not
+the field — read them that way, and never narrow them back to the field's
+single name. Getting this backwards lets the person who proposed something
+approve it themselves.
+
+**The voicer is used and then discarded.** It decides whether a closure
+signal counts, and that question is settled here, during classification,
+with the thread in hand. Once the gates have run it has no further job, so
+it is never written into `decision_proposer`, never rendered on a card, and
+never published. An earlier version recorded it inline as `@needraiser
+(raised the need; proposed by @voicer)`; that put a one-time intermediate
+into a permanent record and made a field that should read as one name read
+as a sentence. Where the voicer's contribution is worth keeping, the thread
+already keeps it: the need that motivated a proposal belongs in `rationale`,
+which is where D2's first strand already sits.
 
 Use only a source-established identity; never infer it from who triggered
 the capture. Leave unresolved when the source does not establish it.
@@ -849,9 +871,10 @@ examples below turn on reading the order rather than the resemblance.
   documentation further?", which makes it explicitly responsive to the
   documentation gap `arpit.goel` stated the day before (`2026-08-25 17:29`,
   `2026-08-25 18:18`). `albert.lim 2026-08-26 08:57` voices the same need again, but a later
-  restatement does not transfer it. So `decision_proposer`:
-  `@arpit.goel (raised the need; proposed by @sengkeong.ho)`, and the
-  **proposing side** is `arpit.goel` + `sengkeong.ho`.
+  restatement does not transfer it. So `decision_proposer` is
+  `@arpit.goel` — one name, and the only thing this field records. The
+  **proposing side**, used below and stored nowhere, is `arpit.goel` +
+  `sengkeong.ho`.
 - **Gate 2:** `sengkeong.ho 2026-08-26 08:59` — "rahadiyan.wisesa lets set up a wiki
   page for this variable and document all the configs here? and then find a
   way to link this variable to this wiki so this becomes the central source

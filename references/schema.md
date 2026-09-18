@@ -32,7 +32,7 @@ Action pointing at a Decision that does not exist is not a case to handle.
   "decision_title": "short and specific",
   "decision_details": "what was decided and its final scope; see extraction.md for what it must carry",
   "rationale": "why, based on the available sources, or null",
-  "decision_proposer": "@username (Slack profile alias, e.g. @long.jin), the party whose need the decision serves rather than whoever typed the proposal; carries an inline voicer marker (e.g. \"@name (raised the need; proposed by @other)\") when those are two different people, or null",
+  "decision_proposer": "@username (Slack profile alias, e.g. @long.jin) — the party the proposal belongs to: whose need it serves and who is accountable for it, not whoever typed it. Exactly one name, never two; see extraction.md. Or null",
   "decision_approver": "@username (Slack profile alias, e.g. @long.jin), a non-person forum's plain name, or either of those with an inline awaited marker (e.g. \"@name (awaiting approval)\") when the thread establishes who is supposed to approve but nobody has yet",
   "decision_status": "approved | rejected | pending",
   "evidence_type": "explicitly_stated | no_objection | none",

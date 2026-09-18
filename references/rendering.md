@@ -567,13 +567,14 @@ contract above and applied identically to every card:
 - Field labels are the exact JSON key in inline code, with `(*)` appended
   inside the code span where it applies — `` `decision_details(*)` ``, never
   a renamed label like "Decision".
-- `decision_proposer` names the party whose need the decision serves, which
-  is not always whoever typed the proposal
-  (`references/extraction.md` owns which). When the thread splits those two
-  roles, the value carries the voicer inline — `@alias (raised the need;
-  proposed by @second-alias)` — one field, both people, no second field on
-  the card. Render it as one value; never split it across two
-  bullets, and never drop the parenthetical to shorten the card.
+- `decision_proposer` names the party the proposal belongs to, which is not
+  always whoever typed it (`references/extraction.md` owns which). **It is
+  one alias and nothing else** — no parenthetical, no second name, no note
+  about who voiced it. Where the thread splits those roles, extraction uses
+  the distinction to decide the gates and discards it; it never reaches the
+  card. Contrast `decision_approver`, whose `(awaiting approval)` marker
+  does render, because that one states the record's current state rather
+  than how it was classified.
 - `decision_status` always shows the full compact label
   `` `decision_status(*)(options:approved|rejected|pending)` `` followed by
   its plain-text value — never wrap `approved`/`rejected`/`pending` in code,
@@ -1101,7 +1102,7 @@ own:
 - `pst(*)`: <PST>
 - `rationale(*)`: <the need this decision answers, from whoever raised it> (@alias). <a second reason> (@second-alias). <a third> (@third-alias).
 - `decision_status(*)(options:approved|rejected|pending)`: approved
-- `decision_proposer(*)`: @alias (raised the need; proposed by @second-alias)
+- `decision_proposer(*)`: @alias
 - `decision_approver(*)`: @third-alias
 - `conditions`: ? - optional to fill
 - `refs`: []

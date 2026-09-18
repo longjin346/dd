@@ -22,8 +22,8 @@ handles, the reactions all come from the export. The **readings** are not.
 
 ### Seven readings awaiting the thread owner
 
-**Five of seven are now answered by the thread owner**, and the answers are
-folded into the file below. What remains open is marked. Two of the five
+**Six of seven are now answered by the thread owner**, and the answers are
+folded into the file below. What remains open is marked. Two of the six
 reversed what this file previously asserted — those are the valuable ones,
 because a baseline derived from the rules could never have produced them.
 
@@ -31,9 +31,9 @@ because a baseline derived from the rules could never have produced them.
    **Answered: yes.** D2 is `approved`, `@albert.lim` is the approver. The
    run that read it as `pending` was wrong.
 2. ~~**Whose decision is D2?**~~ **Answered: `@arpit.goel`** — he raised
-   it. One thing left open inside this: whether the inline voicer marker
-   naming `@sengkeong.ho` comes back, since that marker is what Rule 3.3
-   uses to stop a voicer approving their own proposal.
+   it, and the field carries that one name. The voicer marker the owner
+   dropped is not coming back: it decides Gate 3 during classification and
+   is not a stored value.
 3. ~~**Is D2 "record these configs" or "make a wiki page"?**~~
    **Answered: record the configs.** The title says document, and the page
    is named as the agreed platform inside the details.
@@ -259,8 +259,9 @@ I understand the concern about documentation further?", which makes it
 explicitly responsive to the documentation gap `arpit.goel` stated the
 previous day (`2026-08-25 17:29` and `18:18`). `albert.lim 2026-08-26 08:57`
 voices the same need again, but a later restatement does not transfer it.
-Value: `@arpit.goel (raised the need; proposed by @sengkeong.ho)`. The
-**proposing side** is `arpit.goel` + `sengkeong.ho`.
+Value: `@arpit.goel` — one name, which is all this field ever holds. The
+**proposing side** is `arpit.goel` + `sengkeong.ho`, used to decide Gates 3
+and 5 below and stored nowhere.
 
 **Gate 2 — Final state:** Narrowed, one candidate. `sengkeong.ho 2026-08-26
 08:59` narrows from "all markets" to this single variable and adds the
@@ -323,11 +324,13 @@ not the field** — `sengkeong.ho` is not the name in `decision_proposer`.
 - `decision_status`: `approved`
 - `decision_proposer`: **`@arpit.goel`** — he raised this.
 
-  *Open:* earlier versions carried the voicer inline as
-  `@arpit.goel (raised the need; proposed by @sengkeong.ho)`. The owner's
-  value drops that marker. Whether it should come back is unsettled — the
-  marker is what records that `@sengkeong.ho` voiced the proposal, which is
-  what stops a voicer approving their own proposal under Rule 3.3.
+  **One name, no marker.** Earlier versions carried the voicer inline as
+  `@arpit.goel (raised the need; proposed by @sengkeong.ho)`; the owner's
+  value dropped it and the rules now agree. That `@sengkeong.ho` voiced the
+  proposal still decides Gate 3 — it is why `albert.lim` can close it — but
+  that question is settled during classification, with the thread in hand,
+  and the answer is not part of the record. A run that renders the marker
+  is wrong.
 - `decision_approver`: `@albert.lim`
 - `conditions`: `? - optional to fill`
 - `refs`: available
@@ -426,9 +429,10 @@ Five of the six categories have content; `Source Limitations` does not.
   the approver carried no entry, on the reasoning that it came from direct
   evidence. It does not: naming him is an inference, and one a reviewer
   should be asked to confirm.
-- **Uncertain Decisions** — `D1`, with the unmet eng-PIC gate and the
-  unendorsed redirection, in plain language, with a source link. Never a
-  gate id or an enum name.
+- **Uncertain Decisions** — `D1`, with the unmet eng-PIC gate, in plain
+  language, with a source link. Never a gate id or an enum name. **The
+  unendorsed redirection is not a second reason** — it did not survive the
+  eng-PIC correction, and a run still citing it is reading the old file.
 - **Actions That May Overlap** — **absent.** With the duplicate resolved
   there is one wiki Action, so no pair remains to flag. A run that has not
   resolved it will raise the pair, and raising it is correct behaviour on
