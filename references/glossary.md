@@ -33,6 +33,7 @@ Use these meanings when the term appears. They are confirmed, not inferred.
 | `FMCG` | fast-moving consumer goods |
 | `ID` | Indonesia |
 | `Mart` | the GrabMart product line |
+| `Saver` | a lower-priced fare option. A Saver discount reduces the fare the passenger pays, so a decision about one acts on pax pricing |
 
 `MEX` and `ID` sit in the same table on purpose. One is a country code in
 this context and the other is not, and no amount of care with the shape of a

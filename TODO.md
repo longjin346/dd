@@ -111,20 +111,14 @@ is still open and each of these moves a rule that decides more than one
 thing. Each is a case where the run followed the rule and the rule was
 wrong.
 
-- **`pst` is what the decision acts on, not where the conversation sits.**
-  `extraction.md`'s rule offers *"a decision the thread explicitly calls
-  'this eComm decision'"* as its worked example of a sound inference. That
-  is the exact inference that produced the wrong value: a Saver discount is
-  a discount on pax pricing, and "this eComm decision" describes the
-  surrounding conversation. Replace the example with this case as a worked
-  negative, and state the distinction the owner drew.
-- **A decision about another decision inherits its PST.** D2 documents the
-  behaviour D1 sets, so it is `Pax Pricing` because D1 is — not because
-  anything in the thread places the documentation work in a product area.
-  The current rule only looks for evidence about the decision in front of
-  it, and has nothing for a decision whose subject is another decision.
-  Same principle as the entry above, applied one level up: the PST follows
-  what the decision acts on, and here what it acts on is D1.
+- ~~**`pst` is what the decision acts on, not where the conversation sits.**~~
+  **Applied in 4.2.0.** The rule now leads with that sentence, carries the
+  eComm phrase as a worked *negative* with a table separating what each
+  quotable phrase actually describes, and D1's worked example reads
+  `Pax Pricing` instead of teaching the wrong answer.
+- ~~**A decision about another decision inherits its PST.**~~
+  **Applied in 4.2.0**, stated in the `pst` rule and exhibited on D2, which
+  now carries `Pax Pricing` and says why.
 - **Read the named person's conduct, not only the naming message.** The
   rung-2 passage tells a reader to check what question a naming message was
   answering, and illustrates it with *"who is covering for an absent
@@ -134,9 +128,8 @@ wrong.
   naming him. What settled it was that he then probed the request like
   someone exercising a gate. The rule inspects the naming message's
   neighbours and never looks at what the named person does next.
-- **`Saver` belongs in the glossary.** Reaching the right `pst` depends on
-  knowing a Saver discount is a discount on pax pricing, and the skill has
-  no way to know it. Sits in the unconfirmed list above.
+- ~~**`Saver` belongs in the glossary.**~~ **Added in 4.2.0**, confirmed by
+  the thread owner during the baseline review.
 - **Nothing to fix in the overlap check.** It flagged the right pair, on two
   Decisions that never appear together, and the owner's answer was that they
   are the same work. The 3.5.0 feature did its job on its first real test.

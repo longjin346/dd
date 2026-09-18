@@ -412,13 +412,49 @@ carry, and restating it here only duplicates them while risking a record
 that goes stale the moment `decision_status` is corrected. Test: the
 sentence must stay true even if `decision_status` changes later.
 
-**`pst`** — select only an active value from `references/psts.json`. Use
-explicit source evidence or clearly established project context; never infer
-it from a channel name alone. When the sources support a reasonable but not
-certain value — for example, a decision the thread explicitly calls "this
-eComm decision" — fill the best-supported active value and flag it as
-inferred so the reviewer confirms or changes it. Never stop to ask before
-drafting. Leave it unresolved only when no source gives any basis at all.
+**`pst`** — select only an active value from `references/psts.json`.
+
+**The PST is what the decision acts on, not where the conversation sits.**
+Everything else in this rule follows from that one sentence. A thread lives
+in some channel, is raised by some team, and sits under some org — none of
+those is the subject of the decision, and all three read like evidence.
+
+The failure has a shape worth recognising, because every run so far has
+walked into it. A thread discusses a Saver-fare discount for a merchant
+group. Someone calls it *"this eComm decision"*; someone else notes the
+product sits under Fulfillment. Both are true, both are explicit, and both
+describe the *conversation*. The decision acts on the fare a passenger
+pays, so the PST is `Pax Pricing` — which nobody in the thread ever says.
+**The most quotable evidence in the thread was the wrong evidence**, and a
+value reached by quoting it is confidently, checkably wrong.
+
+So before taking any phrase as evidence, ask what it is about:
+
+| Phrase | What it describes |
+|---|---|
+| *"this eComm decision"* | who is talking |
+| *"product is from under Fulfillment"* | where the product reports |
+| the channel's name | where the thread happens |
+| what the decision changes | **the PST** |
+
+**A decision about another decision inherits the PST of the decision it is
+about.** Documenting, governing, tracking or auditing another decision does
+not give the work its own subject area — what it acts on is that decision.
+In the same thread, the commitment to document the pricing configs is
+`Pax Pricing` because the discount it documents is, not because anything
+places documentation work in a product area.
+
+Reaching the right value often needs domain knowledge the thread never
+supplies — that a Saver discount is a discount on pax pricing is not
+deducible from the transcript. That is expected, and it is why this value
+goes to the reviewer flagged: **fill the best-supported active value, flag
+it as inferred** so they confirm or change it (`references/rendering.md`'s
+`Inferred Values to Confirm`), and never stop to ask before drafting. Check
+`references/glossary.md` for any in-house term the thread leans on; an
+unconfirmed term is a reason to flag, never to guess.
+
+Never infer it from a channel name alone. Leave it unresolved only when no
+source gives any basis at all.
 
 **`decision_proposer`** — **the party the proposal belongs to: whose need
 it serves, and who is accountable for it.** Not whoever happened to type it.
@@ -885,9 +921,15 @@ examples below turn on reading the order rather than the resemblance.
   business-team priority list, reviewed against partnership needs and
   merchant performance rather than fixed (`@moch.zulfa`). **`conditions` is
   not empty for this candidate** — the two approval-process facts are
-  excluded from it, not the field as a whole. `pst`: `FF Ecommerce` (inferred — the
-  thread later calls this "this eComm decision" and ties the product to
-  Fulfillment; flagged for reviewer confirmation).
+  excluded from it, not the field as a whole. `pst`: **`Pax Pricing`**
+  (inferred, flagged for reviewer confirmation). The decision acts on the
+  fare a passenger pays, which is what the field records. The thread's two
+  quotable phrases — `albert.lim 2026-08-26 09:02` calling it "this eComm
+  decision", `jomil.villareal 2026-08-25 15:21` placing the product under
+  Fulfillment — describe who is talking and where the product reports, and
+  taking either is the specific error this example exists to prevent. The
+  thread never states the PST; reaching it needs to know what a Saver
+  discount is, which is why it is flagged.
 - This candidate is finalizable exactly as drafted: every required field is
   present, `decision_approver` included — an awaited value, clearly marked
   as such, is a filled, honest value, not a gap — per Completeness above.
@@ -987,6 +1029,14 @@ examples below turn on reading the order rather than the resemblance.
   `arpit.goel` raised the need, so the decision is attributed to him;
   `albert.lim` restated it and then accepted, so he closes it. One reading
   of the thread, two fields.
+
+- **`pst`: `Pax Pricing`** (inferred, flagged) — **the same value as D1, and
+  for the reason the rule above gives.** This decision's subject is D1: it
+  commits to documenting the configs that carry that discount. A decision
+  about another decision takes the PST of the decision it is about, so
+  nothing here needs to place documentation work in a product area, and
+  nothing in the thread does. Reaching this value means noticing what D2 is
+  about, which is a step above reading the thread for evidence.
 
 - **A1 (attaches to D2):** `sengkeong.ho 2026-08-26 08:59` asks
   `@rahadiyan.wisesa` to set up the wiki page, document the configs there,
