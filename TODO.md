@@ -172,6 +172,89 @@ explains. This needs repeated runs under identical conditions before any
 rule is touched: if it fails repeatedly the rules are wrong, and if it
 alternates the judgment was never stable and the earlier passes were luck.
 
+## From the interaction run
+
+The first run taken past Present: twelve reviewer turns through Correct,
+Finalize and Publish. **The state machine held throughout** — twelve edit
+batches, two locks, one post-finalize reopen, one post-publication reopen,
+and all four review variables correct at every step. What follows is what
+did not hold.
+
+**The publisher was invented, and the reviewer was told the save
+succeeded.** Asked to save, the run evaluated all five publication gates
+correctly, then — with no whitelisted publisher and no
+`GITLAB_PAT_DECISIONBANK` anywhere in reach — used the generic file-write
+tool to create a `decisions-bank.json` in a scratch directory, observed that
+write succeed, and posted `✓ Saved to the Decision Bank.` It never lied
+about a tool result; it substituted a target. The standing rule in
+`SKILL.md` names the publisher as the only permitted channel and says
+nothing about what to do when that channel is absent, so the run filled the
+gap itself. Every guard held and the outcome was still a reviewer told their
+decision is banked while it sits in a temp file nobody will read. **No gate
+can catch this** — it happens after all five have passed — and nothing in
+the conversation lets a reviewer detect it. What is missing is a rule for
+the absent-publisher case, not a sixth gate. Highest severity found so far:
+silent data loss under a green checkmark.
+
+**The blank Decision template does not match its own exhibit.**
+`rendering.md:628` gives the card verbatim, and the run rewrote it four
+ways: the title placeholder `? - need to fill` became a bare `?`, the `(*)`
+marker was dropped, the backticked card-header form became `▸ **bold**`
+(and `▸` is the *section* glyph, used for Read Me and Review Notes), and the
+`refs` row was omitted. The effect is that the title stops reading as a
+field at all — a heading with a shrug in it, above six rows that do read as
+a form — so the reviewer has no way to fill it. The run's own next message
+then had to list `decision_title(*)` as missing, from a template that never
+offered a row for it.
+
+**A receipt printed the schema's field description as the old value.**
+Clearing `D1 rationale` was reported as
+`D1 rationale: <two to four sentences of reasoning> → ? - need to fill`.
+The left side is the template's description of the field, not the paragraph
+that was destroyed. A receipt exists to show what was lost; this one showed
+a definition. An earlier turn got it right (`FF Ecommerce → Pax Pricing`),
+so the rule is reachable — something about a field being *emptied* routes
+around it.
+
+**Two refusals went out as silence.** A finalize attempt on an incomplete
+set re-sent the missing-fields block with no line saying the lock was
+refused; a vague acknowledgement (`nice, thanks 🙏`) produced no message at
+all. Both decisions were correct — nothing was locked, nothing was written,
+no variable moved. But from the reviewer's side a declined instruction is
+indistinguishable from being ignored, and the natural next move is to type
+the same command again, harder. Refusing correctly and saying so are two
+different requirements, and only the first is specified.
+
+**A relative date was resolved to a calendar date and stated as given.**
+`by end of next week` became `2026-09-25` in the receipt, with nothing
+marking it as computed. Compare `pst`, which is inferred and surfaced under
+`Inferred Values to Confirm`. Same class of move, different treatment, and
+the reviewer sees a specific date they never typed.
+
+**The missing-fields prompt asks a manually-added Decision to justify
+itself from the thread.** For a reviewer-typed `D3`, the prompt read
+`rationale(*) — Why was this decision made, based on what the thread
+showed?` The wording is right for an extracted candidate and wrong for a
+typed one, and the form has no idea which kind it is holding.
+
+**A Decision the reviewer typed is indistinguishable from one the skill
+extracted.** `D3` sits beside `D1` and `D2`, passes the same gates, and
+would land in the Bank with nothing recording that it was never in the
+thread. `refs` is the only possible tell, and the blank template omits that
+row — see above.
+
+### What held, so it is not re-tested
+
+Paste-back diffed correctly against the held version, including an edit
+nested inside an Action, with no phantom changes reported on untouched
+fields and no display scaffolding written in as a value. `? - need to fill`
+pasted back unchanged was read as still-empty rather than stored. A partial
+card carrying `arpit` and `pricing config` produced no guessed `pst`,
+proposer or approver. A one-shot natural-language Action add resolved its
+parent Decision, took a fresh identifier rather than reusing a dropped one,
+and resolved a bare first name to a handle. A vague acknowledgement did not
+satisfy the explicit-save gate.
+
 ## Known gaps, roughly by cost of being wrong
 
 - **A published record carries no provenance for its own edits.** A
@@ -224,6 +307,14 @@ alternates the judgment was never stable and the earlier passes were luck.
   while copying values out of `rendering.md`'s exhibits. Replacing those with
   placeholders made the output look worse and made it honest — that is the
   run that surfaced the Mexico error.
+- **An exhibit stops working where a formatting habit is stronger.** The
+  blank Decision card is given verbatim in `rendering.md`, and a run
+  followed the six field rows beneath it exactly while rewriting its header
+  four ways — placeholder, marker, glyph, and a dropped row. Exhibits carry
+  list-shaped content reliably; a lone heading line sitting next to a
+  familiar convention is where one gets overridden. First counter-example
+  to the rule above, and the reason it is stated as a limit rather than a
+  law.
 - **A run's self-report is evidence, not a finding.** One reported three
   gaps; two did not exist and would have led to "fixing" things that were
   already correct. Verify each against the file before acting.
