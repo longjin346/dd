@@ -6,11 +6,11 @@ decides *whether* to publish; that is settled before this file is opened.
 
 ## The boundary
 
-`publisher/publish.sh` is the only thing that writes to the Decision Bank.
+`publisher/publish.py` is the only thing that writes to the Decision Bank.
 The skill builds a payload, hands it over, and reads the result. It does not
 know how the write happens and must not care — that is the whole point of
-the split. Whether the publisher uses the GitLab CLI, the API, or something
-else is its business and can change without any rule in this skill changing.
+the split. How it reaches GitLab is its business and can change without any
+rule in this skill changing.
 
 **There is no second path, and no fallback.** Not the GitLab API, not `git`,
 not a file write, not a scratch copy "so the work isn't lost", not a
@@ -18,27 +18,21 @@ different destination that happens to be reachable. If the publisher cannot
 be run, the correct outcome is that nothing was written — see **When it
 fails**, which is the whole of what to do about it.
 
-## Configuring the Bank
+## The destination is fixed, and that is the point
 
-`publisher/config.env` holds three values — project path, branch, and an
-optional host — and nothing else. It is sourced by `publish.sh`, so every
-value is quoted; an unquoted one containing a space or a colon breaks the
-source.
+There is no configuration file. Host, project and branch are constants at
+the top of `publish.py`:
 
-**Only what differs between deployments is configured.** Directory names,
-the filename pattern and the push message are the publisher's own decisions
-and sit at the top of `publish.sh`, visible and editable there. A setting
-nobody varies is one more thing that can be set wrong or drift out of step
-with the code — the mirror of the `presentation.yaml` lesson, where a file
-nothing read was decorative.
+```python
+GITLAB_HOST = "https://gitlab.myteksi.net"
+GITLAB_PROJECT = "long.jin/decision-capture-slack-bank"
+GITLAB_BRANCH = "main"
+```
 
-`BANK_PROJECT` ships as `CHANGE_ME` and **the publisher refuses to run
-while it is unset.** A half-configured publisher that guesses a destination
-is the failure this whole boundary exists to prevent, and it is the one
-that leaves no symptom. It fails the same way an absent publisher does, and
-the reviewer is told the same thing — nothing was written.
-
-The file is committed and contains nothing secret.
+**A publisher that can be pointed somewhere else is one that can be pointed
+somewhere wrong**, and that is the failure with no symptom — a reviewer told
+their decision is banked while it sits somewhere nobody will look. Changing where
+records go is a code change, reviewed like one — not a value someone edits.
 
 ## Credentials
 
@@ -51,11 +45,14 @@ the only place the skill mentions it.
 ## Invocation
 
 ```
-publisher/publish.sh  < payload.json  > result.json
+publisher/publish.py  < payload.json  > result.json
 ```
 
 The payload goes in on **stdin**, the result comes back on **stdout**, and
-the exit code is the verdict. Nothing is passed as an argument.
+the exit code is the verdict. Two flags exist for testing and are never used
+by the skill: `--input <file>` reads the payload from a file instead of
+stdin, and `--dry-run` validates and prints the paths it would write without
+touching GitLab.
 
 ### What goes in
 
@@ -95,12 +92,14 @@ reviewer; they are what makes a save checkable afterwards.
 | | |
 |---|---|
 | `0` | every record in the payload was written |
-| anything else | **nothing was written**, whatever `status` says |
+| anything else | **nothing was written** |
 
-Treat a non-zero exit as authoritative over the body. A publisher that
-half-wrote and exited non-zero is reporting a failed publication, and the
-skill says so; reconciling a partial write is the publisher's problem, not
-something to guess at from here.
+**A partial write cannot happen.** Every record goes in one atomic GitLab
+commit, so the Bank either has all of them or none. Validation runs before
+that commit is attempted. This is why a non-zero exit can promise the Bank
+is untouched rather than merely reporting that something went wrong, and it
+is worth preserving in any future implementation: without it the skill would
+have to reconcile a half-written Bank it cannot see.
 
 **There is no CI and no pipeline.** The publisher performs the write itself
 and returns when it is done, so there is no queued or in-flight state to
@@ -110,7 +109,8 @@ the moment it returns.
 ## When it fails
 
 A missing script, a non-zero exit, a malformed result, an unrunnable
-publisher — all one case, and all handled the same way:
+publisher, an unavailable token — all one case, and all handled the same
+way:
 
 1. **Nothing was written.** Say that plainly, in those words, with whatever
    `error` came back.
@@ -131,6 +131,31 @@ publisher — all one case, and all handled the same way:
 The failure text itself lives in `references/rendering.md`, like every other
 message. What this file settles is that the outcome is a failure and is
 reported as one.
+
+## What it rejects
+
+The publisher validates before it commits, and every check below fails the
+whole publication rather than dropping a record. Most of them should be
+unreachable — the gates in `references/review.md` §8 cover the same ground
+where a reviewer can do something about it — so a failure here means a gate
+was skipped or mis-scoped, not that the payload was merely imperfect.
+
+- The payload is not a strict v4 object, or carries a field the schema does
+  not define. Field sets are compared exactly, in both directions.
+- A candidate is not `approved`, or its status and evidence type are not one
+  of the valid pairs in `references/schema.md`.
+- A candidate's `pst` is not an active value in `references/psts.json`.
+- A candidate is missing `decision_title`, `decision_details`,
+  `decision_proposer`, `decision_approver` or `rationale`.
+- An Action names a `linked_decision_id` that is not in this payload, or two
+  records would land on the same path.
+
+**Actions are checked for shape, never for presence.** `action_owner` is a
+list and may be empty; `action_due_date.resolved` may be `null`. An Action
+with no owner and no date publishes exactly as the reviewer left it, because
+no Action field is required at either tier (`references/schema.md`) — and
+because the reference thread has one of each, so a publisher that required
+them could not publish the one thread this skill has been tested on.
 
 ## After a successful write
 
