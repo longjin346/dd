@@ -57,12 +57,12 @@ Fulfilment decisions through the existing Decision Memory Slack app.
   card. Update it in place and show only a safe workflow phase or read-only
   tool label. Never show a query, tool arguments, command, path, tool output,
   source content, credential, model reasoning, or completion estimate.
-- For a new decision, run the installed `slack-decisions` skill. Read the exact
+- For a new decision, run the installed `dd` skill. Read the exact
   Slack thread and only exact linked supporting sources, then make one
   generative synthesis. Do not call the shared Decision Processing Service, a
   second model, an AI critic, or a model retry/repair pass.
 - Produce the strict v4 draft defined in
-  `/data/.hermes/skills/slack-decisions/references/schema.md`. Use only an
+  `/data/.hermes/skills/dd/references/schema.md`. Use only an
   active PST from `references/psts.json`, label missing publication-blocking
   values in the rendered cards, accept natural-language edits, and obtain
   explicit final confirmation.
