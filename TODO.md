@@ -268,10 +268,21 @@ satisfy the explicit-save gate.
   message index in `rendering.md` has no row for it, since its trigger is
   not the trigger the source-selection prompt row describes. Small, but it
   is the fourth message found by reading that table backwards.
-- **`SOUL.md` and `SKILL.md` disagree on the principal.** "Long Jin's
-  Decision Memory agent" and "the admitted user" against "anyone in the
-  channel can trigger it, not just the bank owner". Decide which is true;
-  it determines whether identity matters anywhere in the flow.
+- ~~**`SOUL.md` and `SKILL.md` disagree on the principal.**~~ **Settled in
+  5.3.0: anyone in the channel.** Identity gates nothing in the flow.
+  `SOUL.md` said "the admitted user"; `SKILL.md` said anyone can trigger it
+  and corrections come from whoever is in the thread, and `SKILL.md` was the
+  side that had it right. Ownership and access are stated as separate things
+  now, and "admitted" is scoped to which messages reach the agent rather
+  than who sent them.
+
+  **One consequence worth watching in use:** the explicit save request at
+  publication gate 2 can come from anyone in the thread, not only whoever
+  started the capture. That follows from the decision, and from
+  `decision_approver` being what carries authority in a record — but it is
+  the one place an open principal meets an irreversible write. The preview
+  and the locked version are what stand between them, and no capture has yet
+  been exercised with two different people in it.
 - **A non-person approver has no rendered example.** A declared no-objection
   forum is written as a plain name with no `@`. Stated in one clause,
   demonstrated nowhere — the same shape as two rules that runs got wrong
