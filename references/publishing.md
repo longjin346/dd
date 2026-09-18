@@ -20,17 +20,23 @@ fails**, which is the whole of what to do about it.
 
 ## Configuring the Bank
 
-`publisher/config.env` holds the destination — host, project path, branch,
-the two directories, the filename and record-URL patterns. It is sourced by
-`publish.sh`, so every value is quoted; an unquoted value containing a space
-or a colon breaks the source.
+`publisher/config.env` holds three values — project path, branch, and an
+optional host — and nothing else. It is sourced by `publish.sh`, so every
+value is quoted; an unquoted one containing a space or a colon breaks the
+source.
 
-`BANK_HOST` and `BANK_PROJECT` ship as `CHANGE_ME` and **the publisher
-refuses to run while either is unset.** That is deliberate: a
-half-configured publisher that guesses a destination is the failure this
-whole boundary exists to prevent, and it is the one that leaves no symptom.
-An unconfigured publisher fails the same way a missing one does, and the
-reviewer is told the same thing — nothing was written.
+**Only what differs between deployments is configured.** Directory names,
+the filename pattern and the push message are the publisher's own decisions
+and sit at the top of `publish.sh`, visible and editable there. A setting
+nobody varies is one more thing that can be set wrong or drift out of step
+with the code — the mirror of the `presentation.yaml` lesson, where a file
+nothing read was decorative.
+
+`BANK_PROJECT` ships as `CHANGE_ME` and **the publisher refuses to run
+while it is unset.** A half-configured publisher that guesses a destination
+is the failure this whole boundary exists to prevent, and it is the one
+that leaves no symptom. It fails the same way an absent publisher does, and
+the reviewer is told the same thing — nothing was written.
 
 The file is committed and contains nothing secret.
 

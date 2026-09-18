@@ -7,7 +7,8 @@
 # else in the skill may write and there is no fallback path — see
 # references/publishing.md for the contract this file has to satisfy.
 #
-# Configuration lives in config.env beside this file. Credentials do not:
+# The destination lives in config.env beside this file; the layout below is
+# this script's own. Credentials are in neither:
 # the token comes from the environment this script runs in, never from an
 # argument and never from the skill.
 #
@@ -17,6 +18,19 @@
 # you do.
 
 set -euo pipefail
+
+# --- Layout, decided here rather than configured --------------------------
+# These are the publisher's own choices, not per-deployment settings. Change
+# them here if the Bank's layout changes.
+
+DECISIONS_DIR="decisions"
+ACTIONS_DIR="actions"
+FILENAME="%s.json"                       # %s = the permanent record id
+PUSH_MESSAGE="Decision Bank: add %s"     # %s = the permanent record id
+
+# The write is non-overwriting: publishing an edited Decision adds a record
+# rather than replacing an earlier one. The skill assumes this
+# (references/review.md), so it is not a switch.
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 payload="$(cat)"
@@ -34,7 +48,7 @@ fail() {  # fail <status> <message>
 
 set -a; . "$here/config.env"; set +a
 
-for key in BANK_HOST BANK_PROJECT BANK_BRANCH; do
+for key in BANK_PROJECT BANK_BRANCH; do
   value="${!key-}"
   case "$value" in
     ""|CHANGE_ME) fail "not_configured" \
@@ -59,7 +73,7 @@ actions=$(echo "$payload"  | jq '.action_items | length')
 # For each candidate in .candidates and each action in .action_items:
 #   - assign the permanent record id
 #   - resolve each action's linked_decision_id to that permanent id
-#   - write it to $BANK_DECISIONS_DIR / $BANK_ACTIONS_DIR on $BANK_BRANCH
+#   - write it to $DECISIONS_DIR / $ACTIONS_DIR on $BANK_BRANCH
 #   - collect {id, record_url} per record
 #
 # Then print {"status":"ok","written":[...]} and exit 0.
