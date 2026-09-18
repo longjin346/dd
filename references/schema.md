@@ -132,7 +132,7 @@ pending + none
 
 The MVP publisher accepts only `approved` Candidates. Keep `rejected` and
 `pending` Candidates in conversational review so the user can correct or
-exclude them, but never commit them to the Decision Bank.
+exclude them, but never publish them to the Decision Bank.
 
 ## Action
 

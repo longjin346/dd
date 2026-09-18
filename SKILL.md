@@ -1,7 +1,7 @@
 ---
 name: slack-decisions
 description: Capture the decisions in a Slack thread — each with its own attached action items — into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
-version: 3.11.0
+version: 4.0.0
 metadata:
   hermes:
     tags: [slack, decisions, knowledge-management, gitlab]
@@ -9,7 +9,7 @@ metadata:
 required_environment_variables:
   - name: GITLAB_PAT_DECISIONBANK
     prompt: Agent-specific token restricted by Palana to the Decision Capture Slack Bank
-    required_for: committing a confirmed decision to the bank
+    required_for: publishing a confirmed decision to the bank
 ---
 
 # Slack Thread Decision Extractor
@@ -50,7 +50,8 @@ confirms an exact preview of what is about to be written.
    then show it: the whole set, whatever in it cannot be saved as it
    stands, and the request to save. Editing shows deltas; this is where the
    reviewer sees the record whole, at the moment it decides something.
-6. **Publish** — only on a separate, explicit request. Every candidate that
+6. **Publish** — only on a separate, explicit request.
+   → `references/publishing.md` Every candidate that
    isn't `approved` is resolved by a human — left out, or corrected with
    who actually approved it — and a correction means showing that candidate
    again before the write. Publication sits behind five gates, all
@@ -73,6 +74,7 @@ defeats the point of splitting them out.
 | Fetching the thread; a truncated or failed fetch; finding and listing linked sources; the source-selection question; reading the selected sources; the bundle's `complete` / `partial` / `inaccessible` status | `references/sources.md` |
 | Whether something is a Decision at all (the gate model), its `decision_status` / `evidence_type`, populating a Decision's fields, an Action as an attribute of the Decision it attaches to, two Actions that may name the same artifact, the required-field set, how to cite a source | `references/extraction.md` |
 | Applying a correction — natural-language or pasted — any structural edit (add, drop, restore, merge, move, confirm), the review-state variables, the finalize gate, the five publication gates | `references/review.md` |
+| Handing a passed record to the Decision Bank: the payload, how the publisher is invoked, what it returns, and what to do when it fails | `references/publishing.md` |
 | The exact text of anything sent to Slack: the opening line, the source-selection prompt, the Read Me, a Decision or Action card, a change receipt, Review Notes and the `presentation.yaml` hide-list it is rendered against, the finalize prompt, the save message, the publication result, spacing and glyph rules | `references/rendering.md` |
 
 `references/glossary.md` records the in-house terms these threads use — what
@@ -109,11 +111,13 @@ regardless of which stage is running or what has been loaded so far:
 - **Never call a Slack write tool.** Every prompt, card, and result goes
   out through the normal Hermes reply path — not a message-posting or
   message-editing MCP call.
-- **The Decision Bank is written only through the whitelisted publisher,
-  and only after all five publication gates pass**, for candidates
-  confirmed `approved`. The publishing credential is passed only to that
-  publisher and is never printed, logged, or echoed back into the
-  conversation.
+- **The Decision Bank is written only by `publisher/publish.sh`, and only
+  after all five publication gates pass**, for candidates confirmed
+  `approved`. There is no second path and no fallback: if it cannot be run
+  or does not exit 0, nothing was written and that is what the reviewer is
+  told — never a file, a branch, a scratch copy, or any other destination
+  that happens to be reachable. The publishing credential lives in that
+  script's environment; the skill never reads, passes, prints or logs it.
 
 ## Working with whoever triggered you
 

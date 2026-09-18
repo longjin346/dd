@@ -4,7 +4,7 @@ This file governs one thing: reading a Slack thread and deciding what is a
 decision, what its status is, who decided it, and what follow-up work
 attaches to it. It does not cover how results are rendered as cards, how
 conversational corrections are applied, or how an approved record is
-committed — those live in other reference files and are only named here
+published — those live in other reference files and are only named here
 where a handoff matters.
 
 ## Input to this layer

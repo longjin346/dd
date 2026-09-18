@@ -1252,8 +1252,8 @@ that anything was written. Sent once, immediately after the write returns.
 Not saved: `D1: <title>` — left out at your request; still here if you want to save it later.
 ```
 
-- One bullet per committed Decision, with the record address the publisher
-  returned for it. Its Actions were committed inside it and are not listed
+- One bullet per published Decision, with the record address the publisher
+  returned for it. Its Actions were written inside it and are not listed
   again. When the publisher returns no address for a record, say so on that
   bullet in plain words rather than linking to something invented — the
   rule for a source with no URL, above, applies here for the same reason.
@@ -1265,7 +1265,9 @@ Not saved: `D1: <title>` — left out at your request; still here if you want to
 
 **When the write fails**, the run still ends with a message — a silent
 failure after an explicit "Yes, save" is the worst possible outcome, because
-the user has every reason to believe it worked:
+the user has every reason to believe it worked. A missing publisher, a
+non-zero exit and an unusable result are all this same case
+(`references/publishing.md`):
 
 ```text
 ▸ **Not saved**
@@ -1277,5 +1279,10 @@ The write to the Decision Bank didn't go through, so nothing was written. The ve
   in plain language and what the user can do next.
 - Say explicitly that nothing was written. After a confirmation, the default
   assumption is that it was.
+- **This message, not the success one, is what a write to anywhere else
+  gets.** If the Bank could not be reached, nothing was published, however
+  successfully something was written somewhere reachable. Never render
+  `Saved to the Decision Bank` over a file, a branch or a scratch copy — a
+  run has done exactly that, and the reviewer had no way to tell.
 - Never leave the locked version in doubt: it is unchanged, and retrying
-  commits exactly what was previewed.
+  publishes exactly what was previewed.
