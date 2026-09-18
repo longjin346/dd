@@ -1,7 +1,7 @@
 ---
 name: dd
 description: Capture the decisions in a Slack thread — each with its own attached action items — into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
-version: 5.3.0
+version: 5.4.0
 metadata:
   hermes:
     tags: [slack, decisions, knowledge-management, gitlab]
@@ -23,8 +23,11 @@ confirms an exact preview of what is about to be written.
 
 ## The pipeline, in one screen
 
-1. **Acquire** — fetch the target thread in full. A fetch that comes back
-   truncated stops here and asks before anything else happens. Find what the
+1. **Acquire** — fetch the target thread in full, then **check the message
+   count against the thread's own `reply_count`** — a short read announces
+   nothing, and the fetch tool has returned 6 messages on a 26-message
+   thread. A short read is re-fetched with a second tool first; only when
+   that also falls short does the run stop and ask. Find what the
    thread links to (Jira, Confluence, Docs, attachments) without opening
    anything, ask which of those to read, then read only the selected ones.
    → `references/sources.md`
@@ -71,11 +74,11 @@ defeats the point of splitting them out.
 
 | Working on… | Load |
 |---|---|
-| Fetching the thread; a truncated or failed fetch; finding and listing linked sources; the source-selection question; reading the selected sources; the bundle's `complete` / `partial` / `inaccessible` status | `references/sources.md` |
+| Fetching the thread; the count check and the re-fetch; a short or failed fetch; resolving a person's alias and what to do with a raw Slack id; finding and listing linked sources; the source-selection question; reading the selected sources; the bundle's `complete` / `partial` / `inaccessible` status | `references/sources.md` |
 | Whether something is a Decision at all (the gate model), its `decision_status` / `evidence_type`, populating a Decision's fields, an Action as an attribute of the Decision it attaches to, two Actions that may name the same artifact, the required-field set, how to cite a source, where a Slack address comes from | `references/extraction.md` |
 | Applying a correction — natural-language or pasted — any structural edit (add, drop, restore, merge, move, confirm), the review-state variables, the finalize gate, the five publication gates | `references/review.md` |
 | Handing a passed record to the Decision Bank: the payload, how the publisher is invoked, what it returns, and what to do when it fails | `references/publishing.md` |
-| The exact text of anything sent to Slack: the opening line, the source-selection prompt, the Read Me, a Decision or Action card, a change receipt, Review Notes and the `presentation.yaml` hide-list it is rendered against, the finalize prompt, the save message, the publication result, spacing and glyph rules | `references/rendering.md` |
+| The exact text of anything sent to Slack: the opening line, the source-selection prompt, the Read Me, a Decision or Action card, a change receipt, Review Notes and the `presentation.yaml` hide-list it is rendered against, an unresolved identity the reviewer is asked to name, the finalize prompt, the save message, the publication result, spacing and glyph rules | `references/rendering.md` |
 
 `references/glossary.md` records the in-house terms these threads use — what
 a confirmed one means, and which are known to have no confirmed meaning.
