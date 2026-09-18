@@ -18,6 +18,22 @@ different destination that happens to be reachable. If the publisher cannot
 be run, the correct outcome is that nothing was written — see **When it
 fails**, which is the whole of what to do about it.
 
+## Configuring the Bank
+
+`publisher/config.env` holds the destination — host, project path, branch,
+the two directories, the filename and record-URL patterns. It is sourced by
+`publish.sh`, so every value is quoted; an unquoted value containing a space
+or a colon breaks the source.
+
+`BANK_HOST` and `BANK_PROJECT` ship as `CHANGE_ME` and **the publisher
+refuses to run while either is unset.** That is deliberate: a
+half-configured publisher that guesses a destination is the failure this
+whole boundary exists to prevent, and it is the one that leaves no symptom.
+An unconfigured publisher fails the same way a missing one does, and the
+reviewer is told the same thing — nothing was written.
+
+The file is committed and contains nothing secret.
+
 ## Credentials
 
 The publisher reads what it needs from its own environment. The skill never
