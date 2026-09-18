@@ -692,16 +692,28 @@ and `refs` is optional besides.
 
 One `▸ **Review Notes**` section after all Decision cards, when it has
 content. Each category renders as a bold top-level bullet with its entries
-nested underneath, in this fixed order. Two things gate what renders, in
-this order: **a category renders when it has at least one entry**, and
-**a category the reviewer has hidden does not render at all**. Omit the
-entire section when nothing survives both.
+nested underneath, in this fixed order.
+
+**Open `references/presentation.yaml` before rendering this section.** It
+carries the reviewer's hide-list, and reading it is the first step of
+rendering Review Notes, not a detail to check afterwards — by the time you
+have decided what to render, the decision has already been made without it.
+Read it the same way `psts.json` is read: at render time, every time.
+
+**This read has no symptom when it is skipped.** An empty hide-list and an
+unread file produce identical output, and the list is usually empty, so a
+run that never opens the file looks correct on every thread until the one
+where somebody set a preference — and then it silently overrides them.
+Nothing downstream will catch it. The only defence is opening the file.
+
+Two things then gate what renders, in this order: **a category renders when
+it has at least one entry**, and **a category on the hide-list does not
+render at all**. Omit the entire section when nothing survives both.
 
 ### What the reviewer can hide
 
-`references/presentation.yaml` carries a hide-list for these categories.
-It is a display preference and nothing else — **read it when rendering
-Review Notes, and nowhere else in the skill.**
+The hide-list read above is a display preference and nothing else — it is
+read when rendering Review Notes, and nowhere else in the skill.
 
 - **A hidden category is still computed, and still means what it meant.**
   An uncertain Decision is still uncertain with its entry hidden;
