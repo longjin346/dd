@@ -568,6 +568,52 @@ available Slack evidence because it makes the record easier to verify: exact
 message link, verbatim excerpt, `ref_type`. For a manually added candidate,
 `refs: []` is fine and never blocks review or publication.
 
+### Where a Slack address comes from
+
+Every `[View source]` link and every `refs` entry needs an address. There are
+exactly two ways to get one, in this order.
+
+**1. The source gave one — copy it, byte for byte.** An export header, a
+message's own permalink field, anything the source states. Never rebuild an
+address you were handed, never normalize it, never "fix" it. A run that
+reconstructed a thread address it had already been given produced
+`p1787642328.064969` where the export's own header said
+`p1787642328064969` — one character apart, and a dead link.
+
+**2. The source gave none — construct it, by this formula and no other.**
+Slack exports commonly carry a per-message `ts` and no per-message link,
+so a message-level citation usually has to be built:
+
+```text
+https://<workspace>.slack.com/archives/<channel-id>/p<ts with the dot removed>
+```
+
+Worked, from the reference export — channel `C04KSAY0K`, and the message
+at `ts 1787642410.610609`:
+
+```text
+ts             1787642410.610609
+dot removed    1787642410610609
+address        https://grab.slack.com/archives/C04KSAY0K/p1787642410610609
+```
+
+**The dot is removed, not kept and not replaced.** This is the single step
+every wrong version of this has missed.
+
+Take `<workspace>` and `<channel-id>` from what the source states — the
+export header carries both, and a thread permalink contains them. Never
+guess either. Where the source establishes neither, there is no address:
+cite the message in author + time form and omit the link, exactly as a
+source with no resolvable URL is handled elsewhere in this file. An address
+that looks right and 404s is worse than none, because nobody checks a link
+that looks fine.
+
+**The stored `ref` is not this address.** `schema.md` stores
+`slack://<channel>/<thread-ts>/<message-ts>`, which keeps the timestamps
+whole, dots included. The https permalink above is what gets *rendered*.
+Building one from the other means removing the dot; they are two notations
+for the same message and neither is a source for the other's formatting.
+
 ## Actions are attributes of Decisions, not peers
 
 The Decision is the core record. An Action is something captured about a

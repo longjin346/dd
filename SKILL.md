@@ -1,7 +1,7 @@
 ---
 name: slack-decisions
 description: Capture the decisions in a Slack thread — each with its own attached action items — into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
-version: 4.0.0
+version: 4.1.0
 metadata:
   hermes:
     tags: [slack, decisions, knowledge-management, gitlab]
@@ -72,7 +72,7 @@ defeats the point of splitting them out.
 | Working on… | Load |
 |---|---|
 | Fetching the thread; a truncated or failed fetch; finding and listing linked sources; the source-selection question; reading the selected sources; the bundle's `complete` / `partial` / `inaccessible` status | `references/sources.md` |
-| Whether something is a Decision at all (the gate model), its `decision_status` / `evidence_type`, populating a Decision's fields, an Action as an attribute of the Decision it attaches to, two Actions that may name the same artifact, the required-field set, how to cite a source | `references/extraction.md` |
+| Whether something is a Decision at all (the gate model), its `decision_status` / `evidence_type`, populating a Decision's fields, an Action as an attribute of the Decision it attaches to, two Actions that may name the same artifact, the required-field set, how to cite a source, where a Slack address comes from | `references/extraction.md` |
 | Applying a correction — natural-language or pasted — any structural edit (add, drop, restore, merge, move, confirm), the review-state variables, the finalize gate, the five publication gates | `references/review.md` |
 | Handing a passed record to the Decision Bank: the payload, how the publisher is invoked, what it returns, and what to do when it fails | `references/publishing.md` |
 | The exact text of anything sent to Slack: the opening line, the source-selection prompt, the Read Me, a Decision or Action card, a change receipt, Review Notes and the `presentation.yaml` hide-list it is rendered against, the finalize prompt, the save message, the publication result, spacing and glyph rules | `references/rendering.md` |

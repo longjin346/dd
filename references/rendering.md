@@ -508,6 +508,11 @@ I only open the sources you pick, and nothing linked inside them.
   deleting the ellipsis, which yields a well-formed URL that points
   somewhere else with nothing left to show that anything was lost.
 - A source linked from several messages is one numbered entry, not several.
+- **`slack-permalink` is a placeholder, not a value to invent.**
+  `references/extraction.md` owns where a Slack address comes from: copy the
+  one the source gave byte for byte, or, where it gave none, build it by the
+  formula there — `p` plus the `ts` **with its dot removed**. A run that
+  rebuilt an address it already had shipped a dead link that looked correct.
 - An ordinary permalink to another message in the same thread is not an
   external source and never appears in this list.
 

@@ -154,13 +154,14 @@ already decided what to render. Until this is settled the switch is
 decorative — a reviewer who sets it will see no effect and have no way to
 tell.
 
-**Permalinks are built wrong.** A run rendered
-`.../archives/C04KSAY0K/p1787642328.064969`. The real form has no dot —
-`p1787642328064969` — and the export's own header shows it. The run took the
-`ts` field and prefixed `p` rather than using the address it was given. Same
-family as the URL problems: an address that looks right and fails on click.
-Nothing tells a run how a permalink is constructed, and it should not be
-constructing one at all when the source supplies it.
+~~**Permalinks are built wrong.**~~ **Fixed in 4.1.0.**
+`references/extraction.md` now states where a Slack address comes from:
+copy the one the source gave byte for byte, or build it by a worked formula
+— `p` plus the `ts` with its dot removed — and where neither is possible,
+cite author + time and omit the link. **Not verified against live Slack
+tooling**, which may return per-message permalinks and make the construction
+branch unnecessary; the rule covers both cases so that answer does not block
+anything.
 
 **D2's classification is not stable.** Two runs on the old fixture and the
 first on the export all closed D2 as `approved` on `albert.lim`'s "ya that
