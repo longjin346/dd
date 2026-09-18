@@ -1,7 +1,7 @@
 ---
 name: slack-decisions
 description: Capture the decisions in a Slack thread — each with its own attached action items — into the GitLab Decision Bank. Use this skill WHENEVER the bot is @-mentioned inside a thread and the request touches decisions, approvals, action items, owners, or due dates — including bare mentions with no instruction at all ("@bot", "@bot can you take this one", "@bot capture this"), and phrases like "what did we decide", "extract decisions here", "log the action items", "record this context", "put this in the decision bank". Anyone in the channel can trigger it, not just the bank owner — including a request to summarize a thread, if it mentions decisions, approvals, or actions.
-version: 3.8.0
+version: 3.9.0
 metadata:
   hermes:
     tags: [slack, decisions, knowledge-management, gitlab]
@@ -81,9 +81,12 @@ a confirmed one means, and which are known to have no confirmed meaning.
 abbreviation the source did not expand) and loads it while reading; it is
 not a separate routing destination.
 
-`references/schema.md` defines the published record's field shapes. It is
-loaded from within `extraction.md` and `review.md` wherever each needs it;
-it is not a separate routing destination on its own.
+`references/schema.md` defines the published record's field shapes, and the
+question to ask the reviewer for each field. It is loaded from within
+`extraction.md`, `review.md` and `rendering.md` wherever each needs it —
+`rendering.md` reads the questions from it when a field is unresolved, the
+same way it reads PST values from `psts.json`. It is not a separate routing
+destination on its own.
 
 `references/presentation.yaml` carries the reviewer's display preferences —
 today, which Review Notes categories to hide. It is read by

@@ -986,14 +986,20 @@ either tier.
 
 A candidate extracted from a thread that named a PST, an approver and a
 rationale reaches finalize with nothing outstanding, so this prompt never
-fires for it. The example below therefore shows the shape using a Decision
-added from a blank template, which is the common case for an unresolved
-`pst`:
+fires for it. The example below therefore shows a Decision added from a
+blank template, where the reviewer is filling every field themselves — the
+one case where all seven can be outstanding at once:
 
 ```text
 ▸ **Still needed before finalizing**
 
-- `D5 pst(*)` — Which PST does this belong to?
+- `D5 decision_title(*)` — What should this decision be called?
+- `D5 decision_details(*)` — What was decided, and what does it cover?
+- `D5 rationale(*)` — Why was this decided?
+- `D5 decision_status(*)` — Where does this stand now: approved, rejected, or pending?
+- `D5 decision_proposer(*)` — Whose need does this decision serve?
+- `D5 decision_approver(*)` — Who approved this? If nobody has yet, who is it waiting on?
+- `D5 pst(*)` — Which team is this decision about?
   1. DCA
   2. Dispatch
   3. FFI
@@ -1021,16 +1027,28 @@ Please provide all known values in one reply. Anything else you want to change? 
   this prompt and the finalize prompt — `review.md` §4 owns the choice, and
   the two never appear in one response.
 - List every missing `(*)` field once, grouped in Decision order, ID plus
-  exact field key plus one short plain-language question.
+  exact field key plus its question.
+- **The questions are not written here.** Each field's question is a
+  property of the field, defined in `references/schema.md`; read them from
+  there at render time and use them verbatim, exactly as the PST values are
+  read from `psts.json`. The block above is a copy, kept so the shape is
+  unambiguous — if the two disagree, this copy is out of date. Put `pst`
+  last so its numbered list ends the block rather than interrupting it.
+- **Never improvise a question for a field that has none.** A run left to
+  write its own has produced noun phrases — `Product/Stream/Team`,
+  `Current decision status` — that name the field back at the reviewer
+  instead of asking them anything, and, for `decision_proposer`, `Who
+  initiated this decision?`, which points at whoever spoke rather than
+  whose need is served and so contradicts two of that field's three rungs
+  (`references/extraction.md`). A field reaching this prompt with no
+  question in `schema.md` is a gap to report, never one to fill in.
 - **The `decision_approver` question states plainly what is wanted.** It
   reaches this prompt only when extraction's fallback ladder
   (`references/extraction.md`) found neither an approver nor an awaited
   party in the thread — the reviewer is being asked to supply real
   knowledge the transcript didn't capture, the same as `pst`,
   `decision_proposer`, and `rationale` already are, never to invent a
-  person:
-  `` - `D5 decision_approver(*)` — Who approved this? If nobody has yet, who
-  is it waiting on? `` In practice this rarely fires for an extracted
+  person. In practice this rarely fires for an extracted
   candidate — rung 2 of the ladder already fills the field with an awaited
   party whenever the thread names one — so it is the common case only for a
   Decision added from a blank template, where the reviewer is filling every

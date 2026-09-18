@@ -59,6 +59,42 @@ Required before publication:
 - `decision_status`
 - `evidence_type`
 
+### What to ask the reviewer for each field
+
+When a required field is unresolved and the reviewer has to supply it, the
+question is a property of the field, defined here and nowhere else:
+
+```json
+{
+  "decision_title":    "What should this decision be called?",
+  "decision_details":  "What was decided, and what does it cover?",
+  "rationale":         "Why was this decided?",
+  "decision_status":   "Where does this stand now: approved, rejected, or pending?",
+  "decision_proposer": "Whose need does this decision serve?",
+  "decision_approver": "Who approved this? If nobody has yet, who is it waiting on?",
+  "pst":               "Which team is this decision about?"
+}
+```
+
+Render these verbatim. They are the wording, not a sample of the register,
+and `references/rendering.md` carries a copy of them inside the
+missing-fields exhibit — **this block is the original**; if the two
+disagree, the exhibit is out of date.
+
+**Each question asks what the field means, in words someone who has never
+seen this schema would use.** That is the whole constraint, and it is worth
+stating because the obvious alternative — naming the field back at the
+reviewer — is what a run produces when left to improvise. `pst` asks which
+*team*, never which *PST*. `decision_proposer` asks whose *need* is served,
+never who *initiated* or *requested* it: those words point at whoever spoke,
+which is the wrong party at two of that field's three rungs
+(`references/extraction.md`), and the field has no synonyms — nothing in
+this skill is called a requester or an initiator.
+
+**Adding a field to the required set above obliges adding its question
+here.** A required field with no question reaches the reviewer as whatever
+the run invents on the spot.
+
 **One required-field set, not two.** `extraction.md` defines a single
 required-field list, checked at finalize, and this is that same list plus
 the two fields extraction always assigns itself (`candidate_id`,
