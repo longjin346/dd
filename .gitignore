@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+
+# eval workspace lives outside the repo

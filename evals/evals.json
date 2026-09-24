@@ -1,0 +1,78 @@
+{
+  "skill_name": "dd",
+  "status": "iteration-1 design, awaiting sign-off on the primary assertions",
+  "notes": [
+    "Iteration 1 measures a variance defect: decision_details, rationale and conditions sometimes carry the same content — roughly half of runs, by report.",
+    "A single run cannot tell a fix from luck on a defect that intermittent, so the same eval is repeated and what gets compared is the RATE, not one output. At a true rate of 50%, the chance of 8 clean runs is 0.4%.",
+    "Iteration 1 is the BASELINE: current skill, nothing changed. The rule fix comes after, and iteration 2 compares rates.",
+    "Contamination does not affect this measurement. The fixture's answers are worked through in references/extraction.md, which makes it useless for judging whether a decision was caught correctly — but duplication is a mechanical property of the output, and knowing the right answer does not stop a run writing the same sentence into two fields.",
+    "Scope: one thread. The rate is a rate on THIS thread."
+  ],
+  "evals": [
+    {
+      "id": 0,
+      "name": "field-separation-on-reference-thread",
+      "prompt": "Run the skill end to end on the reference thread and produce the Present-stage output: the opening line, the Read Me, every Decision card with its nested Actions, and Review Notes.",
+      "expected_output": "Two Decision cards and two Actions. decision_details, rationale and conditions each carry content the other two do not.",
+      "files": ["examples/saver-discount-thread.md"],
+      "repeats": 8,
+      "assertions": [
+        {
+          "id": "D1",
+          "kind": "grader",
+          "text": "No sentence in decision_details answers WHY the decision was made. Details carries what was decided, its scope and its mechanism; the case for it belongs in rationale.",
+          "why": "This is the direction the rules never stated. decision_details excludes conditions, refs, proposer and the title — but says nothing about rationale, and rationale says nothing back."
+        },
+        {
+          "id": "D2",
+          "kind": "grader",
+          "text": "No sentence in rationale describes WHAT was decided. Rationale carries the reasons the thread gave; the decision itself belongs in decision_details.",
+          "why": "The other half of the same missing rule."
+        },
+        {
+          "id": "D3",
+          "kind": "grader",
+          "text": "No content in conditions also appears in decision_details, in any wording.",
+          "why": "This exclusion IS stated, in one direction. Checking it separates a rule that is written but not landing from one that was never written."
+        },
+        {
+          "id": "D4",
+          "kind": "script",
+          "text": "No sentence-level near-duplicate between decision_details, rationale and conditions, by n-gram overlap above threshold.",
+          "why": "Deterministic tripwire for literal restatement. Catches less than the grader items but never disagrees with itself."
+        },
+        {
+          "id": "R1",
+          "kind": "script",
+          "text": "D1.pst and D2.pst are both 'Pax Pricing'.",
+          "why": "Regression. Free, since the runs are happening anyway."
+        },
+        {
+          "id": "R2",
+          "kind": "script",
+          "text": "Exactly two Actions across both Decisions."
+        },
+        {
+          "id": "R3",
+          "kind": "script",
+          "text": "Every rendered Slack permalink ends in p followed by digits only — no dot."
+        },
+        {
+          "id": "R4",
+          "kind": "script",
+          "text": "The string 'Mexico' does not appear anywhere in the output."
+        },
+        {
+          "id": "R5",
+          "kind": "script",
+          "text": "The string 'FF Ecommerce' does not appear as a pst value."
+        },
+        {
+          "id": "R6",
+          "kind": "script",
+          "text": "Review Notes contains a 'Not Identified as Decisions' category with six entries."
+        }
+      ]
+    }
+  ]
+}
